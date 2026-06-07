@@ -15,9 +15,7 @@
     --white: #F8F6F0;
     --muted: #8A9BB0;
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   body {
     background: var(--midnight);
     font-family: 'DM Sans', sans-serif;
@@ -27,24 +25,8 @@
     width: 100vw;
   }
 
-  /* HERO STAGE */
-  .hero {
-    width: 100vw;
-    height: 100vh;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-
   /* STARS */
-  .stars {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-
+  .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
   .star {
     position: absolute;
     background: var(--white);
@@ -52,315 +34,141 @@
     animation: twinkle var(--duration) ease-in-out infinite var(--delay);
     opacity: 0;
   }
-
   @keyframes twinkle {
-    0%, 100% { opacity: 0; transform: scale(0.8); }
-    50% { opacity: var(--max-opacity); transform: scale(1); }
+    0%,100% { opacity: 0; }
+    50% { opacity: var(--max-opacity); }
   }
 
-  /* CLOUDS - hand drawn SVG style */
-  .clouds {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
+  /* NAV */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+    z-index: 100;
+    opacity: 0;
+    background: transparent;
+    transition: background 0.4s;
   }
-
-  .cloud {
-    position: absolute;
+  .nav.visible {
+    animation: navReveal 0.6s ease-out forwards;
+  }
+  @keyframes navReveal {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     opacity: 0;
   }
-
-  .cloud-left {
-    left: -300px;
-    top: 30%;
-    animation: cloudRevealLeft 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    animation-delay: 2.8s;
+  .nav-logo.visible {
+    animation: fadeUp 0.5s ease-out forwards;
   }
-
-  .cloud-right {
-    right: -300px;
-    top: 25%;
-    animation: cloudRevealRight 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    animation-delay: 2.8s;
+  .nav-rocket-icon {
+    width: 36px;
+    height: 36px;
   }
-
-  .cloud-top-left {
-    left: -200px;
-    top: 10%;
-    animation: cloudRevealLeft 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    animation-delay: 3.1s;
+  .nav-logo-text {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--white);
+    letter-spacing: -0.01em;
   }
-
-  .cloud-top-right {
-    right: -200px;
-    top: 8%;
-    animation: cloudRevealRight 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    animation-delay: 3.1s;
+  .nav-logo-text span { color: var(--gold); }
+  .nav-links {
+    margin-left: auto;
+    display: flex;
+    gap: 32px;
+    opacity: 0;
   }
-
-  @keyframes cloudRevealLeft {
-    0% { opacity: 0; transform: translateX(0); }
-    20% { opacity: 1; }
-    100% { opacity: 1; transform: translateX(320px); }
+  .nav-links.visible {
+    animation: fadeUp 0.5s ease-out 0.15s forwards;
   }
-
-  @keyframes cloudRevealRight {
-    0% { opacity: 0; transform: translateX(0); }
-    20% { opacity: 1; }
-    100% { opacity: 1; transform: translateX(-320px); }
+  .nav-links a {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
   }
+  .nav-links a:hover { color: var(--white); }
 
-  /* ROCKET WRAPPER */
-  .rocket-wrapper {
-    position: absolute;
+  /* HERO */
+  .hero {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    bottom: -200px;
-    animation: rocketLaunch 2.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    animation-delay: 0.3s;
+    justify-content: center;
+    z-index: 1;
   }
 
-  @keyframes rocketLaunch {
-    0% { bottom: -200px; opacity: 1; }
-    60% { bottom: 38%; opacity: 1; }
-    75% { bottom: 40%; opacity: 1; }
-    85% { bottom: 42%; opacity: 1; }
-    100% { bottom: 40%; opacity: 1; }
-  }
-
-  /* ROCKET SVG */
-  .rocket-svg {
-    width: 100px;
-    height: 140px;
-    filter: drop-shadow(0 0 20px rgba(245, 200, 66, 0.4));
-    animation: rocketWobble 3s ease-in-out infinite;
-    animation-delay: 2.5s;
-  }
-
-  @keyframes rocketWobble {
-    0%, 100% { transform: rotate(-1deg) translateY(0px); }
-    25% { transform: rotate(1deg) translateY(-3px); }
-    75% { transform: rotate(-0.5deg) translateY(2px); }
-  }
-
-  /* FLAME */
-  .flame-wrapper {
-    position: relative;
-    width: 60px;
-    height: 80px;
-    margin-top: -8px;
-  }
-
-  .flame-outer {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 44px;
-    height: 70px;
-    background: linear-gradient(to top, #FF6B00, #F5C842, transparent);
-    border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
-    animation: flameOuter 0.15s ease-in-out infinite alternate;
-    filter: blur(2px);
-    opacity: 0.9;
-  }
-
-  .flame-mid {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 28px;
-    height: 55px;
-    background: linear-gradient(to top, #FF8C00, #FFD700, #F5C842, transparent);
-    border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
-    animation: flameMid 0.12s ease-in-out infinite alternate;
-    filter: blur(1px);
-    opacity: 0.95;
-  }
-
-  .flame-inner {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 16px;
-    height: 40px;
-    background: linear-gradient(to top, #fff, #7EDCCA, transparent);
-    border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
-    animation: flameInner 0.1s ease-in-out infinite alternate;
-    opacity: 0.8;
-  }
-
-  /* Spark particles */
-  .sparks {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 60px;
-  }
-
-  .spark {
-    position: absolute;
-    width: 3px;
-    height: 3px;
-    border-radius: 50%;
-    background: var(--gold);
-    animation: sparkFly var(--spark-dur) ease-out infinite var(--spark-delay);
-    left: 50%;
-    bottom: 0;
-    opacity: 0;
-  }
-
-  @keyframes sparkFly {
-    0% { opacity: 1; transform: translate(var(--sx), 0) scale(1); }
-    100% { opacity: 0; transform: translate(var(--sx), var(--sy)) scale(0.2); }
-  }
-
-  @keyframes flameOuter {
-    0% { height: 70px; width: 44px; transform: translateX(-50%) skewX(-2deg); }
-    100% { height: 80px; width: 40px; transform: translateX(-50%) skewX(2deg); }
-  }
-
-  @keyframes flameMid {
-    0% { height: 55px; width: 28px; transform: translateX(-50%) skewX(1deg); }
-    100% { height: 62px; width: 24px; transform: translateX(-50%) skewX(-1deg); }
-  }
-
-  @keyframes flameInner {
-    0% { height: 40px; transform: translateX(-50%) scaleX(1); }
-    100% { height: 45px; transform: translateX(-50%) scaleX(0.85); }
-  }
-
-  /* LOGO REVEAL */
-  .logo-reveal {
-    position: absolute;
-    bottom: 22%;
-    left: 50%;
-    transform: translateX(-50%);
+  /* TITLE BLOCK */
+  .title-block {
     text-align: center;
+    position: relative;
+    z-index: 2;
+    margin-top: -40px;
+  }
+  .title-line {
+    display: block;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(3.5rem, 10vw, 7rem);
+    letter-spacing: -0.03em;
+    line-height: 0.95;
     opacity: 0;
-    animation: logoFadeIn 1s ease-out forwards;
-    animation-delay: 3.6s;
-    white-space: nowrap;
+    clip-path: inset(0 100% 0 0);
+  }
+  .title-line.line1 { color: var(--white); }
+  .title-line.line2 { color: var(--gold); }
+  .title-line.reveal {
+    animation: textReveal 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+  @keyframes textReveal {
+    0% { opacity: 1; clip-path: inset(0 100% 0 0); }
+    100% { opacity: 1; clip-path: inset(0 0% 0 0); }
   }
 
-  .logo-line1 {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: clamp(2.5rem, 7vw, 5rem);
-    color: var(--white);
-    letter-spacing: -0.02em;
-    line-height: 1;
-    display: block;
-  }
-
-  .logo-line2 {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: clamp(2.5rem, 7vw, 5rem);
-    color: var(--gold);
-    letter-spacing: -0.02em;
-    line-height: 1;
-    display: block;
-    margin-top: 4px;
-  }
-
-  .logo-sub {
+  .subtitle {
     font-family: 'DM Sans', sans-serif;
     font-weight: 300;
-    font-size: clamp(0.6rem, 1.5vw, 0.85rem);
+    font-size: clamp(0.65rem, 1.5vw, 0.85rem);
     color: var(--aqua);
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    margin-top: 16px;
-    display: block;
-    opacity: 0;
-    animation: logoFadeIn 0.8s ease-out forwards;
-    animation-delay: 4.2s;
-  }
-
-  @keyframes logoFadeIn {
-    0% { opacity: 0; transform: translateY(12px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
-
-  /* SMOKE TRAIL */
-  .smoke-trail {
-    position: absolute;
-    bottom: 35%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 4px;
-    background: linear-gradient(to bottom, transparent, rgba(126,220,202,0.15), rgba(126,220,202,0.05));
-    height: 0;
-    animation: smokeGrow 2s ease-out forwards;
-    animation-delay: 0.5s;
-    border-radius: 2px;
-    filter: blur(2px);
-  }
-
-  @keyframes smokeGrow {
-    0% { height: 0; opacity: 0.6; }
-    100% { height: 200px; opacity: 0.3; }
-  }
-
-  /* GLOW BEHIND ROCKET */
-  .rocket-glow {
-    position: absolute;
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(245,200,66,0.15) 0%, transparent 70%);
-    animation: glowPulse 1.5s ease-in-out infinite;
-    animation-delay: 2.5s;
+    margin-top: 20px;
     opacity: 0;
   }
+  .subtitle.visible { animation: fadeUp 0.6s ease-out forwards; }
 
-  @keyframes glowPulse {
-    0%, 100% { opacity: 0.4; transform: scale(1); }
-    50% { opacity: 0.8; transform: scale(1.2); }
-  }
-
-  /* TAGLINE */
-  .tagline-reveal {
-    position: absolute;
-    bottom: 16%;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    animation: logoFadeIn 0.8s ease-out forwards;
-    animation-delay: 4.6s;
-    text-align: center;
-  }
-
-  .tagline-text {
+  .tagline {
     font-family: 'Syne', sans-serif;
     font-weight: 400;
-    font-size: clamp(0.75rem, 2vw, 1rem);
+    font-size: clamp(0.85rem, 2vw, 1.1rem);
     color: var(--muted);
-    letter-spacing: 0.05em;
-  }
-
-  .tagline-text em {
-    color: var(--aqua);
-    font-style: normal;
-  }
-
-  /* CTA */
-  .cta-reveal {
-    position: absolute;
-    bottom: 8%;
-    left: 50%;
-    transform: translateX(-50%);
+    letter-spacing: 0.04em;
+    margin-top: 12px;
     opacity: 0;
-    animation: logoFadeIn 0.8s ease-out forwards;
-    animation-delay: 5s;
   }
+  .tagline em { color: var(--aqua); font-style: normal; }
+  .tagline.visible { animation: fadeUp 0.6s ease-out forwards; }
 
+  .cta-wrap {
+    margin-top: 32px;
+    opacity: 0;
+  }
+  .cta-wrap.visible { animation: fadeUp 0.6s ease-out forwards; }
   .cta-btn {
     font-family: 'DM Sans', sans-serif;
     font-weight: 500;
@@ -369,167 +177,477 @@
     text-transform: uppercase;
     color: var(--midnight);
     background: var(--gold);
-    padding: 14px 32px;
+    padding: 15px 36px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
   }
-
   .cta-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(245,200,66,0.35);
+    box-shadow: 0 8px 28px rgba(245,200,66,0.35);
   }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ROCKET */
+  .rocket-container {
+    position: fixed;
+    z-index: 50;
+    pointer-events: none;
+    /* Start bottom-right */
+    bottom: -120px;
+    right: -80px;
+    width: 80px;
+    height: 120px;
+  }
+  .rocket-svg { width: 80px; height: 110px; }
+
+  /* FIRE TRAIL - canvas based */
+  #trail-canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 49;
+  }
+
+  /* FLAME UNDER ROCKET */
+  .flame-wrap {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 60px;
+  }
+  .fl-outer {
+    position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 32px; height: 52px;
+    background: linear-gradient(to top, #FF6B00, #F5C842, transparent);
+    border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
+    animation: fo 0.14s ease-in-out infinite alternate;
+    filter: blur(2px); opacity: 0.9;
+  }
+  .fl-mid {
+    position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 20px; height: 40px;
+    background: linear-gradient(to top, #FF8C00, #FFD700, transparent);
+    border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
+    animation: fm 0.11s ease-in-out infinite alternate;
+    filter: blur(1px); opacity: 0.95;
+  }
+  .fl-inner {
+    position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 10px; height: 28px;
+    background: linear-gradient(to top, #fff, #7EDCCA, transparent);
+    border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
+    animation: fi 0.09s ease-in-out infinite alternate;
+    opacity: 0.85;
+  }
+  @keyframes fo { 0% { height:52px;width:32px; } 100% { height:60px;width:28px; } }
+  @keyframes fm { 0% { height:40px;width:20px; } 100% { height:46px;width:16px; } }
+  @keyframes fi { 0% { height:28px; } 100% { height:33px; } }
+
+  /* CLOUDS */
+  .cloud {
+    position: fixed;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 3;
+  }
+  .cloud-1 { left: -280px; top: 12%; }
+  .cloud-2 { right: -260px; top: 8%; }
+  .cloud-3 { left: -240px; top: 55%; }
+  .cloud-4 { right: -220px; top: 60%; }
+
+  .cloud-1.show { animation: cL 1.1s cubic-bezier(.25,.46,.45,.94) forwards; }
+  .cloud-2.show { animation: cR 1.1s cubic-bezier(.25,.46,.45,.94) forwards; }
+  .cloud-3.show { animation: cL2 1s cubic-bezier(.25,.46,.45,.94) forwards; }
+  .cloud-4.show { animation: cR2 1s cubic-bezier(.25,.46,.45,.94) forwards; }
+
+  @keyframes cL  { 0%{opacity:0;transform:translateX(0)} 15%{opacity:1} 100%{opacity:1;transform:translateX(300px)} }
+  @keyframes cR  { 0%{opacity:0;transform:translateX(0)} 15%{opacity:1} 100%{opacity:1;transform:translateX(-300px)} }
+  @keyframes cL2 { 0%{opacity:0;transform:translateX(0)} 15%{opacity:0.7} 100%{opacity:0.7;transform:translateX(260px)} }
+  @keyframes cR2 { 0%{opacity:0;transform:translateX(0)} 15%{opacity:0.7} 100%{opacity:0.7;transform:translateX(-260px)} }
 </style>
 </head>
 <body>
 
-<div class="hero">
+<!-- STARS -->
+<div class="stars" id="stars"></div>
 
-  <!-- STARS -->
-  <div class="stars" id="stars"></div>
+<!-- TRAIL CANVAS -->
+<canvas id="trail-canvas"></canvas>
 
-  <!-- CLOUDS -->
-  <div class="clouds">
-    <!-- Large cloud left -->
-    <div class="cloud cloud-left">
-      <svg width="280" height="120" viewBox="0 0 280 120" fill="none">
-        <path d="M20 80 Q10 60 30 55 Q25 30 55 32 Q60 15 85 20 Q95 5 120 15 Q140 5 160 18 Q180 8 195 25 Q220 20 230 40 Q250 38 255 58 Q270 60 265 78 Q260 90 240 88 Q200 100 160 95 Q120 105 80 98 Q40 102 20 80Z" 
-              fill="#F8F6F0" opacity="0.12" stroke="#F8F6F0" stroke-width="1.5" stroke-opacity="0.2"/>
-        <path d="M20 80 Q10 60 30 55 Q25 30 55 32 Q60 15 85 20 Q95 5 120 15 Q140 5 160 18 Q180 8 195 25 Q220 20 230 40 Q250 38 255 58 Q270 60 265 78 Q260 90 240 88 Q200 100 160 95 Q120 105 80 98 Q40 102 20 80Z" 
-              fill="none" stroke="#7EDCCA" stroke-width="1" stroke-opacity="0.15" stroke-dasharray="4 6"/>
-      </svg>
-    </div>
-
-    <!-- Large cloud right -->
-    <div class="cloud cloud-right">
-      <svg width="260" height="110" viewBox="0 0 260 110" fill="none">
-        <path d="M240 75 Q255 55 235 50 Q242 28 210 28 Q208 12 180 16 Q172 4 148 14 Q128 3 108 16 Q88 6 72 24 Q48 20 42 42 Q22 44 18 64 Q12 78 30 82 Q70 96 110 90 Q148 100 190 92 Q228 98 240 75Z" 
-              fill="#F8F6F0" opacity="0.12" stroke="#F8F6F0" stroke-width="1.5" stroke-opacity="0.2"/>
-        <path d="M240 75 Q255 55 235 50 Q242 28 210 28 Q208 12 180 16 Q172 4 148 14 Q128 3 108 16 Q88 6 72 24 Q48 20 42 42 Q22 44 18 64 Q12 78 30 82 Q70 96 110 90 Q148 100 190 92 Q228 98 240 75Z" 
-              fill="none" stroke="#7EDCCA" stroke-width="1" stroke-opacity="0.15" stroke-dasharray="4 6"/>
-      </svg>
-    </div>
-
-    <!-- Small cloud top left -->
-    <div class="cloud cloud-top-left">
-      <svg width="180" height="80" viewBox="0 0 180 80" fill="none">
-        <path d="M15 55 Q8 40 22 36 Q18 18 42 20 Q46 8 68 12 Q84 2 100 14 Q118 6 130 22 Q148 20 152 38 Q165 42 160 56 Q154 68 135 64 Q100 74 65 68 Q30 72 15 55Z" 
-              fill="#F8F6F0" opacity="0.1" stroke="#F8F6F0" stroke-width="1.2" stroke-opacity="0.18"/>
-      </svg>
-    </div>
-
-    <!-- Small cloud top right -->
-    <div class="cloud cloud-top-right">
-      <svg width="200" height="85" viewBox="0 0 200 85" fill="none">
-        <path d="M185 58 Q196 42 180 37 Q186 18 158 18 Q156 6 132 10 Q120 1 100 12 Q80 3 62 18 Q40 14 34 32 Q16 35 12 52 Q8 65 28 68 Q66 78 104 72 Q142 80 170 72 Q192 76 185 58Z" 
-              fill="#F8F6F0" opacity="0.1" stroke="#F8F6F0" stroke-width="1.2" stroke-opacity="0.18"/>
-      </svg>
-    </div>
-  </div>
-
-  <!-- SMOKE TRAIL -->
-  <div class="smoke-trail"></div>
-
-  <!-- ROCKET -->
-  <div class="rocket-wrapper">
-    <div class="rocket-glow"></div>
-
-    <!-- Rocket SVG -->
-    <svg class="rocket-svg" viewBox="0 0 100 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- Body -->
-      <rect x="32" y="28" width="36" height="72" rx="18" fill="#F5C842"/>
-      <!-- Nose cone -->
-      <path d="M32 46 Q50 8 68 46Z" fill="#F5C842"/>
-      <!-- Nose highlight -->
-      <path d="M38 44 Q50 16 56 38" stroke="#FFE080" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
-      <!-- Window -->
-      <circle cx="50" cy="62" r="10" fill="#1A2E45"/>
-      <circle cx="50" cy="62" r="8" fill="#0D1B2A"/>
-      <circle cx="47" cy="59" r="2.5" fill="#7EDCCA" opacity="0.7"/>
-      <!-- LEGO studs on body -->
-      <circle cx="43" cy="78" r="3" fill="#E03A2F" opacity="0.8"/>
-      <circle cx="50" cy="78" r="3" fill="#E03A2F" opacity="0.8"/>
-      <circle cx="57" cy="78" r="3" fill="#E03A2F" opacity="0.8"/>
-      <circle cx="43" cy="87" r="3" fill="#E03A2F" opacity="0.6"/>
-      <circle cx="57" cy="87" r="3" fill="#E03A2F" opacity="0.6"/>
-      <!-- Left wing -->
-      <path d="M32 72 L14 102 L32 96Z" fill="#E03A2F"/>
-      <path d="M32 72 L14 102 L32 96Z" stroke="#C02A1F" stroke-width="0.5"/>
-      <!-- Right wing -->
-      <path d="M68 72 L86 102 L68 96Z" fill="#E03A2F"/>
-      <path d="M68 72 L86 102 L68 96Z" stroke="#C02A1F" stroke-width="0.5"/>
-      <!-- Bottom nozzle -->
-      <path d="M38 98 Q50 104 62 98 L60 110 Q50 116 40 110Z" fill="#1A2E45"/>
-      <path d="M42 100 Q50 106 58 100 L57 108 Q50 112 43 108Z" fill="#0D1B2A"/>
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-logo" id="navLogo">
+    <svg class="nav-rocket-icon" viewBox="0 0 64 64" fill="none">
+      <rect x="22" y="12" width="20" height="28" rx="10" fill="#F5C842"/>
+      <path d="M22 22 Q32 6 42 22Z" fill="#F5C842"/>
+      <circle cx="32" cy="30" r="6" fill="#1A2E45"/>
+      <circle cx="30" cy="28" r="1.5" fill="#7EDCCA" opacity="0.7"/>
+      <path d="M22 32 L13 46 L22 43Z" fill="#E03A2F"/>
+      <path d="M42 32 L51 46 L42 43Z" fill="#E03A2F"/>
+      <ellipse cx="32" cy="44" rx="4" ry="5" fill="#7EDCCA" opacity="0.7"/>
+      <ellipse cx="32" cy="46" rx="2.5" ry="3.5" fill="#F5C842" opacity="0.9"/>
     </svg>
+    <div class="nav-logo-text">Missione <span>Mattoncini</span></div>
+  </div>
+  <div class="nav-links" id="navLinks">
+    <a href="#">Workshop</a>
+    <a href="#">Chi Siamo</a>
+    <a href="#">Iscrizioni</a>
+    <a href="#">Contatti</a>
+  </div>
+</nav>
 
-    <!-- FLAME -->
-    <div class="flame-wrapper">
-      <div class="flame-outer"></div>
-      <div class="flame-mid"></div>
-      <div class="flame-inner"></div>
-      <div class="sparks" id="sparks"></div>
+<!-- CLOUDS -->
+<div class="cloud cloud-1" id="c1">
+  <svg width="260" height="100" viewBox="0 0 260 100" fill="none">
+    <path d="M18 72 Q8 52 26 47 Q20 26 52 28 Q56 12 80 18 Q92 4 118 16 Q138 5 158 18 Q178 8 194 26 Q218 22 224 44 Q242 46 238 66 Q232 80 210 76 Q170 88 128 82 Q86 90 44 84 Q18 86 18 72Z" fill="#F8F6F0" opacity="0.1" stroke="#7EDCCA" stroke-width="1" stroke-opacity="0.2"/>
+  </svg>
+</div>
+<div class="cloud cloud-2" id="c2">
+  <svg width="240" height="90" viewBox="0 0 240 90" fill="none">
+    <path d="M222 68 Q236 50 218 44 Q226 24 196 24 Q194 10 168 14 Q158 3 136 14 Q114 4 94 16 Q72 10 58 28 Q34 24 28 44 Q10 46 8 64 Q4 78 26 80 Q68 92 108 86 Q148 94 186 86 Q218 92 222 68Z" fill="#F8F6F0" opacity="0.1" stroke="#7EDCCA" stroke-width="1" stroke-opacity="0.2"/>
+  </svg>
+</div>
+<div class="cloud cloud-3" id="c3">
+  <svg width="200" height="80" viewBox="0 0 200 80" fill="none">
+    <path d="M14 58 Q6 42 20 37 Q14 20 40 22 Q44 9 64 14 Q76 3 96 13 Q112 4 128 15 Q146 8 156 24 Q172 20 176 38 Q190 42 186 56 Q180 68 160 64 Q126 74 92 68 Q58 74 28 68 Q10 70 14 58Z" fill="#F8F6F0" opacity="0.08" stroke="#F8F6F0" stroke-width="0.8" stroke-opacity="0.15"/>
+  </svg>
+</div>
+<div class="cloud cloud-4" id="c4">
+  <svg width="180" height="72" viewBox="0 0 180 72" fill="none">
+    <path d="M166 54 Q178 38 162 33 Q168 16 142 16 Q140 6 118 10 Q108 1 90 10 Q72 2 56 14 Q38 10 30 26 Q14 22 10 38 Q4 50 22 54 Q56 64 88 58 Q120 66 150 58 Q172 62 166 54Z" fill="#F8F6F0" opacity="0.08" stroke="#F8F6F0" stroke-width="0.8" stroke-opacity="0.15"/>
+  </svg>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="title-block">
+    <span class="title-line line1" id="line1">Missione</span>
+    <span class="title-line line2" id="line2">Mattoncini</span>
+    <div class="subtitle" id="subtitle">STEM · Lego · English · Creativity</div>
+    <div class="tagline" id="tagline">Costruiamo. Esploriamo. <em>Impariamo.</em></div>
+    <div class="cta-wrap" id="ctaWrap">
+      <button class="cta-btn">Scopri i Workshop →</button>
     </div>
   </div>
+</div>
 
-  <!-- LOGO REVEAL -->
-  <div class="logo-reveal">
-    <span class="logo-line1">Missione</span>
-    <span class="logo-line2">Mattoncini</span>
-    <span class="logo-sub">STEM · Lego · English · Creativity</span>
+<!-- ROCKET (will be repositioned by JS) -->
+<div class="rocket-container" id="rocket">
+  <svg class="rocket-svg" viewBox="0 0 80 110" fill="none">
+    <!-- body -->
+    <rect x="26" y="20" width="28" height="58" rx="14" fill="#F5C842"/>
+    <!-- nose -->
+    <path d="M26 34 Q40 6 54 34Z" fill="#F5C842"/>
+    <!-- nose highlight -->
+    <path d="M30 32 Q40 12 46 28" stroke="#FFE080" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+    <!-- window -->
+    <circle cx="40" cy="50" r="9" fill="#1A2E45"/>
+    <circle cx="40" cy="50" r="7" fill="#0D1B2A"/>
+    <circle cx="37.5" cy="47.5" r="2" fill="#7EDCCA" opacity="0.7"/>
+    <!-- studs -->
+    <circle cx="34" cy="64" r="2.5" fill="#E03A2F" opacity="0.8"/>
+    <circle cx="40" cy="64" r="2.5" fill="#E03A2F" opacity="0.8"/>
+    <circle cx="46" cy="64" r="2.5" fill="#E03A2F" opacity="0.8"/>
+    <circle cx="34" cy="71" r="2.5" fill="#E03A2F" opacity="0.6"/>
+    <circle cx="46" cy="71" r="2.5" fill="#E03A2F" opacity="0.6"/>
+    <!-- wings -->
+    <path d="M26 58 L10 82 L26 77Z" fill="#E03A2F"/>
+    <path d="M54 58 L70 82 L54 77Z" fill="#E03A2F"/>
+    <!-- nozzle -->
+    <path d="M30 78 Q40 84 50 78 L48 88 Q40 93 32 88Z" fill="#1A2E45"/>
+  </svg>
+  <div class="flame-wrap">
+    <div class="fl-outer"></div>
+    <div class="fl-mid"></div>
+    <div class="fl-inner"></div>
   </div>
-
-  <!-- TAGLINE -->
-  <div class="tagline-reveal">
-    <div class="tagline-text">Costruiamo. Esploriamo. <em>Impariamo.</em></div>
-  </div>
-
-  <!-- CTA -->
-  <div class="cta-reveal">
-    <button class="cta-btn">Scopri i Workshop →</button>
-  </div>
-
 </div>
 
 <script>
-  // Generate stars
-  const starsContainer = document.getElementById('stars');
-  for (let i = 0; i < 120; i++) {
-    const star = document.createElement('div');
-    star.className = 'star';
-    const size = Math.random() * 2.5 + 0.5;
-    star.style.cssText = `
-      width: ${size}px;
-      height: ${size}px;
-      left: ${Math.random() * 100}%;
-      top: ${Math.random() * 70}%;
-      --duration: ${Math.random() * 3 + 2}s;
-      --delay: ${Math.random() * 4}s;
-      --max-opacity: ${Math.random() * 0.6 + 0.2};
-    `;
-    starsContainer.appendChild(star);
+// STARS
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 130; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const sz = Math.random() * 2.2 + 0.4;
+  s.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--duration:${Math.random()*3+2}s;--delay:${Math.random()*5}s;--max-opacity:${Math.random()*0.55+0.15}`;
+  starsEl.appendChild(s);
+}
+
+// TRAIL CANVAS
+const canvas = document.getElementById('trail-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const particles = [];
+function addParticle(x, y, angle) {
+  const spread = 0.4;
+  const a = angle + (Math.random() - 0.5) * spread;
+  particles.push({
+    x, y,
+    vx: Math.cos(a) * (Math.random() * 2 + 1),
+    vy: Math.sin(a) * (Math.random() * 2 + 1),
+    life: 1,
+    size: Math.random() * 6 + 3,
+    color: Math.random() > 0.5 ? '#F5C842' : (Math.random() > 0.5 ? '#FF6B00' : '#7EDCCA')
+  });
+}
+
+function updateTrail() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life -= 0.03;
+    if (p.life <= 0) { particles.splice(i, 1); continue; }
+    ctx.globalAlpha = p.life * 0.7;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
+
+// ROCKET ANIMATION
+const rocket = document.getElementById('rocket');
+const line1 = document.getElementById('line1');
+const line2 = document.getElementById('line2');
+
+// Get element positions after load
+let titleRect, line1Rect, line2Rect;
+
+function getTitlePositions() {
+  titleRect = document.querySelector('.title-block').getBoundingClientRect();
+  line1Rect = line1.getBoundingClientRect();
+  line2Rect = line2.getBoundingClientRect();
+}
+
+// Rocket state
+let rocketX = window.innerWidth + 80;
+let rocketY = window.innerHeight + 80;
+let rocketAngle = -Math.PI / 4; // pointing up-left
+let phase = 0;
+let phaseT = 0;
+let animating = true;
+let lastTime = 0;
+
+// Waypoints for rocket path
+// Phase 0: enter from bottom-right, arc toward line1
+// Phase 1: zoom across line1 (left to right)  
+// Phase 2: loop back, zoom across line2 (right to left)
+// Phase 3: arc to top-left nav position
+
+const NAV_X = 50;
+const NAV_Y = 36;
+
+function easeInOut(t) {
+  return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
+}
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+// Bezier helper
+function bezier(p0, p1, p2, p3, t) {
+  const mt = 1 - t;
+  return {
+    x: mt*mt*mt*p0.x + 3*mt*mt*t*p1.x + 3*mt*t*t*p2.x + t*t*t*p3.x,
+    y: mt*mt*mt*p0.y + 3*mt*mt*t*p1.y + 3*mt*t*t*p2.y + t*t*t*p3.y
+  };
+}
+
+function bezierTangent(p0, p1, p2, p3, t) {
+  const mt = 1 - t;
+  return {
+    x: 3*(mt*mt*(p1.x-p0.x) + 2*mt*t*(p2.x-p1.x) + t*t*(p3.x-p2.x)),
+    y: 3*(mt*mt*(p1.y-p0.y) + 2*mt*t*(p2.y-p1.y) + t*t*(p3.y-p2.y))
+  };
+}
+
+let paths = [];
+
+function buildPaths() {
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+  getTitlePositions();
+
+  const l1cy = line1Rect.top + line1Rect.height / 2;
+  const l2cy = line2Rect.top + line2Rect.height / 2;
+
+  paths = [
+    // Phase 0: Enter bottom-right → position before line1 sweep (left of screen, line1 height)
+    {
+      p0: { x: W + 100, y: H + 100 },
+      p1: { x: W * 0.7, y: H * 0.8 },
+      p2: { x: W * 0.1, y: l1cy + 40 },
+      p3: { x: -100, y: l1cy },
+      duration: 1600
+    },
+    // Phase 1: Sweep left→right across line1
+    {
+      p0: { x: -100, y: l1cy },
+      p1: { x: W * 0.3, y: l1cy - 30 },
+      p2: { x: W * 0.7, y: l1cy + 20 },
+      p3: { x: W + 120, y: l1cy - 10 },
+      duration: 900
+    },
+    // Phase 2: Arc back, come from right, sweep right→left across line2
+    {
+      p0: { x: W + 120, y: l1cy - 10 },
+      p1: { x: W * 0.9, y: l2cy - 80 },
+      p2: { x: W * 0.4, y: l2cy - 40 },
+      p3: { x: -120, y: l2cy },
+      duration: 1000
+    },
+    // Phase 3: Arc from left, fly to nav top-left
+    {
+      p0: { x: -120, y: l2cy },
+      p1: { x: W * 0.15, y: l2cy + 60 },
+      p2: { x: W * 0.05, y: H * 0.3 },
+      p3: { x: NAV_X, y: NAV_Y },
+      duration: 1100
+    }
+  ];
+}
+
+let trailInterval = null;
+let startTime = null;
+
+function animate(ts) {
+  if (!startTime) startTime = ts;
+  const elapsed = ts - startTime;
+
+  // Wait 0.5s before starting
+  if (elapsed < 500) {
+    requestAnimationFrame(animate);
+    return;
   }
 
-  // Generate sparks
-  const sparksContainer = document.getElementById('sparks');
-  for (let i = 0; i < 12; i++) {
-    const spark = document.createElement('div');
-    spark.className = 'spark';
-    const angle = (Math.random() * 160 + 10) * (Math.PI / 180);
-    const dist = Math.random() * 40 + 15;
-    spark.style.cssText = `
-      --sx: ${Math.cos(angle) * dist}px;
-      --sy: ${Math.sin(angle) * dist + 20}px;
-      --spark-dur: ${Math.random() * 0.4 + 0.3}s;
-      --spark-delay: ${Math.random() * 0.5}s;
-      background: ${Math.random() > 0.5 ? '#F5C842' : '#7EDCCA'};
-      width: ${Math.random() * 2 + 1.5}px;
-      height: ${Math.random() * 2 + 1.5}px;
-    `;
-    sparksContainer.appendChild(spark);
+  updateTrail();
+
+  if (!animating) return;
+
+  const path = paths[phase];
+  if (!path) {
+    // Done — show nav
+    finalizeNav();
+    return;
   }
+
+  const phaseElapsed = elapsed - 500 - paths.slice(0, phase).reduce((a, p) => a + p.duration, 0);
+  const t = Math.min(phaseElapsed / path.duration, 1);
+  const et = easeInOut(t);
+
+  const pos = bezier(path.p0, path.p1, path.p2, path.p3, et);
+  const tang = bezierTangent(path.p0, path.p1, path.p2, path.p3, Math.min(et + 0.01, 1));
+  const angle = Math.atan2(tang.y, tang.x);
+
+  // Position rocket (centered on path point)
+  rocket.style.left = (pos.x - 40) + 'px';
+  rocket.style.top = (pos.y - 55) + 'px';
+  rocket.style.bottom = 'auto';
+  rocket.style.right = 'auto';
+
+  // Rotate rocket to face direction of travel
+  // Rocket points up by default, so subtract 90deg
+  rocket.style.transform = `rotate(${angle + Math.PI/2}rad)`;
+
+  // Add trail particles
+  if (Math.random() > 0.3) {
+    for (let i = 0; i < 3; i++) {
+      addParticle(pos.x, pos.y, angle + Math.PI + (Math.random()-0.5)*0.5);
+    }
+  }
+
+  // Phase transitions
+  if (t >= 1) {
+    phase++;
+    if (phase === 1) {
+      // Reveal line1
+      line1.classList.add('reveal');
+    }
+    if (phase === 2) {
+      // Reveal line2
+      line2.classList.add('reveal');
+    }
+    if (phase === 3) {
+      // Clouds start
+      setTimeout(() => {
+        document.getElementById('c1').classList.add('show');
+        document.getElementById('c2').classList.add('show');
+        setTimeout(() => {
+          document.getElementById('c3').classList.add('show');
+          document.getElementById('c4').classList.add('show');
+        }, 300);
+      }, 200);
+    }
+    if (phase >= paths.length) {
+      animating = false;
+      finalizeNav();
+      return;
+    }
+  }
+
+  requestAnimationFrame(animate);
+}
+
+function finalizeNav() {
+  // Shrink rocket to nav size, place in nav
+  rocket.style.transition = 'all 0.4s ease-out';
+  rocket.style.left = '32px';
+  rocket.style.top = '18px';
+  rocket.style.width = '36px';
+  rocket.style.height = '36px';
+  rocket.style.transform = 'rotate(0deg)';
+
+  // Hide flame
+  document.querySelector('.flame-wrap').style.display = 'none';
+
+  const navEl = document.getElementById('nav');
+  navEl.classList.add('visible');
+
+  setTimeout(() => {
+    document.getElementById('navLogo').classList.add('visible');
+  }, 200);
+  setTimeout(() => {
+    document.getElementById('navLinks').classList.add('visible');
+  }, 350);
+  setTimeout(() => {
+    document.getElementById('subtitle').classList.add('visible');
+  }, 500);
+  setTimeout(() => {
+    document.getElementById('tagline').classList.add('visible');
+  }, 750);
+  setTimeout(() => {
+    document.getElementById('ctaWrap').classList.add('visible');
+  }, 1000);
+
+  // Fade out trail canvas
+  canvas.style.transition = 'opacity 1s';
+  canvas.style.opacity = '0';
+}
+
+window.addEventListener('load', () => {
+  buildPaths();
+  requestAnimationFrame(animate);
+});
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
 </script>
-
 </body>
+</html>
 </html>
