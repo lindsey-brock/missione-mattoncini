@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chi Siamo — Missione Mattoncini</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --midnight: #0D1B2A;
+  --navy:     #1A2E45;
+  --brick:    #E03A2F;
+  --gold:     #F5C842;
+  --aqua:     #7EDCCA;
+  --white:    #F8F6F0;
+  --muted:    #8A9BB0;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--midnight);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--white);
+  overflow-x: hidden;
+}
+
+/* ── STARS ── */
+.stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; will-change: transform; }
+.star {
+  position: absolute;
+  clip-path: polygon(50% 0%, 57% 43%, 100% 50%, 57% 57%, 50% 100%, 43% 57%, 0% 50%, 43% 43%);
+  background: var(--white);
+  opacity: 0;
+  transform: scale(0.6);
+  animation: twinkle var(--duration) ease-in-out infinite var(--delay);
+}
+.star-large {
+  background: #FFF8E8;
+  filter: drop-shadow(0 0 3px rgba(255,240,180,0.8));
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0; transform: scale(0.6); }
+  50%       { opacity: var(--max-opacity); transform: scale(1.2); }
+}
+
+/* ── CLOUDS (static — final positions, no slide-in animation) ── */
+.cloud { position: fixed; pointer-events: none; z-index: 5; will-change: transform; }
+.cloud-1 { left: 20px;  top: 12%; opacity: 1;   }
+.cloud-2 { right: 20px; top: 8%;  opacity: 1;   }
+.cloud-3 { left: 20px;  top: 55%; opacity: 0.7; }
+.cloud-4 { right: 20px; top: 60%; opacity: 0.7; }
+
+/* ── ROCKET NAV ── */
+.rocket-nav {
+  position: fixed;
+  top: 12px;
+  left: 16px;
+  width: 40px;
+  height: 55px;
+  z-index: 150;
+  cursor: pointer;
+  display: block;
+  text-decoration: none;
+  transition: transform 0.15s ease;
+}
+.rocket-nav:hover { transform: translateY(-2px); }
+.rocket-nav svg { width: 40px; height: 55px; display: block; }
+
+/* ── HOVER BADGE ── */
+#hover-badges {
+  position: fixed;
+  top: 10px;
+  left: 76px;
+  z-index: 160;
+  pointer-events: none;
+}
+.hover-badge {
+  background: var(--navy);
+  border: 1px solid var(--aqua);
+  color: var(--aqua);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 20px;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+  pointer-events: none;
+}
+.hover-badge.show { opacity: 1; transform: translateX(0); }
+
+/* ── HERO ── */
+.cs-hero {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 32px 80px;
+  gap: 16px;
+}
+.cs-hero-logo {
+  width: 68px;
+  height: 94px;
+  margin-bottom: 12px;
+  opacity: 0.9;
+}
+.cs-hero-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(3.2rem, 9vw, 6.5rem);
+  letter-spacing: -0.03em;
+  line-height: 0.92;
+  color: var(--white);
+}
+.cs-hero-sub {
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: clamp(1rem, 2.5vw, 1.45rem);
+  color: var(--gold);
+  letter-spacing: -0.01em;
+  margin-top: 6px;
+}
+.cs-scroll-hint {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.cs-scroll-arrow { animation: bounce 1.6s ease-in-out infinite; }
+@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(5px)} }
+
+/* ── HERO PARALLAX ELEMENTS ── */
+.cs-hero-logo { will-change: transform; }
+#heroText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  will-change: transform;
+}
+
+/* ── ENTRANCE ANIMATIONS ── */
+.anim-ready {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.anim-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── MISSION STATEMENT ── */
+.cs-mission {
+  position: relative;
+  z-index: 1;
+  background: var(--midnight);
+  padding: 110px 32px 120px;
+  display: flex;
+  justify-content: center;
+}
+.cs-mission-inner {
+  max-width: 760px;
+  width: 100%;
+}
+.cs-quote-mark {
+  display: block;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 5rem;
+  line-height: 0.75;
+  color: var(--brick);
+  opacity: 0.85;
+  margin-bottom: 24px;
+  user-select: none;
+}
+.cs-mission-body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--white);
+  opacity: 0.88;
+}
+
+/* ── THREE PILLARS ── */
+.cs-pillars {
+  position: relative;
+  z-index: 1;
+  background: var(--navy);
+  border-top: 1px solid rgba(245,200,66,0.1);
+  padding: 100px 120px 100px;
+}
+@media (max-width: 900px) {
+  .cs-pillars { padding: 80px 32px; }
+}
+.cs-section-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--aqua);
+  margin-bottom: 12px;
+}
+.cs-section-heading {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  letter-spacing: -0.03em;
+  color: var(--white);
+  margin-bottom: 48px;
+}
+.cs-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+@media (max-width: 900px) { .cs-cards-grid { grid-template-columns: 1fr; } }
+.cs-card {
+  background: var(--midnight);
+  border: 1px solid rgba(245,200,66,0.15);
+  border-radius: 8px;
+  padding: 28px 24px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.cs-card:hover { transform: translateY(-4px); border-color: rgba(245,200,66,0.4); }
+.cs-card-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  color: var(--gold);
+}
+.cs-card-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  color: var(--white);
+  line-height: 1.2;
+}
+.cs-card-body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.86rem;
+  line-height: 1.65;
+  color: var(--white);
+  opacity: 0.78;
+}
+
+/* ── CTA STRIP ── */
+.cs-cta-strip {
+  position: relative;
+  z-index: 1;
+  background: var(--brick);
+  padding: 88px 32px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.cs-cta-heading {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  letter-spacing: -0.03em;
+  color: #fff;
+}
+.cs-cta-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.82);
+  max-width: 460px;
+  line-height: 1.65;
+}
+.cs-cta-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--midnight);
+  background: var(--gold);
+  padding: 14px 32px;
+  border-radius: 4px;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 10px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.cs-cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.25); }
+
+/* ── FOOTER ── */
+.cs-footer {
+  position: relative;
+  z-index: 1;
+  background: var(--midnight);
+  border-top: 1px solid rgba(245,200,66,0.08);
+  padding: 36px 32px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+.cs-footer-text {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.cs-footer-link {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.cs-footer-link:hover { color: var(--aqua); }
+</style>
+</head>
+<body>
+
+<!-- STARS -->
+<div class="stars" id="stars"></div>
+
+<!-- CLOUDS — static at final positions -->
+<div class="cloud cloud-1">
+  <svg width="364" height="140" viewBox="0 0 260 100" fill="none">
+    <path d="M18 72 Q8 52 26 47 Q20 26 52 28 Q56 12 80 18 Q92 4 118 16 Q138 5 158 18 Q178 8 194 26 Q218 22 224 44 Q242 46 238 66 Q232 80 210 76 Q170 88 128 82 Q86 90 44 84 Q18 86 18 72Z" fill="#F8F6F0" opacity="0.1" stroke="#7EDCCA" stroke-width="1" stroke-opacity="0.2"/>
+  </svg>
+</div>
+<div class="cloud cloud-2">
+  <svg width="336" height="126" viewBox="0 0 240 90" fill="none">
+    <path d="M222 68 Q236 50 218 44 Q226 24 196 24 Q194 10 168 14 Q158 3 136 14 Q114 4 94 16 Q72 10 58 28 Q34 24 28 44 Q10 46 8 64 Q4 78 26 80 Q68 92 108 86 Q148 94 186 86 Q218 92 222 68Z" fill="#F8F6F0" opacity="0.1" stroke="#7EDCCA" stroke-width="1" stroke-opacity="0.2"/>
+  </svg>
+</div>
+<div class="cloud cloud-3">
+  <svg width="280" height="112" viewBox="0 0 200 80" fill="none">
+    <path d="M14 58 Q6 42 20 37 Q14 20 40 22 Q44 9 64 14 Q76 3 96 13 Q112 4 128 15 Q146 8 156 24 Q172 20 176 38 Q190 42 186 56 Q180 68 160 64 Q126 74 92 68 Q58 74 28 68 Q10 70 14 58Z" fill="#F8F6F0" opacity="0.08" stroke="#F8F6F0" stroke-width="0.8" stroke-opacity="0.15"/>
+  </svg>
+</div>
+<div class="cloud cloud-4">
+  <svg width="252" height="101" viewBox="0 0 180 72" fill="none">
+    <path d="M166 54 Q178 38 162 33 Q168 16 142 16 Q140 6 118 10 Q108 1 90 10 Q72 2 56 14 Q38 10 30 26 Q14 22 10 38 Q4 50 22 54 Q56 64 88 58 Q120 66 150 58 Q172 62 166 54Z" fill="#F8F6F0" opacity="0.08" stroke="#F8F6F0" stroke-width="0.8" stroke-opacity="0.15"/>
+  </svg>
+</div>
+
+<!-- ROCKET NAV — links back to index.html -->
+<a class="rocket-nav" href="index.html" id="rocketNav" aria-label="Torna alla home">
+  <svg viewBox="0 0 80 110" fill="none">
+    <rect x="26" y="20" width="28" height="58" rx="14" fill="#F5C842"/>
+    <path d="M26 34 Q40 6 54 34Z" fill="#F5C842"/>
+    <path d="M30 32 Q40 12 46 28" stroke="#FFE080" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+    <circle cx="40" cy="50" r="9" fill="#1A2E45"/>
+    <circle cx="40" cy="50" r="7" fill="#0D1B2A"/>
+    <circle cx="37.5" cy="47.5" r="2" fill="#7EDCCA" opacity="0.7"/>
+    <circle cx="34" cy="64" r="2.5" fill="#E03A2F" opacity="0.8"/>
+    <circle cx="40" cy="64" r="2.5" fill="#E03A2F" opacity="0.8"/>
+    <circle cx="46" cy="64" r="2.5" fill="#E03A2F" opacity="0.8"/>
+    <circle cx="34" cy="71" r="2.5" fill="#E03A2F" opacity="0.6"/>
+    <circle cx="46" cy="71" r="2.5" fill="#E03A2F" opacity="0.6"/>
+    <path d="M26 58 L10 82 L26 77Z" fill="#E03A2F"/>
+    <path d="M54 58 L70 82 L54 77Z" fill="#E03A2F"/>
+    <path d="M30 78 Q40 84 50 78 L48 88 Q40 93 32 88Z" fill="#1A2E45"/>
+  </svg>
+</a>
+
+<!-- HOVER BADGE -->
+<div id="hover-badges">
+  <div class="hover-badge" id="homeBadge">← Home</div>
+</div>
+
+<!-- ════════════════════════════════════
+     HERO
+════════════════════════════════════ -->
+<section class="cs-hero">
+
+  <!-- decorative rocket logo mark above heading -->
+  <svg class="cs-hero-logo" viewBox="0 0 80 110" fill="none" aria-hidden="true">
+    <rect x="26" y="20" width="28" height="58" rx="14" fill="#F5C842"/>
+    <path d="M26 34 Q40 6 54 34Z" fill="#F5C842"/>
+    <path d="M30 32 Q40 12 46 28" stroke="#FFE080" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+    <circle cx="40" cy="50" r="9" fill="#1A2E45"/>
+    <circle cx="40" cy="50" r="7" fill="#0D1B2A"/>
+    <circle cx="37.5" cy="47.5" r="2" fill="#7EDCCA" opacity="0.7"/>
+    <circle cx="34" cy="64" r="2.5" fill="#E03A2F" opacity="0.8"/>
+    <circle cx="40" cy="64" r="2.5" fill="#E03A2F" opacity="0.8"/>
+    <circle cx="46" cy="64" r="2.5" fill="#E03A2F" opacity="0.8"/>
+    <circle cx="34" cy="71" r="2.5" fill="#E03A2F" opacity="0.6"/>
+    <circle cx="46" cy="71" r="2.5" fill="#E03A2F" opacity="0.6"/>
+    <path d="M26 58 L10 82 L26 77Z" fill="#E03A2F"/>
+    <path d="M54 58 L70 82 L54 77Z" fill="#E03A2F"/>
+    <path d="M30 78 Q40 84 50 78 L48 88 Q40 93 32 88Z" fill="#1A2E45"/>
+  </svg>
+
+  <div id="heroText">
+    <h1 class="cs-hero-title">Chi Siamo</h1>
+    <p class="cs-hero-sub">La pedagogia dietro Missione Mattoncini.</p>
+  </div>
+
+  <div class="cs-scroll-hint">
+    <span>Scorri</span>
+    <span class="cs-scroll-arrow">↓</span>
+  </div>
+
+</section>
+
+<!-- ════════════════════════════════════
+     MISSION STATEMENT
+════════════════════════════════════ -->
+<section class="cs-mission">
+  <div class="cs-mission-inner">
+    <span class="cs-quote-mark" aria-hidden="true">"</span>
+    <p class="cs-mission-body">
+      Missione Mattoncini nasce da una convinzione semplice: i bambini imparano meglio quando costruiscono, sbagliano, e ricostruiscono. Ogni sessione introduce un vero concetto scientifico — gravità, forze, densità, biomimetica — attraverso il fare concreto, non la teoria. E lo fa in due lingue, perché il vocabolario scientifico in inglese non si impara dalla ripetizione, ma dal contesto.
+    </p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     THREE PILLARS
+════════════════════════════════════ -->
+<section class="cs-pillars">
+
+  <div class="cs-section-label">Il nostro approccio</div>
+  <h2 class="cs-section-heading">Tre principi, ogni sessione.</h2>
+
+  <div class="cs-cards-grid">
+
+    <div class="cs-card">
+      <div class="cs-card-num">01</div>
+      <div class="cs-card-title">Scienza vera, ogni settimana</div>
+      <p class="cs-card-body">Ogni sessione ha un concetto scientifico reale al centro. I bambini non "giocano con i mattoncini" — testano ipotesi, misurano risultati, e capiscono perché le cose funzionano.</p>
+    </div>
+
+    <div class="cs-card">
+      <div class="cs-card-num">02</div>
+      <div class="cs-card-title">Inglese attraverso il fare</div>
+      <p class="cs-card-body">Il vocabolario nasce dall'esperienza. Dopo sei sessioni i bambini hanno assorbito decine di termini scientifici bilingui in modo naturale, senza memorizzazione.</p>
+    </div>
+
+    <div class="cs-card">
+      <div class="cs-card-num">03</div>
+      <div class="cs-card-title">Fallire è imparare</div>
+      <p class="cs-card-body">Torri cadute e barche affondate non sono fallimenti, sono dati. L'iterazione è il punto.</p>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ════════════════════════════════════
+     CTA FOOTER STRIP
+════════════════════════════════════ -->
+<section class="cs-cta-strip">
+  <h2 class="cs-cta-heading">Pronta/o a partire?</h2>
+  <p class="cs-cta-sub">I posti sono limitati — prima edizione ottobre–dicembre 2026, Bubano (Mordano).</p>
+  <a href="index.html" class="cs-cta-btn">Scopri i Workshop →</a>
+</section>
+
+<!-- ════════════════════════════════════
+     FOOTER
+════════════════════════════════════ -->
+<footer class="cs-footer">
+  <p class="cs-footer-text">Missione Mattoncini — Costruiamo · Esploriamo · Impariamo</p>
+  <a href="index.html" class="cs-footer-link">← Torna alla home</a>
+</footer>
+
+<script>
+/* ── STARS (same generation as index.html) ── */
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 200; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const sz = Math.random() * 3 + 3;
+  s.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--duration:${Math.random()*1.5+1.5}s;--delay:${Math.random()*6}s;--max-opacity:${Math.random()*0.55+0.3}`;
+  starsEl.appendChild(s);
+}
+for (let i = 0; i < 40; i++) {
+  const s = document.createElement('div');
+  s.className = 'star star-large';
+  const sz = Math.random() * 4 + 5;
+  s.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--duration:${Math.random()*4+4}s;--delay:${Math.random()*8}s;--max-opacity:${Math.random()*0.3+0.2}`;
+  starsEl.appendChild(s);
+}
+
+/* ── ROCKET HOVER BADGE ── */
+const rocketNav = document.getElementById('rocketNav');
+const homeBadge = document.getElementById('homeBadge');
+let hoverTimer;
+
+rocketNav.addEventListener('mouseenter', () => {
+  hoverTimer = setTimeout(() => homeBadge.classList.add('show'), 60);
+});
+rocketNav.addEventListener('mouseleave', () => {
+  clearTimeout(hoverTimer);
+  homeBadge.classList.remove('show');
+});
+
+/* ── PARALLAX SCROLL ── */
+const isMobile = () => window.innerWidth < 768;
+
+const parallaxLayers = {
+  stars:   document.getElementById('stars'),
+  cloud1:  document.querySelector('.cloud-1'),
+  cloud2:  document.querySelector('.cloud-2'),
+  cloud3:  document.querySelector('.cloud-3'),
+  cloud4:  document.querySelector('.cloud-4'),
+  logo:    document.querySelector('.cs-hero-logo'),
+  heroTxt: document.getElementById('heroText'),
+};
+
+let lastScrollY = 0;
+let rafPending  = false;
+
+function applyParallax() {
+  const sy = lastScrollY;
+
+  if (!isMobile()) {
+    parallaxLayers.stars.style.transform   = `translateY(${sy * 0.3}px)`;
+    parallaxLayers.cloud1.style.transform  = `translateY(${sy * 0.15}px)`;
+    parallaxLayers.cloud2.style.transform  = `translateY(${sy * 0.2}px)`;
+    parallaxLayers.cloud3.style.transform  = `translateY(${sy * 0.1}px)`;
+    parallaxLayers.cloud4.style.transform  = `translateY(${sy * 0.12}px)`;
+    parallaxLayers.logo.style.transform    = `translateY(${sy * 0.5}px)`;
+    parallaxLayers.heroTxt.style.transform = `translateY(${sy * 0.4}px)`;
+    // Fade hero text out as user scrolls into the mission section
+    parallaxLayers.heroTxt.style.opacity   = Math.max(0, 1 - sy / 400);
+  }
+
+  rafPending = false;
+}
+
+window.addEventListener('scroll', () => {
+  lastScrollY = window.scrollY;
+  if (!rafPending) {
+    rafPending = true;
+    requestAnimationFrame(applyParallax);
+  }
+}, { passive: true });
+
+// Reset transforms if window resizes past mobile breakpoint
+window.addEventListener('resize', () => {
+  if (isMobile()) {
+    Object.values(parallaxLayers).forEach(el => {
+      if (el) { el.style.transform = ''; el.style.opacity = ''; }
+    });
+  }
+}, { passive: true });
+
+/* ── ENTRANCE ANIMATIONS (IntersectionObserver) ── */
+const entranceObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const delay = parseInt(entry.target.dataset.animDelay || '0', 10);
+      setTimeout(() => entry.target.classList.add('anim-in'), delay);
+      entranceObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+
+// Mission block
+const missionEl = document.querySelector('.cs-mission');
+if (missionEl) {
+  missionEl.classList.add('anim-ready');
+  entranceObserver.observe(missionEl);
+}
+
+// Cards — staggered
+document.querySelectorAll('.cs-card').forEach((card, i) => {
+  card.classList.add('anim-ready');
+  card.dataset.animDelay = i * 120;
+  entranceObserver.observe(card);
+});
+
+// CTA strip
+const ctaEl = document.querySelector('.cs-cta-strip');
+if (ctaEl) {
+  ctaEl.classList.add('anim-ready');
+  entranceObserver.observe(ctaEl);
+}
+</script>
+</body>
+</html>
