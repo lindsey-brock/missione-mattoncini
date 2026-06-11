@@ -2076,7 +2076,7 @@
         <span class="drawer-nav-label">Workshop</span>
         <span class="drawer-nav-arrow">→</span>
       </a>
-      <a href="chi-siamo.html" class="drawer-nav-item">
+      <a href="#" class="drawer-nav-item" onclick="navigateWithRocket('chi-siamo.html'); return false;">
         <span class="drawer-nav-num">02 —</span>
         <span class="drawer-nav-label">Chi Siamo</span>
         <span class="drawer-nav-arrow">→</span>
@@ -2433,6 +2433,61 @@ function toggleDrawer() {
 
 // Click-outside closes drawer
 overlayEl.addEventListener('click', closeDrawer);
+
+/* ════════════════════════════════════════
+   PAGE TRANSITION — NAVIGATE WITH ROCKET
+════════════════════════════════════════ */
+function navigateWithRocket(url) {
+  closeDrawer();
+  animating = false;
+
+  rocket.style.transition = 'none';
+  rocket.style.bottom     = 'auto';
+  rocket.style.right      = 'auto';
+  rocket.style.width      = '80px';
+  rocket.style.height     = '110px';
+
+  requestAnimationFrame(() => {
+    flameWrap.classList.add('active');
+    flameWrap.classList.remove('nav-mode');
+  });
+
+  const W = window.innerWidth;
+  const startX = 56, startY = 67;
+  const endX   = W * 0.45, endY = -160;
+  const dur    = 800;
+  let   liftStart = null;
+
+  function liftOff(ts) {
+    if (!liftStart) liftStart = ts;
+    const t  = Math.min((ts - liftStart) / dur, 1);
+    const et = t * t;
+    const x  = startX + (endX - startX) * et;
+    const y  = startY + (endY - startY) * et;
+    const angle = Math.atan2(endY - startY, endX - startX);
+
+    rocket.style.left      = (x - 40) + 'px';
+    rocket.style.top       = (y - 55) + 'px';
+    rocket.style.transform = `rotate(${angle + Math.PI / 2}rad)`;
+
+    if (Math.random() > 0.4) {
+      canvas.style.opacity = '1';
+      canvas.style.transition = '';
+      for (let i = 0; i < 2; i++) addParticle(x, y, angle + Math.PI + (Math.random()-0.5)*0.5);
+    }
+    updateTrail();
+
+    if (t < 1) { requestAnimationFrame(liftOff); }
+    else        { window.location.href = url; }
+  }
+
+  setTimeout(() => {
+    document.body.style.transition = 'opacity 0.5s ease';
+    document.body.style.opacity = '0';
+  }, 350);
+
+  requestAnimationFrame(liftOff);
+}
 
 /* ════════════════════════════════════════
    WORKSHOP DATA
