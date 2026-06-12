@@ -2354,7 +2354,12 @@ function finalizeRocket() {
     document.body.classList.add('unlocked');
     enableRocketNav();
     document.getElementById('waBlurb').classList.add('ready');
-    setTimeout(showNWPopup, 600);
+    // Auto-open booking modal if arriving from chi-siamo "Iscriviti" CTA
+    if (new URLSearchParams(location.search).get('prenota')) {
+      setTimeout(() => openBookingModal(detectNextWorkshop()), 400);
+    } else {
+      setTimeout(showNWPopup, 600);
+    }
   }, 1200);
 
   canvas.style.transition = 'opacity 1s';

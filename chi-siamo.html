@@ -551,9 +551,9 @@ body.unlocked { overflow: auto; height: auto; }
 </section>
 
 <section class="cs-cta-strip">
-  <h2 class="cs-cta-heading">Pronta/o a partire?</h2>
+  <h2 class="cs-cta-heading">Pronti a partire?</h2>
   <p class="cs-cta-sub">I posti sono limitati — prima edizione ottobre–dicembre 2026, Bubano (Mordano).</p>
-  <a href="#" class="cs-cta-btn" onclick="navigateWithRocket('index.html'); return false;">Scopri i Workshop →</a>
+  <a href="#" class="cs-cta-btn" onclick="navigateWithRocket('index.html?prenota=1'); return false;">Iscriviti ora →</a>
 </section>
 
 
@@ -567,7 +567,7 @@ body.unlocked { overflow: auto; height: auto; }
   const targets = [
     document.querySelector('.cs-mission'),
     ...Array.from(document.querySelectorAll('.cs-card')),
-    document.querySelector('.cs-cta-strip'),
+    // .cs-cta-strip intentionally excluded — always visible at bottom
   ].filter(Boolean);
   targets.forEach(el => {
     el.style.opacity   = '0';
@@ -918,7 +918,7 @@ function initParallaxAndIO() {
   const entranceTargets = [
     { el: document.querySelector('.cs-mission'),   delay: 0 },
     ...Array.from(document.querySelectorAll('.cs-card')).map((card, i) => ({ el: card, delay: i * 120 })),
-    { el: document.querySelector('.cs-cta-strip'), delay: 0 },
+    // .cs-cta-strip excluded — always visible
   ].filter(t => t.el);
 
   const entranceObserver = new IntersectionObserver((entries) => {
