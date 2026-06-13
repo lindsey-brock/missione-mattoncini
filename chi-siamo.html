@@ -59,6 +59,7 @@ body.unlocked { overflow: auto; height: auto; }
 
 /* ── TITLE BLOCK ── */
 .title-block {
+  width: 100%;
   text-align: center;
   position: relative;
   z-index: 2;
@@ -73,15 +74,10 @@ body.unlocked { overflow: auto; height: auto; }
   letter-spacing: -0.03em;
   line-height: 0.92;
   opacity: 0;
-  clip-path: inset(0 100% 0 0);
+  animation: fadeUp 0.7s ease-out forwards;
 }
-.title-line.line1 { color: var(--white); }
-.title-line.line2 { color: var(--gold); }
-.title-line.reveal { animation: textReveal 0.7s cubic-bezier(0.25,0.46,0.45,0.94) forwards; }
-@keyframes textReveal {
-  0%   { opacity: 1; clip-path: inset(0 100% 0 0); }
-  100% { opacity: 1; clip-path: inset(0 0% 0 0); }
-}
+.title-line.line1 { color: var(--white); animation-delay: 0.25s; }
+.title-line.line2 { color: var(--gold);  animation-delay: 0.45s; }
 .tagline {
   font-family: 'Syne', sans-serif;
   font-weight: 400;
@@ -370,8 +366,8 @@ body.unlocked { overflow: auto; height: auto; }
 .scroll-indicator {
   position: absolute;
   bottom: 32px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -631,23 +627,15 @@ function updateTrail() {
 }
 
 /* ════════════════════════════════════════
-   ROCKET INTRO ANIMATION
+   ROCKET INTRO — single drop-in landing
+   (matches the rocketSwirl landing used on
+   the workshop page, not the homepage sweep)
 ════════════════════════════════════════ */
 const rocket    = document.getElementById('rocket');
 const flameWrap = document.getElementById('flameWrap');
-const line1     = document.getElementById('line1');
-const line2     = document.getElementById('line2');
 
-let titleRect, line1Rect, line2Rect;
-function getTitlePositions() {
-  titleRect = document.querySelector('.title-block').getBoundingClientRect();
-  line1Rect = line1.getBoundingClientRect();
-  line2Rect = line2.getBoundingClientRect();
-}
-
-let phase    = 0;
 let animating = true;
-const NAV_X = 50, NAV_Y = 36;
+const NAV_X = 56, NAV_Y = 67; // nav centre
 
 function easeInOut(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
 function bezier(p0,p1,p2,p3,t) {
@@ -659,54 +647,51 @@ function bezierTangent(p0,p1,p2,p3,t) {
   return { x:3*(mt*mt*(p1.x-p0.x)+2*mt*t*(p2.x-p1.x)+t*t*(p3.x-p2.x)), y:3*(mt*mt*(p1.y-p0.y)+2*mt*t*(p2.y-p1.y)+t*t*(p3.y-p2.y)) };
 }
 
-let paths = [];
-function buildPaths() {
+function runIntroAnimation() {
   const W = window.innerWidth, H = window.innerHeight;
-  getTitlePositions();
-  const l1cy = line1Rect.top + line1Rect.height / 2;
-  const l2cy = line2Rect.top + line2Rect.height / 2;
-  paths = [
-    { p0:{x:W+100,y:H+100}, p1:{x:W*0.7,y:H*0.8}, p2:{x:W*0.1,y:l1cy+40}, p3:{x:-100,y:l1cy}, duration:1600 },
-    { p0:{x:-100,y:l1cy},   p1:{x:W*0.3,y:l1cy-30}, p2:{x:W*0.7,y:l1cy+20}, p3:{x:W+120,y:l1cy-10}, duration:900 },
-    { p0:{x:W+120,y:l1cy-10}, p1:{x:W*0.9,y:l2cy-80}, p2:{x:W*0.4,y:l2cy-40}, p3:{x:-120,y:l2cy}, duration:1000 },
-    { p0:{x:-120,y:l2cy},   p1:{x:W*0.15,y:l2cy+60}, p2:{x:W*0.05,y:H*0.3}, p3:{x:NAV_X,y:NAV_Y}, duration:1100 }
-  ];
-}
 
-let startTime = null;
-function animate(ts) {
-  if (!startTime) startTime = ts;
-  const elapsed = ts - startTime;
-  if (elapsed < 500) { requestAnimationFrame(animate); return; }
-  updateTrail();
-  if (!animating) return;
+  // One bezier segment: off-screen above → sweep across → drop straight
+  // into nav corner from directly above (p2 directly above p3 so the
+  // rocket points straight up on landing — no spinning)
+  const path = {
+    p0: { x: W * 0.55,  y: -120       },
+    p1: { x: W * 0.25,  y: H * 0.18   },
+    p2: { x: NAV_X,     y: NAV_Y + 260 },
+    p3: { x: NAV_X,     y: NAV_Y       }
+  };
+  const duration = 1300;
+  let startTime = null;
 
-  const path = paths[phase];
-  if (!path) { finalizeRocket(); return; }
-
-  const phaseElapsed = elapsed - 500 - paths.slice(0, phase).reduce((a,p) => a + p.duration, 0);
-  const t  = Math.min(phaseElapsed / path.duration, 1);
-  const et = easeInOut(t);
-  const pos  = bezier(path.p0, path.p1, path.p2, path.p3, et);
-  const tang = bezierTangent(path.p0, path.p1, path.p2, path.p3, Math.min(et+0.01,1));
-  const angle = Math.atan2(tang.y, tang.x);
-
-  rocket.style.left      = (pos.x - 40) + 'px';
-  rocket.style.top       = (pos.y - 55) + 'px';
-  rocket.style.bottom    = 'auto';
-  rocket.style.right     = 'auto';
-  rocket.style.transform = `rotate(${angle + Math.PI/2}rad)`;
-
-  if (Math.random() > 0.3) {
-    for (let i = 0; i < 3; i++) addParticle(pos.x, pos.y, angle + Math.PI + (Math.random()-0.5)*0.5);
-  }
+  rocket.style.left   = (path.p0.x - 40) + 'px';
+  rocket.style.top    = (path.p0.y - 55) + 'px';
+  rocket.style.bottom = 'auto';
+  rocket.style.right  = 'auto';
+  canvas.style.opacity    = '1';
+  canvas.style.transition = '';
   flameWrap.classList.add('active');
+  flameWrap.classList.remove('nav-mode');
 
-  if (t >= 1) {
-    phase++;
-    if (phase === 1) line1.classList.add('reveal');
-    if (phase === 2) line2.classList.add('reveal');
-    if (phase === 3) {
+  function animate(ts) {
+    if (!startTime) startTime = ts;
+    const t     = Math.min((ts - startTime) / duration, 1);
+    const et    = easeInOut(t);
+    const pos   = bezier(path.p0, path.p1, path.p2, path.p3, et);
+    const tang  = bezierTangent(path.p0, path.p1, path.p2, path.p3, Math.min(et + 0.01, 1));
+    const angle = Math.atan2(tang.y, tang.x);
+
+    rocket.style.left      = (pos.x - 40) + 'px';
+    rocket.style.top       = (pos.y - 55) + 'px';
+    rocket.style.transform = `rotate(${angle + Math.PI / 2}rad)`;
+
+    if (Math.random() > 0.3) {
+      for (let i = 0; i < 3; i++) addParticle(pos.x, pos.y, angle + Math.PI + (Math.random()-0.5)*0.5);
+    }
+    updateTrail();
+
+    if (t < 1) {
+      requestAnimationFrame(animate);
+    } else {
+      // Trigger clouds same timing as index.html finalizeRocket
       setTimeout(() => {
         document.getElementById('c1').classList.add('show');
         document.getElementById('c2').classList.add('show');
@@ -715,9 +700,10 @@ function animate(ts) {
           document.getElementById('c4').classList.add('show');
         }, 300);
       }, 200);
+      finalizeRocket();
     }
-    if (phase >= paths.length) { animating = false; finalizeRocket(); return; }
   }
+
   requestAnimationFrame(animate);
 }
 
@@ -750,7 +736,7 @@ function finalizeRocket() {
   canvas.style.opacity = '0';
 }
 
-window.addEventListener('load', () => { buildPaths(); requestAnimationFrame(animate); });
+window.addEventListener('load', () => { runIntroAnimation(); });
 window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
 
 /* ════════════════════════════════════════
