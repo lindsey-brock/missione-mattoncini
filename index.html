@@ -2253,6 +2253,7 @@ function getTitlePositions() {
 let phase = 0;
 let animating = true;
 const NAV_X = 50, NAV_Y = 36;
+const INTRO_PLAYED_KEY = 'mm_intro_played';
 
 function easeInOut(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
 function bezier(p0,p1,p2,p3,t) {
@@ -2351,22 +2352,58 @@ function finalizeRocket() {
     });
   }, 1100);
   setTimeout(() => {
+    sessionStorage.setItem(INTRO_PLAYED_KEY, '1');
     document.body.classList.add('unlocked');
     enableRocketNav();
     document.getElementById('waBlurb').classList.add('ready');
-    // Auto-navigate to workshop calendar if arriving from chi-siamo CTA
-    if (new URLSearchParams(location.search).get('workshops')) {
-      setTimeout(() => goToWorkshops(), 400);
-    } else {
-      setTimeout(showNWPopup, 600);
-    }
+    setTimeout(showNWPopup, 600);
   }, 1200);
 
   canvas.style.transition = 'opacity 1s';
   canvas.style.opacity = '0';
 }
 
-window.addEventListener('load', () => { buildPaths(); requestAnimationFrame(animate); });
+window.addEventListener('load', () => {
+  buildPaths();
+  const urlGoWorkshops = new URLSearchParams(location.search).get('workshops');
+  if (urlGoWorkshops) history.replaceState(null, '', location.pathname); // strip param immediately
+  const goWorkshops = urlGoWorkshops || sessionStorage.getItem('mm_goto_workshops');
+  if (goWorkshops) sessionStorage.removeItem('mm_goto_workshops');
+  if (goWorkshops || sessionStorage.getItem(INTRO_PLAYED_KEY)) {
+    // Skip intro — place rocket at nav position immediately
+    animating = false;
+    rocket.style.transition = 'none';
+    rocket.style.left   = '16px';
+    rocket.style.top    = '12px';
+    rocket.style.width  = '40px';
+    rocket.style.height = '40px';
+    rocket.style.transform = 'rotate(0deg)';
+    flameWrap.classList.remove('active');
+    flameWrap.classList.add('nav-mode');
+    // Show all hero content instantly
+    document.getElementById('line1').classList.add('reveal');
+    document.getElementById('line2').classList.add('reveal');
+    document.getElementById('tagline').classList.add('visible');
+    document.getElementById('ctaWrap').classList.add('visible');
+    document.querySelectorAll('.pillar-card').forEach(c => c.classList.add('in-view'));
+    ['c1','c2','c3','c4'].forEach(id => document.getElementById(id).classList.add('show'));
+    document.body.classList.add('unlocked');
+    enableRocketNav();
+    document.getElementById('waBlurb').classList.add('ready');
+    if (goWorkshops) {
+      // Show workshops view immediately — no animation, no homepage flash
+      currentView = 'workshops';
+      document.getElementById('view-home').classList.add('view-hidden');
+      const wsView = document.getElementById('view-workshops');
+      wsView.classList.remove('view-hidden');
+      renderWorkshopCards();
+    } else {
+      setTimeout(showNWPopup, 300);
+    }
+  } else {
+    requestAnimationFrame(animate);
+  }
+});
 window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
 
 /* ════════════════════════════════════════
