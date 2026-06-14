@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chi Siamo — Missione Mattoncini</title>
+<title>Contatti — Missione Mattoncini</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -45,7 +45,7 @@ body.unlocked { overflow: auto; height: auto; }
 
 /* ── HERO ── */
 .hero {
-  position: relative; /* anchors .scroll-indicator */
+  position: relative;
   width: 100vw;
   height: 100vh;
   display: flex;
@@ -292,57 +292,178 @@ body.unlocked { overflow: auto; height: auto; }
 @keyframes cL2 { 0%{opacity:0;transform:translateX(0)} 15%{opacity:0.7} 100%{opacity:0.7;transform:translateX(320px)} }
 @keyframes cR2 { 0%{opacity:0;transform:translateX(0)} 15%{opacity:0.7} 100%{opacity:0.7;transform:translateX(-290px)} }
 
-/* ── CHI-SIAMO SECTIONS ── */
-.cs-mission {
-  position: relative; z-index: 1;
-  background: var(--midnight);
-  padding: 110px 32px 120px;
-  display: flex; justify-content: center;
+/* ── SCROLL INDICATOR ── */
+.scroll-indicator {
+  position: absolute;
+  bottom: 32px; left: 0; right: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  opacity: 0; pointer-events: none;
 }
-.cs-mission-inner { max-width: 760px; width: 100%; }
-.cs-quote-mark {
-  display: block;
-  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 5rem;
-  line-height: 0.75; color: var(--brick); opacity: 0.85;
-  margin-bottom: 24px; user-select: none;
+.scroll-indicator.visible { animation: fadeUp 0.6s ease-out 1.2s forwards; }
+.scroll-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 1rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--muted);
 }
-.cs-mission-body {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 1.1rem; line-height: 1.8;
-  color: var(--white); opacity: 0.88;
+.scroll-chevron {
+  color: var(--aqua); font-size: 1.4rem; line-height: 1;
+  animation: scrollBounce 1.4s ease-in-out infinite;
 }
-.cs-pillars {
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(6px); }
+}
+
+/* ── CONTACT FORM SECTION ── */
+.ct-form-section {
   position: relative; z-index: 1;
   background: var(--navy);
   border-top: 1px solid rgba(245,200,66,0.1);
-  padding: 100px 120px;
+  display: flex; justify-content: center;
 }
-@media (max-width: 900px) { .cs-pillars { padding: 80px 32px; } }
-.cs-section-label {
+.ct-form-inner {
+  max-width: 680px; width: 100%;
+  padding: 80px 48px;
+}
+@media (max-width: 700px) { .ct-form-inner { padding: 60px 24px; } }
+.ct-section-label {
   font-family: 'Space Mono', monospace;
   font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase;
   color: var(--aqua); margin-bottom: 12px;
 }
-.cs-section-heading {
+.ct-heading {
   font-family: 'Syne', sans-serif; font-weight: 800;
-  font-size: clamp(1.8rem, 4vw, 2.8rem); letter-spacing: -0.03em;
-  color: var(--white); margin-bottom: 48px;
+  font-size: clamp(1.8rem, 4vw, 2.6rem); letter-spacing: -0.03em;
+  color: var(--white); margin-bottom: 10px;
 }
-.cs-cards-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+.ct-subtext {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.92rem; line-height: 1.65; color: var(--muted);
+  margin-bottom: 40px;
 }
-@media (max-width: 900px) { .cs-cards-grid { grid-template-columns: 1fr; } }
-.cs-card {
+
+/* Form fields */
+.ct-form { display: flex; flex-direction: column; gap: 24px; }
+.ct-field { display: flex; flex-direction: column; gap: 6px; }
+.ct-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+}
+.ct-input,
+.ct-textarea {
   background: var(--midnight);
-  border: 1px solid rgba(245,200,66,0.15);
-  border-radius: 8px; padding: 28px 24px 26px;
-  display: flex; flex-direction: column; gap: 12px;
-  transition: transform 0.2s, border-color 0.2s;
+  border: 1px solid rgba(126,220,202,0.2);
+  color: var(--white);
+  border-radius: 4px;
+  padding: 12px 16px;
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
 }
-.cs-card:hover { transform: translateY(-4px); border-color: rgba(245,200,66,0.4); }
-.cs-card-num { font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.18em; color: var(--gold); }
-.cs-card-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em; color: var(--white); line-height: 1.2; }
-.cs-card-body { font-family: 'DM Sans', sans-serif; font-size: 0.86rem; line-height: 1.65; color: var(--white); opacity: 0.78; }
+.ct-input:focus,
+.ct-textarea:focus { border-color: var(--aqua); }
+.ct-input::placeholder,
+.ct-textarea::placeholder { color: var(--muted); opacity: 0.6; }
+.ct-textarea { min-height: 140px; resize: vertical; }
+
+/* Radio pill group */
+.ct-radio-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+  margin-bottom: 2px;
+}
+.ct-radio-group { display: flex; flex-wrap: wrap; gap: 10px; }
+.ct-radio-option { display: none; }
+.ct-radio-pill {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem; font-weight: 500;
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(126,220,202,0.3);
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  user-select: none;
+}
+.ct-radio-option:checked + .ct-radio-pill {
+  background: rgba(245,200,66,0.15);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.ct-radio-pill:hover { border-color: rgba(126,220,202,0.6); color: var(--white); }
+
+/* Field error */
+.ct-error {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem; color: var(--brick);
+  display: none;
+}
+.ct-field.has-error .ct-input,
+.ct-field.has-error .ct-textarea { border-color: var(--brick); }
+.ct-field.has-error .ct-error { display: block; }
+
+/* Submit button */
+.ct-submit {
+  display: block; width: 100%;
+  font-family: 'DM Sans', sans-serif; font-weight: 500;
+  font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--midnight); background: var(--gold);
+  padding: 14px 28px; border: none; border-radius: 6px;
+  cursor: pointer; text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-top: 8px;
+}
+.ct-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(245,200,66,0.35); }
+
+/* Success message */
+.ct-success {
+  display: none;
+  text-align: center;
+  padding: 48px 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.ct-success.visible { display: flex; }
+.ct-success-icon {
+  font-size: 2rem; color: var(--aqua); line-height: 1;
+}
+.ct-success-heading {
+  font-family: 'Syne', sans-serif; font-weight: 700;
+  font-size: 1.4rem; color: var(--white);
+}
+.ct-success-body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem; color: var(--muted); line-height: 1.65; max-width: 380px;
+}
+
+/* Divider */
+.ct-divider {
+  display: flex; align-items: center; gap: 16px;
+  margin: 40px 0;
+}
+.ct-divider-line {
+  flex: 1; height: 1px; background: rgba(255,255,255,0.08);
+}
+.ct-divider-text {
+  font-family: 'DM Sans', sans-serif; font-size: 0.8rem; color: var(--muted);
+}
+
+/* WhatsApp CTA */
+.ct-wa-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%;
+  background: #25D366; color: #fff;
+  font-family: 'DM Sans', sans-serif; font-weight: 500;
+  font-size: 0.88rem; letter-spacing: 0.04em;
+  padding: 14px 28px; border-radius: 4px;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.ct-wa-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,211,102,0.4); }
+
+/* CTA strip */
 .cs-cta-strip {
   position: relative; z-index: 1;
   background: var(--brick); padding: 88px 32px;
@@ -359,40 +480,6 @@ body.unlocked { overflow: auto; height: auto; }
   transition: transform 0.2s, box-shadow 0.2s;
 }
 .cs-cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.25); }
-
-/* Entrance animation state is managed entirely via JS in initParallaxAndIO() */
-
-/* ── SCROLL INDICATOR ── */
-.scroll-indicator {
-  position: absolute;
-  bottom: 32px;
-  left: 0;
-  right: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  opacity: 0;
-  pointer-events: none;
-}
-.scroll-indicator.visible { animation: fadeUp 0.6s ease-out 1.2s forwards; }
-.scroll-label {
-  font-family: 'Space Mono', monospace;
-  font-size: 1rem;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.scroll-chevron {
-  color: var(--aqua);
-  font-size: 1.4rem;
-  line-height: 1;
-  animation: scrollBounce 1.4s ease-in-out infinite;
-}
-@keyframes scrollBounce {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(6px); }
-}
 </style>
 </head>
 <body>
@@ -428,9 +515,8 @@ body.unlocked { overflow: auto; height: auto; }
 <!-- HERO -->
 <div class="hero">
   <div class="title-block">
-    <span class="title-line line1" id="line1">Chi</span>
-    <span class="title-line line2" id="line2">Siamo</span>
-    <div class="tagline" id="tagline">La pedagogia dietro <em>Missione Mattoncini.</em></div>
+    <span class="title-line line1" id="line1">Contatti</span>
+    <div class="tagline" id="tagline"><em>Scrivici</em> — rispondiamo entro 24 ore.</div>
   </div>
 </div>
 
@@ -483,22 +569,22 @@ body.unlocked { overflow: auto; height: auto; }
     </div>
     <div class="drawer-divider"></div>
     <nav class="drawer-nav">
-      <a href="#" class="drawer-nav-item" onclick="navigateWithRocket('index.html'); return false;">
+      <a href="#" class="drawer-nav-item" onclick="sessionStorage.setItem('mm_goto_workshops','1'); navigateWithRocket('index.html'); return false;">
         <span class="drawer-nav-num">01 —</span>
         <span class="drawer-nav-label">Workshop</span>
         <span class="drawer-nav-arrow">→</span>
       </a>
-      <a href="#" class="drawer-nav-item nav-active" onclick="closeDrawer(); return false;">
+      <a href="#" class="drawer-nav-item" onclick="sessionStorage.setItem('mm_from_nav','1'); navigateWithRocket('chi-siamo.html'); return false;">
         <span class="drawer-nav-num">02 —</span>
         <span class="drawer-nav-label">Chi Siamo</span>
         <span class="drawer-nav-arrow">→</span>
       </a>
-      <a href="#" class="drawer-nav-item" onclick="navigateWithRocket('index.html'); return false;">
+      <a href="#" class="drawer-nav-item" onclick="sessionStorage.setItem('mm_goto_workshops','1'); navigateWithRocket('index.html'); return false;">
         <span class="drawer-nav-num">03 —</span>
         <span class="drawer-nav-label">Iscrizioni</span>
         <span class="drawer-nav-arrow">→</span>
       </a>
-      <a href="#" class="drawer-nav-item" onclick="sessionStorage.setItem('mm_from_nav','1'); navigateWithRocket('contatti.html'); return false;">
+      <a href="#" class="drawer-nav-item nav-active" onclick="closeDrawer(); return false;">
         <span class="drawer-nav-num">04 —</span>
         <span class="drawer-nav-label">Contatti</span>
         <span class="drawer-nav-arrow">→</span>
@@ -514,58 +600,86 @@ body.unlocked { overflow: auto; height: auto; }
   </div>
 </div>
 
-<!-- CHI-SIAMO CONTENT -->
-<section class="cs-mission">
-  <div class="cs-mission-inner">
-    <span class="cs-quote-mark" aria-hidden="true">"</span>
-    <p class="cs-mission-body">
-      Missione Mattoncini nasce da una convinzione semplice: i bambini imparano meglio quando costruiscono, sbagliano, e ricostruiscono. Ogni sessione introduce un vero concetto scientifico — gravità, forze, densità, biomimetica — attraverso il fare concreto, non la teoria. E lo fa in due lingue, perché il vocabolario scientifico in inglese non si impara dalla ripetizione, ma dal contesto.
-    </p>
+<!-- CONTACT FORM SECTION -->
+<section class="ct-form-section" id="ctFormSection">
+  <div class="ct-form-inner">
+    <div class="ct-section-label">Mettiti in contatto</div>
+    <h2 class="ct-heading">Hai domande sui workshop?</h2>
+    <p class="ct-subtext">Compila il modulo o scrivici direttamente su WhatsApp.</p>
+
+    <form class="ct-form" id="ctForm" novalidate>
+      <div class="ct-field" id="field-nome">
+        <label class="ct-label" for="ct-nome">Nome</label>
+        <input class="ct-input" id="ct-nome" type="text" placeholder="Il tuo nome" required autocomplete="given-name">
+        <span class="ct-error">Inserisci il tuo nome.</span>
+      </div>
+
+      <div class="ct-field" id="field-email">
+        <label class="ct-label" for="ct-email">Email</label>
+        <input class="ct-input" id="ct-email" type="email" placeholder="tua@email.com" required autocomplete="email">
+        <span class="ct-error">Inserisci un indirizzo email valido.</span>
+      </div>
+
+      <div class="ct-field" id="field-tel">
+        <label class="ct-label" for="ct-tel">WhatsApp o telefono <span style="opacity:0.55">(opzionale)</span></label>
+        <input class="ct-input" id="ct-tel" type="tel" placeholder="+39 333 1234567" autocomplete="tel">
+      </div>
+
+      <div class="ct-field" id="field-messaggio">
+        <label class="ct-label" for="ct-messaggio">Messaggio</label>
+        <textarea class="ct-textarea" id="ct-messaggio" placeholder="Scrivi qui la tua domanda…" required></textarea>
+        <span class="ct-error">Scrivi il tuo messaggio.</span>
+      </div>
+
+      <div class="ct-field">
+        <div class="ct-radio-label">Di cosa hai bisogno?</div>
+        <div class="ct-radio-group">
+          <input class="ct-radio-option" type="radio" name="motivo" id="r1" value="informazioni" checked>
+          <label class="ct-radio-pill" for="r1">Informazioni sui workshop</label>
+          <input class="ct-radio-option" type="radio" name="motivo" id="r2" value="iscrizione">
+          <label class="ct-radio-pill" for="r2">Iscrizione e pagamento</label>
+          <input class="ct-radio-option" type="radio" name="motivo" id="r3" value="altro">
+          <label class="ct-radio-pill" for="r3">Altro</label>
+        </div>
+      </div>
+
+      <!-- TODO: wire to Resend or Formspree to actually send the message -->
+      <button class="ct-submit" type="submit">Invia Messaggio →</button>
+    </form>
+
+    <div class="ct-success" id="ctSuccess">
+      <div class="ct-success-icon">✓</div>
+      <div class="ct-success-heading">Messaggio ricevuto!</div>
+      <p class="ct-success-body">Ti risponderemo entro 24 ore su WhatsApp o via email. A presto!</p>
+    </div>
+
+    <div class="ct-divider" id="ctWaDivider">
+      <div class="ct-divider-line"></div>
+      <span class="ct-divider-text">oppure</span>
+      <div class="ct-divider-line"></div>
+    </div>
+
+    <!-- TODO: replace YOURPHONENUMBER with your WhatsApp number in international format (e.g. 393331234567) -->
+    <a class="ct-wa-btn" id="ctWaBtn" href="https://wa.me/YOURPHONENUMBER" target="_blank" rel="noopener">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+      Scrivici su WhatsApp →
+    </a>
   </div>
 </section>
 
-<section class="cs-pillars">
-  <div class="cs-section-label">Il nostro approccio</div>
-  <h2 class="cs-section-heading">Tre principi, ogni sessione.</h2>
-  <div class="cs-cards-grid">
-    <div class="cs-card">
-      <div class="cs-card-num">01</div>
-      <div class="cs-card-title">Scienza vera, ogni settimana</div>
-      <p class="cs-card-body">Ogni sessione ha un concetto scientifico reale al centro. I bambini non "giocano con i mattoncini" — testano ipotesi, misurano risultati, e capiscono perché le cose funzionano.</p>
-    </div>
-    <div class="cs-card">
-      <div class="cs-card-num">02</div>
-      <div class="cs-card-title">Inglese attraverso il fare</div>
-      <p class="cs-card-body">Il vocabolario nasce dall'esperienza. Dopo sei sessioni i bambini hanno assorbito decine di termini scientifici bilingui in modo naturale, senza memorizzazione.</p>
-    </div>
-    <div class="cs-card">
-      <div class="cs-card-num">03</div>
-      <div class="cs-card-title">Fallire è imparare</div>
-      <p class="cs-card-body">Torri cadute e barche affondate non sono fallimenti, sono dati. L'iterazione è il punto.</p>
-    </div>
-  </div>
-</section>
-
+<!-- FOOTER CTA STRIP -->
 <section class="cs-cta-strip">
   <h2 class="cs-cta-heading">Pronti a partire?</h2>
   <p class="cs-cta-sub">I posti sono limitati — prima edizione ottobre–dicembre 2026, Bubano (Mordano).</p>
   <a href="#" class="cs-cta-btn" onclick="sessionStorage.setItem('mm_goto_workshops','1'); navigateWithRocket('index.html'); return false;">Scopri i Workshop →</a>
 </section>
 
-
 <script>
 /* ════════════════════════════════════════
-   ENTRANCE ELEMENTS — hide immediately on
-   page load so there's no flash of content
-   before the IntersectionObserver fires
+   ENTRANCE ELEMENTS — hide on load
 ════════════════════════════════════════ */
 (function hideEntranceElements() {
-  const targets = [
-    document.querySelector('.cs-mission'),
-    ...Array.from(document.querySelectorAll('.cs-card')),
-    // .cs-cta-strip intentionally excluded — always visible at bottom
-  ].filter(Boolean);
-  targets.forEach(el => {
+  [document.getElementById('ctFormSection')].filter(Boolean).forEach(el => {
     el.style.opacity   = '0';
     el.style.transform = 'translateY(32px)';
   });
@@ -628,14 +742,12 @@ function updateTrail() {
 
 /* ════════════════════════════════════════
    ROCKET INTRO — single drop-in landing
-   (matches the rocketSwirl landing used on
-   the workshop page, not the homepage sweep)
 ════════════════════════════════════════ */
 const rocket    = document.getElementById('rocket');
 const flameWrap = document.getElementById('flameWrap');
 
 let animating = true;
-const NAV_X = 56, NAV_Y = 67; // nav centre
+const NAV_X = 56, NAV_Y = 67;
 
 function easeInOut(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
 function bezier(p0,p1,p2,p3,t) {
@@ -649,10 +761,6 @@ function bezierTangent(p0,p1,p2,p3,t) {
 
 function runIntroAnimation() {
   const W = window.innerWidth, H = window.innerHeight;
-
-  // One bezier segment: off-screen above → sweep across → drop straight
-  // into nav corner from directly above (p2 directly above p3 so the
-  // rocket points straight up on landing — no spinning)
   const path = {
     p0: { x: W * 0.55,  y: -120       },
     p1: { x: W * 0.25,  y: H * 0.18   },
@@ -691,7 +799,6 @@ function runIntroAnimation() {
     if (t < 1) {
       requestAnimationFrame(animate);
     } else {
-      // Trigger clouds same timing as index.html finalizeRocket
       setTimeout(() => {
         document.getElementById('c1').classList.add('show');
         document.getElementById('c2').classList.add('show');
@@ -722,7 +829,6 @@ function finalizeRocket() {
   setTimeout(() => {
     document.body.classList.add('unlocked');
     enableRocketNav();
-    // Build and show scroll indicator
     const ind = document.createElement('div');
     ind.className = 'scroll-indicator';
     ind.id = 'scrollIndicator';
@@ -738,7 +844,6 @@ function finalizeRocket() {
 
 /* ════════════════════════════════════════
    ROCKET SWIRL — two-arc landing
-   Mirrors the rocketSwirl on index.html.
    Used when arriving via rocket nav from another page.
 ════════════════════════════════════════ */
 function rocketSwirl(onSwitch, onDone) {
@@ -833,11 +938,9 @@ window.addEventListener('load', () => {
   const fromNav = sessionStorage.getItem('mm_from_nav');
   if (fromNav) {
     sessionStorage.removeItem('mm_from_nav');
-    // Show content instantly (skip intro reveal), then play swirl
     document.getElementById('tagline').classList.add('visible');
     document.body.classList.add('unlocked');
     enableRocketNav();
-    // Create scroll indicator
     const ind = document.createElement('div');
     ind.className = 'scroll-indicator';
     ind.id = 'scrollIndicator';
@@ -909,7 +1012,6 @@ function navigateWithRocket(url) {
   closeDrawer();
   animating = false;
 
-  // Scale rocket back up and fire flame
   rocket.style.transition = 'none';
   rocket.style.bottom     = 'auto';
   rocket.style.right      = 'auto';
@@ -922,7 +1024,7 @@ function navigateWithRocket(url) {
   });
 
   const W = window.innerWidth;
-  const startX = 56, startY = 67; // nav centre
+  const startX = 56, startY = 67;
   const endX   = W * 0.45, endY = -160;
   const dur    = 800;
   let   liftStart = null;
@@ -930,7 +1032,7 @@ function navigateWithRocket(url) {
   function liftOff(ts) {
     if (!liftStart) liftStart = ts;
     const t  = Math.min((ts - liftStart) / dur, 1);
-    const et = t * t; // ease-in
+    const et = t * t;
     const x  = startX + (endX - startX) * et;
     const y  = startY + (endY - startY) * et;
     const angle = Math.atan2(endY - startY, endX - startX);
@@ -946,14 +1048,10 @@ function navigateWithRocket(url) {
     }
     updateTrail();
 
-    if (t < 1) {
-      requestAnimationFrame(liftOff);
-    } else {
-      window.location.href = url;
-    }
+    if (t < 1) { requestAnimationFrame(liftOff); }
+    else        { window.location.href = url; }
   }
 
-  // Fade page out
   setTimeout(() => {
     document.body.style.transition = 'opacity 0.5s ease';
     document.body.style.opacity = '0';
@@ -964,12 +1062,10 @@ function navigateWithRocket(url) {
 
 /* ════════════════════════════════════════
    PARALLAX + ENTRANCE ANIMATIONS
-   Initialised after rocket intro completes
 ════════════════════════════════════════ */
 function initParallaxAndIO() {
   const isMobile = () => window.innerWidth < 768;
 
-  // Set will-change via JS so it only promotes layers when actually needed
   ['stars', 'c1', 'c2', 'c3', 'c4'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.willChange = 'transform';
@@ -1011,13 +1107,8 @@ function initParallaxAndIO() {
     }
   }, { passive: true });
 
-  // ── ENTRANCE ANIMATIONS ──
-  // Initial hidden state is already set on page load (above the STARS block).
-  // Observer fires only when the element reaches the centre band of the viewport.
   const entranceTargets = [
-    { el: document.querySelector('.cs-mission'),   delay: 0 },
-    ...Array.from(document.querySelectorAll('.cs-card')).map((card, i) => ({ el: card, delay: i * 120 })),
-    // .cs-cta-strip excluded — always visible
+    { el: document.getElementById('ctFormSection'), delay: 0 },
   ].filter(t => t.el);
 
   const entranceObserver = new IntersectionObserver((entries) => {
@@ -1034,13 +1125,65 @@ function initParallaxAndIO() {
 
   entranceTargets.forEach(({ el }) => entranceObserver.observe(el));
 }
-</script>
 
-<div style="position:fixed;bottom:28px;right:28px;z-index:200;">
-  <a href="https://wa.me/TUONUMERO" target="_blank" rel="noopener" style="position:relative;display:flex;align-items:center;justify-content:center;width:56px;height:56px;background:#25D366;border-radius:50%;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,0.45);transition:transform 0.2s,box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 28px rgba(37,211,102,0.6)'" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 20px rgba(37,211,102,0.45)'">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-  </a>
-</div>
+/* ════════════════════════════════════════
+   CONTACT FORM VALIDATION + SUBMIT
+════════════════════════════════════════ */
+document.getElementById('ctForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  let valid = true;
+
+  // Nome
+  const nome = document.getElementById('ct-nome');
+  const fieldNome = document.getElementById('field-nome');
+  if (!nome.value.trim()) {
+    fieldNome.classList.add('has-error');
+    valid = false;
+  } else {
+    fieldNome.classList.remove('has-error');
+  }
+
+  // Email
+  const email = document.getElementById('ct-email');
+  const fieldEmail = document.getElementById('field-email');
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
+  if (!emailOk) {
+    fieldEmail.classList.add('has-error');
+    valid = false;
+  } else {
+    fieldEmail.classList.remove('has-error');
+  }
+
+  // Messaggio
+  const msg = document.getElementById('ct-messaggio');
+  const fieldMsg = document.getElementById('field-messaggio');
+  if (!msg.value.trim()) {
+    fieldMsg.classList.add('has-error');
+    valid = false;
+  } else {
+    fieldMsg.classList.remove('has-error');
+  }
+
+  if (!valid) return;
+
+  // TODO: wire to Resend or Formspree to actually send the message
+
+  // Show success state
+  document.getElementById('ctForm').style.display = 'none';
+  document.getElementById('ctSuccess').classList.add('visible');
+  document.getElementById('ctWaDivider').style.display = 'none';
+  document.getElementById('ctWaBtn').style.display = 'none';
+});
+
+// Clear error on input
+['ct-nome', 'ct-email', 'ct-messaggio'].forEach(id => {
+  document.getElementById(id).addEventListener('input', function() {
+    const field = this.closest('.ct-field');
+    if (field) field.classList.remove('has-error');
+  });
+});
+</script>
 
 </body>
 </html>

@@ -1104,6 +1104,132 @@
     transition: transform 0.2s, box-shadow 0.2s;
   }
   .wm-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(245,200,66,0.35); }
+
+  /* ── SCOPRI DI PIÙ card button ── */
+  .ws-scopri-btn {
+    align-self: flex-end;
+    margin-top: auto;
+    background: transparent;
+    border: 1px solid rgba(126,220,202,0.4);
+    color: var(--aqua);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .ws-scopri-btn:hover {
+    border-color: var(--aqua);
+    background: rgba(126,220,202,0.08);
+  }
+
+  /* ── SESSION DETAIL MODAL ── */
+  .sd-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(13,27,42,0.88);
+    backdrop-filter: blur(6px);
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .sd-overlay.open { opacity: 1; pointer-events: auto; }
+  .sd-card {
+    background: #1A2E45;
+    border: 1px solid rgba(126,220,202,0.15);
+    border-radius: 12px;
+    max-width: 780px;
+    width: 100%;
+    max-height: 88vh;
+    overflow-y: auto;
+    padding: 40px 36px 36px;
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(126,220,202,0.3) transparent;
+  }
+  .sd-overlay.open .sd-card { transform: translateY(0); }
+  .sd-video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--midnight);
+    border: 1px solid rgba(126,220,202,0.15);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .sd-play-btn {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: rgba(245,200,66,0.15);
+    border: 2px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    color: var(--gold);
+    padding-left: 4px; /* optical nudge for the ▶ */
+  }
+  .sd-video-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .sd-age-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+  .sd-age-pill {
+    background: rgba(245,200,66,0.1);
+    border: 1px solid rgba(245,200,66,0.3);
+    color: var(--gold);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    padding: 4px 11px;
+    border-radius: 20px;
+    letter-spacing: 0.08em;
+  }
+  /* ── SESSION TIMELINE ── */
+  .sd-timeline {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  .sd-timeline-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .sd-timeline-row:last-child { border-bottom: none; }
+  .sd-timeline-time {
+    min-width: 110px;
+    flex-shrink: 0;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--gold);
+    border-left: 2px solid var(--brick);
+    padding-left: 10px;
+    line-height: 1.5;
+  }
+  .sd-timeline-activity {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    color: var(--white);
+    line-height: 1.5;
+    opacity: 0.9;
+  }
   .cal-time-label {
     font-family: 'Space Mono', monospace;
     font-size: 0.48rem;
@@ -2086,7 +2212,7 @@
         <span class="drawer-nav-label">Iscrizioni</span>
         <span class="drawer-nav-arrow">→</span>
       </a>
-      <a href="#" class="drawer-nav-item">
+      <a href="#" class="drawer-nav-item" onclick="sessionStorage.setItem('mm_from_nav','1'); navigateWithRocket('contatti.html'); return false;">
         <span class="drawer-nav-num">04 —</span>
         <span class="drawer-nav-label">Contatti</span>
         <span class="drawer-nav-arrow">→</span>
@@ -2172,6 +2298,13 @@
   <div class="wm-card">
     <button class="wm-close" onclick="closeModal()">✕</button>
     <div id="wm-content"></div>
+  </div>
+</div>
+
+<div id="session-detail-overlay" class="sd-overlay">
+  <div class="sd-card">
+    <button class="wm-close" onclick="closeSessionDetail()">✕</button>
+    <div id="sd-content"></div>
   </div>
 </div>
 
@@ -2542,7 +2675,15 @@ const WORKSHOPS = [
     english: ['gravity', 'structure', 'weight', 'strong'],
     age: '5–10 anni', lang: 'Bilingue', time: '10:00–11:30',
     price: '€12 (lancio) · €15 dalla 2a ed.', location: 'Bubano (Mordano) — sede TBD',
-    payment: 'Pagamento anticipato richiesto. Nessun rimborso in caso di assenza. I posti sono limitati — prenota subito.'
+    payment: 'Pagamento anticipato richiesto. Nessun rimborso in caso di assenza. I posti sono limitati — prenota subito.',
+    schedule: [
+      { time: '10:00–10:10', activity: 'Benvenuto e domanda di lancio: "Quanto peso può reggere una torre?"' },
+      { time: '10:10–10:25', activity: 'Costruzione libera: ogni bambino costruisce la torre più alta possibile' },
+      { time: '10:25–10:40', activity: 'Test di carico: aggiungiamo peso fino al crollo e misuriamo' },
+      { time: '10:40–10:55', activity: 'Rebuild: riprogettare con quello che abbiamo imparato' },
+      { time: '10:55–11:20', activity: 'Sfida finale: costruzione di squadra, struttura più resistente' },
+      { time: '11:20–11:30', activity: 'Wrap-up bilingue: gravity, structure, weight, strong — cosa abbiamo scoperto?' }
+    ]
   },
   {
     num: '02', title: 'Bridge Challenge', titleIT: 'Il Ponte',
@@ -2552,7 +2693,15 @@ const WORKSHOPS = [
     english: ['bridge', 'force', 'tension', 'pressure'],
     age: '5–10 anni', lang: 'Bilingue', time: '10:00–11:30',
     price: '€12 (lancio) · €15 dalla 2a ed.', location: 'Bubano (Mordano) — sede TBD',
-    payment: 'Pagamento anticipato richiesto. Nessun rimborso in caso di assenza. I posti sono limitati — prenota subito.'
+    payment: 'Pagamento anticipato richiesto. Nessun rimborso in caso di assenza. I posti sono limitati — prenota subito.',
+    schedule: [
+      { time: '10:00–10:10', activity: 'Benvenuto: "Quale ponte regge di più?"' },
+      { time: '10:10–10:25', activity: 'Costruzione del primo ponte con mattoncini' },
+      { time: '10:25–10:40', activity: 'Test: quante macchinine/monete regge prima di cedere?' },
+      { time: '10:40–10:55', activity: 'Osserviamo: dov\'è ceduto? Compressione o tensione?' },
+      { time: '10:55–11:20', activity: 'Redesign e sfida finale: ponte più resistente della classe' },
+      { time: '11:20–11:30', activity: 'Wrap-up bilingue: bridge, force, tension, pressure' }
+    ]
   },
   {
     num: '03', title: 'The Roman Arch', titleIT: "L'Arco Romano",
@@ -2562,7 +2711,15 @@ const WORKSHOPS = [
     english: ['arch', 'compression', 'ancient', 'balance'],
     age: '5–10 anni', lang: 'Bilingue', time: '10:00–11:30',
     price: '€12 (lancio) · €15 dalla 2a ed.', location: 'Bubano (Mordano) — sede TBD',
-    payment: 'Pagamento anticipato richiesto. Nessun rimborso in caso di assenza. I posti sono limitati — prenota subito.'
+    payment: 'Pagamento anticipato richiesto. Nessun rimborso in caso di assenza. I posti sono limitati — prenota subito.',
+    schedule: [
+      { time: '10:00–10:10', activity: 'Benvenuto: "Come facevano i Romani senza colla e viti?"' },
+      { time: '10:10–10:30', activity: 'Costruiamo un arco romano passo per passo — la chiave di volta' },
+      { time: '10:30–10:45', activity: 'Test: togliere la chiave di volta — cosa succede?' },
+      { time: '10:45–11:00', activity: 'Confronto: arco vs. struttura dritta — quale regge di più?' },
+      { time: '11:00–11:20', activity: 'Sfida: costruire un acquedotto in miniatura' },
+      { time: '11:20–11:30', activity: 'Wrap-up bilingue: arch, compression, ancient, balance' }
+    ]
   },
   {
     num: '04', title: 'Ramp Racers', titleIT: 'Macchine Veloci',
@@ -2572,7 +2729,15 @@ const WORKSHOPS = [
     english: ['speed', 'friction', 'ramp', 'fast', 'slow'],
     age: '5–10 anni', lang: 'Bilingue', time: '10:00–11:30',
     price: '€12 (lancio) · €15 dalla 2a ed.', location: 'Bubano (Mordano) — sede TBD',
-    payment: 'Pagamento anticipato richiesto. Nessun rimborso in caso di assenza. I posti sono limitati — prenota subito.'
+    payment: 'Pagamento anticipato richiesto. Nessun rimborso in caso di assenza. I posti sono limitati — prenota subito.',
+    schedule: [
+      { time: '10:00–10:10', activity: 'Benvenuto: "Perché alcune macchine vanno più veloci di altre?"' },
+      { time: '10:10–10:30', activity: 'Costruzione della macchina LEGO personalizzata' },
+      { time: '10:30–10:45', activity: 'Prima gara sulla rampa — misuriamo le distanze' },
+      { time: '10:45–11:00', activity: 'Modifica: cambiamo peso, forma, ruote — cosa cambia?' },
+      { time: '11:00–11:20', activity: 'Gara finale e analisi dei risultati' },
+      { time: '11:20–11:30', activity: 'Wrap-up bilingue: speed, friction, ramp, fast, slow' }
+    ]
   },
   {
     num: '05', title: 'Float or Sink?', titleIT: 'Affonda o Galleggia?',
@@ -2582,7 +2747,15 @@ const WORKSHOPS = [
     english: ['float', 'sink', 'density', 'water', 'heavy', 'light'],
     age: '5–10 anni', lang: 'Bilingue', time: '10:00–11:30',
     price: '€12 (lancio) · €15 dalla 2a ed.', location: 'Bubano (Mordano) — sede TBD',
-    payment: 'Pagamento anticipato richiesto. Nessun rimborso in caso di assenza. I posti sono limitati — prenota subito.'
+    payment: 'Pagamento anticipato richiesto. Nessun rimborso in caso di assenza. I posti sono limitati — prenota subito.',
+    schedule: [
+      { time: '10:00–10:10', activity: 'Benvenuto: "Perché le navi di metallo galleggiano?"' },
+      { time: '10:10–10:25', activity: 'Costruiamo la prima barca con materiali diversi' },
+      { time: '10:25–10:40', activity: 'Test: quante biglie regge prima di affondare?' },
+      { time: '10:40–10:55', activity: 'Redesign: forma diversa, stesso materiale — cosa cambia?' },
+      { time: '10:55–11:20', activity: 'Sfida finale: barca che regge più biglie della classe' },
+      { time: '11:20–11:30', activity: 'Wrap-up bilingue: float, sink, density, water, heavy, light' }
+    ]
   },
   {
     num: '06', title: 'Animal Engineers', titleIT: 'Ingegneri della Natura',
@@ -2592,7 +2765,15 @@ const WORKSHOPS = [
     english: ['hexagon', 'structure', 'strong', 'nature', 'test', 'build'],
     age: '5–10 anni', lang: 'Bilingue', time: '10:00–11:30',
     price: '€12 (lancio) · €15 dalla 2a ed.', location: 'Bubano (Mordano) — sede TBD',
-    payment: 'Pagamento anticipato richiesto. Nessun rimborso in caso di assenza. I posti sono limitati — prenota subito.'
+    payment: 'Pagamento anticipato richiesto. Nessun rimborso in caso di assenza. I posti sono limitati — prenota subito.',
+    schedule: [
+      { time: '10:00–10:10', activity: 'Benvenuto: "Chi è il miglior ingegnere del mondo?"' },
+      { time: '10:10–10:30', activity: 'Costruzione a stazioni: alveare (Magna-Tiles), ragnatela (spago), nido (LEGO)' },
+      { time: '10:30–10:45', activity: 'Test di resistenza: quale struttura regge di più?' },
+      { time: '10:45–11:00', activity: 'Perché funziona? Geometria esagonale, tensione, distribuzione del peso' },
+      { time: '11:00–11:20', activity: 'Progetto libero: inventa la tua struttura ispirata alla natura' },
+      { time: '11:20–11:30', activity: 'Wrap-up bilingue: hexagon, structure, strong, nature, test, build' }
+    ]
   }
 ];
 
@@ -2799,7 +2980,7 @@ function renderWorkshopCards() {
       <div class="ws-card-concept">${w.concept}</div>
       <p class="ws-card-desc">${w.description}</p>
       <div class="ws-card-pills">${pills}</div>
-      <button class="ws-card-btn" onclick="openBookingModal(${i})">Prenota →</button>
+      <button class="ws-scopri-btn" onclick="openSessionDetail(${i})">Scopri di più →</button>
     </div>`;
   }).join('');
 }
@@ -3170,7 +3351,7 @@ async function bmPay() {
 document.getElementById('booking-modal-overlay').addEventListener('click', e => {
   if (e.target === document.getElementById('booking-modal-overlay')) closeBookingModal();
 });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeBookingModal(); closeModal(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeBookingModal(); closeModal(); closeSessionDetail(); } });
 
 /* ════════════════════════════════════════
    WORKSHOP MODAL
@@ -3223,6 +3404,76 @@ function closeModal() {
 }
 
 wmOverlay.addEventListener('click', e => { if (e.target === wmOverlay) closeModal(); });
+
+/* ════════════════════════════════════════
+   SESSION DETAIL MODAL
+════════════════════════════════════════ */
+const sdOverlay = document.getElementById('session-detail-overlay');
+
+function openSessionDetail(idx) {
+  const w = WORKSHOPS[idx];
+  const kwPills = w.english.map(k => `<span class="wm-pill">${k}</span>`).join('');
+  const earlyBird = new Date() < new Date(2026, 9, 17);
+  document.getElementById('sd-content').innerHTML = `
+    <span class="wm-num">Missione ${w.num}</span>
+    <h2 class="wm-title">${w.titleIT}</h2>
+    <p class="wm-title-en">${w.title}</p>
+
+    <div class="sd-video">
+      <div class="sd-play-btn">▶</div>
+      <span class="sd-video-label">Video in arrivo</span>
+    </div>
+
+    <div class="wm-meta">
+      <div>📅 ${formatDate(w.date)}</div>
+      <div>🕙 ${w.time}</div>
+      <div>📍 ${w.location}</div>
+    </div>
+
+    <p class="wm-concept">🔬 ${w.concept}</p>
+
+    <span class="wm-section-label">Come funziona</span>
+    <p class="wm-desc">${w.description}</p>
+
+    <span class="wm-section-label">Programma della sessione</span>
+    <div class="sd-timeline">
+      ${w.schedule.map(s => `
+      <div class="sd-timeline-row">
+        <span class="sd-timeline-time">${s.time}</span>
+        <span class="sd-timeline-activity">${s.activity}</span>
+      </div>`).join('')}
+    </div>
+
+    <span class="wm-section-label">Parole chiave in inglese</span>
+    <div class="wm-kw-pills">${kwPills}</div>
+
+    <div class="sd-age-pills">
+      <span class="sd-age-pill">👦 ${w.age}</span>
+      <span class="sd-age-pill">🌍 ${w.lang}</span>
+    </div>
+
+    <div class="wm-pricing">
+      ${earlyBird
+        ? `<div><span class="wm-lancio">EARLY BIRD</span><span class="wm-price-gold">€12 a bambino — prenota prima del 17 ottobre 2026</span></div>
+           <div style="color:var(--muted)">Dopo il 17 ottobre: €15 a bambino</div>`
+        : `<div><span class="wm-price-gold">€15 a bambino</span></div>`
+      }
+      <div class="wm-psi-line">+ 🧸 Psicomotricità per fratelli/sorelle (2–4 anni): €7 a bambino</div>
+    </div>
+    <p class="wm-payment">Pagamento anticipato richiesto. Nessun rimborso in caso di assenza.<br>I posti sono limitati — prenota subito.</p>
+
+    <button class="wm-cta" onclick="closeSessionDetail(); openBookingModal(${idx})">Prenota il tuo posto →</button>
+  `;
+  sdOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSessionDetail() {
+  sdOverlay.classList.remove('open');
+  document.body.style.overflow = document.body.classList.contains('unlocked') ? 'auto' : 'hidden';
+}
+
+sdOverlay.addEventListener('click', e => { if (e.target === sdOverlay) closeSessionDetail(); });
 
 /* ════════════════════════════════════════
    DETECT NEXT WORKSHOP
