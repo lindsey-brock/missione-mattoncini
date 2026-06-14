@@ -2391,12 +2391,7 @@ window.addEventListener('load', () => {
     enableRocketNav();
     document.getElementById('waBlurb').classList.add('ready');
     if (goWorkshops) {
-      // Show workshops view immediately — no animation, no homepage flash
-      currentView = 'workshops';
-      document.getElementById('view-home').classList.add('view-hidden');
-      const wsView = document.getElementById('view-workshops');
-      wsView.classList.remove('view-hidden');
-      renderWorkshopCards();
+      setTimeout(() => goToWorkshops(), 100);
     } else {
       setTimeout(showNWPopup, 300);
     }
