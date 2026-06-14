@@ -736,7 +736,120 @@ function finalizeRocket() {
   canvas.style.opacity = '0';
 }
 
-window.addEventListener('load', () => { runIntroAnimation(); });
+/* ════════════════════════════════════════
+   ROCKET SWIRL — two-arc landing
+   Mirrors the rocketSwirl on index.html.
+   Used when arriving via rocket nav from another page.
+════════════════════════════════════════ */
+function rocketSwirl(onSwitch, onDone) {
+  animating = false;
+  const W = window.innerWidth, H = window.innerHeight;
+  const navX = 56, navY = 67;
+
+  rocket.style.transition = 'none';
+  rocket.style.width  = '80px';
+  rocket.style.height = '110px';
+  rocket.style.left   = (navX - 40) + 'px';
+  rocket.style.top    = (navY - 55) + 'px';
+  rocket.style.transform = 'rotate(0deg)';
+  canvas.style.transition = '';
+  canvas.style.opacity    = '1';
+
+  requestAnimationFrame(() => {
+    flameWrap.classList.add('active');
+    flameWrap.classList.remove('nav-mode');
+  });
+
+  const swirlPaths = [
+    {
+      p0: {x: navX,     y: navY},
+      p1: {x: W * 0.45, y: -100},
+      p2: {x: W + 100,  y: H * 0.45},
+      p3: {x: W * 0.45, y: H + 100},
+      duration: 750
+    },
+    {
+      p0: {x: W * 0.45, y: H + 100},
+      p1: {x: -120,     y: H * 0.5},
+      p2: {x: navX,     y: navY + 280},
+      p3: {x: navX,     y: navY},
+      duration: 900
+    }
+  ];
+
+  let swirlPhase = 0, swirlStart = null, switched = false;
+
+  function animateSwirl(ts) {
+    if (!swirlStart) swirlStart = ts;
+    const path    = swirlPaths[swirlPhase];
+    const elapsed = ts - swirlStart;
+    const t       = Math.min(elapsed / path.duration, 1);
+    const et      = easeInOut(t);
+    const pos     = bezier(path.p0, path.p1, path.p2, path.p3, et);
+    const tang    = bezierTangent(path.p0, path.p1, path.p2, path.p3, Math.min(et + 0.01, 1));
+    const angle   = Math.atan2(tang.y, tang.x);
+
+    rocket.style.left      = (pos.x - 40) + 'px';
+    rocket.style.top       = (pos.y - 55) + 'px';
+    rocket.style.transform = `rotate(${angle + Math.PI / 2}rad)`;
+
+    if (Math.random() > 0.3) {
+      for (let i = 0; i < 3; i++) addParticle(pos.x, pos.y, angle + Math.PI + (Math.random() - 0.5) * 0.5);
+    }
+    updateTrail();
+
+    if (!switched && swirlPhase === 1 && t > 0.06) {
+      switched = true;
+      onSwitch();
+    }
+
+    if (t >= 1) {
+      swirlPhase++;
+      swirlStart = null;
+      if (swirlPhase >= swirlPaths.length) {
+        rocket.style.transition = 'left 0.4s ease-out, top 0.4s ease-out, width 0.4s ease-out, height 0.4s ease-out, transform 0.4s ease-out';
+        rocket.style.left   = '16px';
+        rocket.style.top    = '12px';
+        rocket.style.width  = '40px';
+        rocket.style.height = '40px';
+        rocket.style.transform = 'rotate(0deg)';
+        setTimeout(() => {
+          flameWrap.classList.remove('active');
+          flameWrap.classList.add('nav-mode');
+          canvas.style.transition = 'opacity 1s';
+          canvas.style.opacity    = '0';
+          onDone();
+        }, 420);
+        return;
+      }
+    }
+    requestAnimationFrame(animateSwirl);
+  }
+
+  requestAnimationFrame(animateSwirl);
+}
+
+window.addEventListener('load', () => {
+  const fromNav = sessionStorage.getItem('mm_from_nav');
+  if (fromNav) {
+    sessionStorage.removeItem('mm_from_nav');
+    // Show content instantly (skip intro reveal), then play swirl
+    document.getElementById('tagline').classList.add('visible');
+    document.body.classList.add('unlocked');
+    enableRocketNav();
+    // Create scroll indicator
+    const ind = document.createElement('div');
+    ind.className = 'scroll-indicator';
+    ind.id = 'scrollIndicator';
+    ind.innerHTML = `<span class="scroll-label">Scorri</span><span class="scroll-chevron">▾</span>`;
+    document.querySelector('.hero').appendChild(ind);
+    requestAnimationFrame(() => ind.classList.add('visible'));
+    initParallaxAndIO();
+    rocketSwirl(() => {}, () => {});
+  } else {
+    runIntroAnimation();
+  }
+});
 window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
 
 /* ════════════════════════════════════════

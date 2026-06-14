@@ -2076,7 +2076,7 @@
         <span class="drawer-nav-label">Workshop</span>
         <span class="drawer-nav-arrow">→</span>
       </a>
-      <a href="#" class="drawer-nav-item" onclick="navigateWithRocket('chi-siamo.html'); return false;">
+      <a href="#" class="drawer-nav-item" onclick="sessionStorage.setItem('mm_from_nav','1'); navigateWithRocket('chi-siamo.html'); return false;">
         <span class="drawer-nav-num">02 —</span>
         <span class="drawer-nav-label">Chi Siamo</span>
         <span class="drawer-nav-arrow">→</span>
@@ -2391,7 +2391,11 @@ window.addEventListener('load', () => {
     enableRocketNav();
     document.getElementById('waBlurb').classList.add('ready');
     if (goWorkshops) {
-      setTimeout(() => goToWorkshops(), 100);
+      // Show workshops immediately (no home flash), then play the swirl on top
+      currentView = 'workshops';
+      document.getElementById('view-home').classList.add('view-hidden');
+      document.getElementById('view-workshops').classList.remove('view-hidden');
+      setTimeout(() => rocketSwirl(() => {}, () => {}), 100);
     } else {
       setTimeout(showNWPopup, 300);
     }
