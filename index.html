@@ -3169,6 +3169,10 @@ function renderBmStep2() {
         <input class="bm-input" type="tel" id="bm-telefono" placeholder="+39 333 123 4567" value="${f.telefono||''}">
         <div class="bm-input-error" id="err-telefono"></div>
       </div>
+      <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-top:4px">
+        <input type="checkbox" id="bm-newsletter" style="margin-top:3px;accent-color:var(--aqua)" ${f.newsletterOptIn ? 'checked' : ''}>
+        <span style="font-size:0.82rem;color:var(--muted);line-height:1.4">Voglio ricevere aggiornamenti sulle prossime missioni e novità Missione Mattoncini</span>
+      </label>
     </div>
     <button class="bm-cta" onclick="bmValidateStep2()">Continua al pagamento →</button>`;
 }
@@ -3253,7 +3257,10 @@ function bmValidateStep2() {
     el.style.borderColor = invalid ? 'var(--brick)' : '';
     if (invalid) { ok = false; } else { bookingFormData[key] = val; }
   });
-  if (ok) { bookingStep = 3; renderBookingModal(); }
+  if (ok) {
+    bookingFormData.newsletterOptIn = document.getElementById('bm-newsletter')?.checked ?? false;
+    bookingStep = 3; renderBookingModal();
+  }
 }
 
 /* ── STEP 1 STEPPERS ── */
@@ -3261,21 +3268,10 @@ function adjustBmChildren(d) { bookingState.children    = Math.max(1, bookingSta
 function adjustBmPsi(d)      { bookingState.psiChildren = Math.max(0, bookingState.psiChildren + d); renderBookingModal(); }
 
 /* ── STRIPE ── */
-// TODO: replace with your Stripe publishable key from dashboard.stripe.com
-/*
- * STRIPE INTEGRATION TODO:
- * 1. Create a backend endpoint (e.g. Supabase Edge Function or Next.js API route)
- *    that receives booking data + paymentMethod.id and calls stripe.paymentIntents.create()
- * 2. Return the client_secret to the frontend
- * 3. Call stripe.confirmCardPayment(clientSecret) here to complete the charge
- * 4. On success, save the booking to your database and send confirmation emails via Resend
- */
 function mountStripeCard() {
   if (!window.Stripe) { console.warn('Stripe.js not loaded yet'); return; }
 
-  // Initialise Stripe once; recreate elements each visit so amount is always current
   if (!stripeInstance) {
-    // TODO: replace with your Stripe publishable key from dashboard.stripe.com
     stripeInstance = Stripe('pk_live_51ThECpH5xM63HUdBhTs99fOyZfnYFr5WmGewSGHC0AJbozzEbZ8F58aBn1CjJ6H7C66rIJcN2VE0jiOXkFbiwhgw00QQZ4c6q9');
   }
 
@@ -3324,17 +3320,49 @@ async function bmPay() {
     return;
   }
 
-  /*
-   * STRIPE INTEGRATION TODO:
-   * 1. Create a backend endpoint (e.g. Supabase Edge Function or Next.js API route)
-   *    that receives booking data + amount and calls stripe.paymentIntents.create()
-   * 2. Return the client_secret to the frontend
-   * 3. Call stripe.confirmPayment({ elements: stripeElements, clientSecret, confirmParams: { return_url: window.location.href } })
-   * 4. On success, save the booking to your database and send confirmation emails via Resend
-   */
-  console.log('Payment Element validated. Send to backend:', { bookingState, bookingFormData, amountCents: bmGetTotal() * 100 });
+  // Create PaymentIntent via Supabase Edge Function
+  const SUPABASE_URL = 'https://pclnvexmbgtcbeujywdh.supabase.co';
+  let clientSecret;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/create-payment-intent`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        amountCents:      bmGetTotal() * 100,
+        workshops:        bookingState.selections.map(i => WORKSHOPS[i].num),
+        nomeBambino:      bookingFormData.nomeBambino,
+        nomeGenitore:     bookingFormData.nomeGenitore,
+        email:            bookingFormData.email,
+        telefono:         bookingFormData.telefono,
+        bambiniCount:     bookingState.children,
+        newsletterOptIn:  bookingFormData.newsletterOptIn,
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.clientSecret) throw new Error(data.error || 'Errore del server');
+    clientSecret = data.clientSecret;
+  } catch (err) {
+    const errEl = document.getElementById('bm-card-error');
+    if (errEl) errEl.textContent = err.message || 'Errore di connessione. Riprova.';
+    if (btn) { btn.disabled = false; btn.textContent = `Paga €${bmGetTotal()} →`; }
+    return;
+  }
 
-  // TODO: send bookingState + bookingFormData to your backend to create and confirm a PaymentIntent
+  // Confirm payment with Stripe
+  const { error: confirmError } = await stripeInstance.confirmPayment({
+    elements: stripeElements,
+    clientSecret,
+    confirmParams: { return_url: window.location.href },
+    redirect: 'if_required',
+  });
+
+  if (confirmError) {
+    const errEl = document.getElementById('bm-card-error');
+    if (errEl) errEl.textContent = confirmError.message || 'Pagamento non riuscito.';
+    if (btn) { btn.disabled = false; btn.textContent = `Paga €${bmGetTotal()} →`; }
+    return;
+  }
+
   bookingStep = 'confirmed';
   renderBookingModal();
 }
