@@ -259,6 +259,39 @@
     .modal-confirm-btn:hover { opacity: 0.88; }
     .modal-confirm-btn:disabled { opacity: 0.4; cursor: default; }
 
+    /* ── WORKSHOPS SECTION ── */
+    .ws-section { margin-top: 40px; }
+    .ws-section-heading {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+    }
+    .ws-discover-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 16px 20px;
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 10px; text-decoration: none; color: var(--text);
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .ws-discover-card:hover { border-color: var(--border-mid); background: var(--surface2); }
+    .ws-discover-card.past { opacity: 0.45; pointer-events: none; }
+    .ws-discover-num {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em;
+      color: var(--yellow); background: var(--yellow-bg);
+      border-radius: 6px; padding: 4px 8px; flex-shrink: 0;
+    }
+    .ws-discover-info { flex: 1; min-width: 0; }
+    .ws-discover-title { font-size: 0.92rem; font-weight: 600; }
+    .ws-discover-date { font-size: 0.77rem; color: var(--muted); margin-top: 2px; }
+    .ws-discover-badge {
+      font-size: 0.7rem; font-weight: 700; padding: 4px 9px;
+      border-radius: 6px; flex-shrink: 0;
+    }
+    .ws-discover-badge.full  { background: var(--brick-bg); color: #e87060; }
+    .ws-discover-badge.low   { background: var(--yellow-bg); color: var(--yellow); }
+    .ws-discover-badge.ok    { background: var(--aqua-bg); color: var(--aqua); }
+    .ws-discover-badge.past  { background: var(--border); color: var(--muted); }
+    .ws-discover-arrow { color: var(--muted); font-size: 0.85rem; flex-shrink: 0; }
+
     .page-footer {
       max-width: 560px; margin: 48px auto 0; padding-top: 24px;
       border-top: 1px solid var(--border); font-size: 0.78rem; color: var(--muted);
@@ -346,6 +379,10 @@
       <button class="signout-btn" onclick="doSignout()">Esci</button>
     </div>
     <div id="bookings-area"></div>
+    <div class="ws-section" id="ws-section" style="display:none">
+      <div class="ws-section-heading">Prossimi workshop</div>
+      <div id="ws-discover-list"></div>
+    </div>
   </div>
 
   <!-- SWITCH MODAL -->
@@ -366,7 +403,7 @@
 
   <footer class="page-footer">
     <span>© 2026 Missione Mattoncini</span>
-    <a href="mailto:prenotazioni@missionemattoncini.it">prenotazioni@missionemattoncini.it</a>
+    <a href="mailto:info@missionemattoncini.it">info@missionemattoncini.it</a>
   </footer>
 
   <script>
@@ -550,10 +587,46 @@
       const area = document.getElementById('bookings-area');
       if (!currentBookings.length) {
         area.innerHTML = `<div class="state-box"><div class="state-icon">🔭</div><div class="state-title">Nessuna prenotazione trovata</div><p>Non risultano prenotazioni confermate per questa email.<br>Hai prenotato con un indirizzo diverso?</p></div>`;
-        return;
+      } else {
+        const heading = `<div class="results-heading">${currentBookings.length} prenotazion${currentBookings.length === 1 ? 'e' : 'i'}</div>`;
+        area.innerHTML = heading + currentBookings.map(renderBookingCard).join('');
       }
-      const heading = `<div class="results-heading">${currentBookings.length} prenotazion${currentBookings.length === 1 ? 'e' : 'i'}</div>`;
-      area.innerHTML = heading + currentBookings.map(renderBookingCard).join('');
+      renderWorkshopDiscovery();
+    }
+
+    function renderWorkshopDiscovery() {
+      const section = document.getElementById('ws-section');
+      const list    = document.getElementById('ws-discover-list');
+      section.style.display = 'block';
+
+      const bookedNums = new Set(currentBookings.flatMap(b => b.workshops || []));
+
+      list.innerHTML = WORKSHOPS_META.map(ws => {
+        const isPast   = new Date(ws.date) < new Date();
+        const avail    = availability[ws.num];
+        const isBooked = bookedNums.has(ws.num);
+
+        let badgeClass = 'ok', badgeText = 'Disponibile';
+        if      (isPast)             { badgeClass = 'past'; badgeText = 'Concluso'; }
+        else if (isBooked)           { badgeClass = 'ok';   badgeText = '✓ Iscritto'; }
+        else if (avail?.isFull)      { badgeClass = 'full'; badgeText = 'Esaurito'; }
+        else if (avail?.spotsAvailable <= 5) { badgeClass = 'low'; badgeText = `${avail.spotsAvailable} posti`; }
+        else if (avail)              { badgeClass = 'ok';   badgeText = `${avail.spotsAvailable} posti`; }
+
+        const href   = isPast || isBooked ? '#' : `index.html#prenota`;
+        const past   = isPast ? ' past' : '';
+        const arrow  = isPast || isBooked ? '' : `<span class="ws-discover-arrow">→</span>`;
+
+        return `<a href="${href}" class="ws-discover-card${past}">
+          <span class="ws-discover-num">M${ws.num}</span>
+          <div class="ws-discover-info">
+            <div class="ws-discover-title">${ws.titleIT}</div>
+            <div class="ws-discover-date">${formatDate(ws.date)}</div>
+          </div>
+          <span class="ws-discover-badge ${badgeClass}">${badgeText}</span>
+          ${arrow}
+        </a>`;
+      }).join('');
     }
 
     function renderBookingCard(b) {
