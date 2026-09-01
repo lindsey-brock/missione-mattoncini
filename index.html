@@ -2537,8 +2537,9 @@ function finalizeRocket() {
 window.addEventListener('load', () => {
   buildPaths();
   const urlGoWorkshops = new URLSearchParams(location.search).get('workshops');
-  if (urlGoWorkshops) history.replaceState(null, '', location.pathname); // strip param immediately
-  const goWorkshops = urlGoWorkshops || sessionStorage.getItem('mm_goto_workshops');
+  const urlBookNum     = new URLSearchParams(location.search).get('book');
+  if (urlGoWorkshops || urlBookNum) history.replaceState(null, '', location.pathname);
+  const goWorkshops = urlGoWorkshops || urlBookNum || sessionStorage.getItem('mm_goto_workshops');
   if (goWorkshops) sessionStorage.removeItem('mm_goto_workshops');
   if (goWorkshops || sessionStorage.getItem(INTRO_PLAYED_KEY)) {
     // Skip intro — place rocket at nav position immediately
@@ -2567,6 +2568,11 @@ window.addEventListener('load', () => {
       document.getElementById('view-home').classList.add('view-hidden');
       document.getElementById('view-workshops').classList.remove('view-hidden');
       setTimeout(() => rocketSwirl(() => {}, () => {}), 100);
+      // If ?book=XX was passed, open the booking modal for that workshop
+      if (urlBookNum) {
+        const bookIdx = WORKSHOPS.findIndex(w => w.num === urlBookNum);
+        if (bookIdx !== -1) setTimeout(() => openBookingModal(bookIdx), 500);
+      }
     } else {
       setTimeout(showNWPopup, 300);
     }

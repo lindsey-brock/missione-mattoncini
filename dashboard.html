@@ -259,38 +259,72 @@
     .modal-confirm-btn:hover { opacity: 0.88; }
     .modal-confirm-btn:disabled { opacity: 0.4; cursor: default; }
 
-    /* ── WORKSHOPS SECTION ── */
+    /* ── WORKSHOPS CAROUSEL ── */
     .ws-section { margin-top: 40px; }
+    .ws-section-header {
+      display: flex; align-items: baseline; justify-content: space-between;
+      margin-bottom: 14px;
+    }
     .ws-section-heading {
-      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+      font-size: 1rem; font-weight: 700; color: var(--text);
     }
-    .ws-discover-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; padding: 16px 20px;
-      display: flex; align-items: center; gap: 14px;
-      margin-bottom: 10px; text-decoration: none; color: var(--text);
-      transition: border-color 0.15s, background 0.15s;
+    .ws-section-sub {
+      font-size: 0.75rem; color: var(--muted);
     }
-    .ws-discover-card:hover { border-color: var(--border-mid); background: var(--surface2); }
-    .ws-discover-card.past { opacity: 0.45; pointer-events: none; }
-    .ws-discover-num {
-      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em;
+    .ws-carousel-wrap {
+      margin: 0 -16px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: 4px 16px 12px;
+      display: flex;
+      gap: 12px;
+    }
+    .ws-carousel-wrap::-webkit-scrollbar { display: none; }
+    .ws-square-card {
+      flex: 0 0 160px;
+      height: 180px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 14px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      scroll-snap-align: start;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color 0.15s, transform 0.15s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .ws-square-card:active { transform: scale(0.97); }
+    .ws-square-card:hover:not(.past):not(.booked) { border-color: var(--border-mid); background: var(--surface2); }
+    .ws-square-card.past { opacity: 0.38; pointer-events: none; }
+    .ws-square-card.booked { border-color: rgba(126,220,202,0.3); }
+    .ws-sq-num {
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em;
       color: var(--yellow); background: var(--yellow-bg);
-      border-radius: 6px; padding: 4px 8px; flex-shrink: 0;
+      border-radius: 5px; padding: 3px 7px; align-self: flex-start;
     }
-    .ws-discover-info { flex: 1; min-width: 0; }
-    .ws-discover-title { font-size: 0.92rem; font-weight: 600; }
-    .ws-discover-date { font-size: 0.77rem; color: var(--muted); margin-top: 2px; }
-    .ws-discover-badge {
-      font-size: 0.7rem; font-weight: 700; padding: 4px 9px;
-      border-radius: 6px; flex-shrink: 0;
+    .ws-sq-title {
+      font-size: 0.88rem; font-weight: 700; line-height: 1.25;
+      margin-top: 8px; flex: 1;
     }
-    .ws-discover-badge.full  { background: var(--brick-bg); color: #e87060; }
-    .ws-discover-badge.low   { background: var(--yellow-bg); color: var(--yellow); }
-    .ws-discover-badge.ok    { background: var(--aqua-bg); color: var(--aqua); }
-    .ws-discover-badge.past  { background: var(--border); color: var(--muted); }
-    .ws-discover-arrow { color: var(--muted); font-size: 0.85rem; flex-shrink: 0; }
+    .ws-sq-date {
+      font-size: 0.7rem; color: var(--muted); margin-top: 6px;
+    }
+    .ws-sq-badge {
+      font-size: 0.62rem; font-weight: 700; padding: 3px 8px;
+      border-radius: 5px; align-self: flex-start; margin-top: 8px;
+    }
+    .ws-sq-badge.full    { background: var(--brick-bg); color: #e87060; }
+    .ws-sq-badge.low     { background: var(--yellow-bg); color: var(--yellow); }
+    .ws-sq-badge.ok      { background: var(--aqua-bg); color: var(--aqua); }
+    .ws-sq-badge.booked  { background: var(--aqua-bg); color: var(--aqua); }
+    .ws-sq-badge.past    { background: var(--border); color: var(--muted); }
 
     .page-footer {
       max-width: 560px; margin: 48px auto 0; padding-top: 24px;
@@ -380,8 +414,10 @@
     </div>
     <div id="bookings-area"></div>
     <div class="ws-section" id="ws-section" style="display:none">
-      <div class="ws-section-heading">Prossimi workshop</div>
-      <div id="ws-discover-list"></div>
+      <div class="ws-section-header">
+        <div class="ws-section-heading">Prenota la tua prossima missione</div>
+      </div>
+      <div class="ws-carousel-wrap" id="ws-discover-list"></div>
     </div>
   </div>
 
@@ -607,26 +643,27 @@
         const isBooked = bookedNums.has(ws.num);
 
         let badgeClass = 'ok', badgeText = 'Disponibile';
-        if      (isPast)             { badgeClass = 'past'; badgeText = 'Concluso'; }
-        else if (isBooked)           { badgeClass = 'ok';   badgeText = '✓ Iscritto'; }
-        else if (avail?.isFull)      { badgeClass = 'full'; badgeText = 'Esaurito'; }
-        else if (avail?.spotsAvailable <= 5) { badgeClass = 'low'; badgeText = `${avail.spotsAvailable} posti`; }
-        else if (avail)              { badgeClass = 'ok';   badgeText = `${avail.spotsAvailable} posti`; }
+        if      (isPast)                          { badgeClass = 'past';   badgeText = 'Concluso'; }
+        else if (isBooked)                        { badgeClass = 'booked'; badgeText = '✓ Iscritto'; }
+        else if (avail?.isFull)                   { badgeClass = 'full';   badgeText = 'Esaurito'; }
+        else if (avail?.spotsAvailable <= 5)      { badgeClass = 'low';    badgeText = `${avail.spotsAvailable} posti`; }
+        else if (avail)                           { badgeClass = 'ok';     badgeText = `${avail.spotsAvailable} posti`; }
 
-        const href   = isPast || isBooked ? '#' : `index.html#prenota`;
-        const past   = isPast ? ' past' : '';
-        const arrow  = isPast || isBooked ? '' : `<span class="ws-discover-arrow">→</span>`;
+        const cardClass = isPast ? ' past' : isBooked ? ' booked' : '';
+        const clickable = !isPast && !isBooked && !avail?.isFull;
+        const onclick   = clickable ? `onclick="bookWorkshop('${ws.num}')"` : '';
 
-        return `<a href="${href}" class="ws-discover-card${past}">
-          <span class="ws-discover-num">M${ws.num}</span>
-          <div class="ws-discover-info">
-            <div class="ws-discover-title">${ws.titleIT}</div>
-            <div class="ws-discover-date">${formatDate(ws.date)}</div>
-          </div>
-          <span class="ws-discover-badge ${badgeClass}">${badgeText}</span>
-          ${arrow}
-        </a>`;
+        return `<div class="ws-square-card${cardClass}" ${onclick}>
+          <span class="ws-sq-num">M${ws.num}</span>
+          <div class="ws-sq-title">${ws.titleIT}</div>
+          <div class="ws-sq-date">${formatDate(ws.date)}</div>
+          <span class="ws-sq-badge ${badgeClass}">${badgeText}</span>
+        </div>`;
       }).join('');
+    }
+
+    function bookWorkshop(num) {
+      window.location.href = `index.html?book=${num}`;
     }
 
     function renderBookingCard(b) {
