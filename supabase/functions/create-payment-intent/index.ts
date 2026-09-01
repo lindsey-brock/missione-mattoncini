@@ -1,8 +1,14 @@
 import Stripe from "https://esm.sh/stripe@14"
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 
 const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {
   apiVersion: "2023-10-16",
 })
+
+const supabase = createClient(
+  Deno.env.get("SUPABASE_URL")!,
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+)
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -19,6 +25,23 @@ Deno.serve(async (req) => {
 
     if (!amountCents || amountCents < 100) {
       return new Response(JSON.stringify({ error: "Importo non valido" }), { status: 400, headers: CORS })
+    }
+
+    // Check capacity for each requested workshop
+    if (workshops?.length && bambiniCount) {
+      const { data: wsRows } = await supabase
+        .from("workshops")
+        .select("num, max_spots, spots_taken")
+        .in("num", workshops)
+
+      for (const ws of (wsRows ?? [])) {
+        const available = ws.max_spots - ws.spots_taken
+        if (available < bambiniCount) {
+          return new Response(JSON.stringify({
+            error: `Il workshop M${ws.num} è esaurito o ha posti insufficienti (${available} rimasti).`
+          }), { status: 409, headers: CORS })
+        }
+      }
     }
 
     const paymentIntent = await stripe.paymentIntents.create({

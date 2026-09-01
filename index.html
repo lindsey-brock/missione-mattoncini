@@ -129,6 +129,37 @@
   }
 
   /* ── ROCKET ── */
+  .nav-signin {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 150;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: rgba(248,246,240,0.6);
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    padding: 6px 12px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease, color 0.2s, background 0.2s, border-color 0.2s;
+  }
+  .nav-signin.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .nav-signin:hover {
+    color: #f8f6f0;
+    background: rgba(255,255,255,0.09);
+    border-color: rgba(255,255,255,0.22);
+  }
+
   .rocket-container {
     position: fixed;
     z-index: 150;
@@ -880,6 +911,11 @@
     flex: 1;
   }
   .ws-card-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+  .ws-spots { display: inline-block; font-size: 0.72rem; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: rgba(126,220,202,0.15); color: var(--aqua); margin: 4px 0 6px; }
+  .ws-spots-low { background: rgba(245,200,66,0.18); color: var(--yellow); }
+  .ws-spots-full { background: rgba(224,58,47,0.18); color: #e87060; }
+  .bm-ws-full-tag { font-size: 0.68rem; font-weight: 700; color: #e87060; background: rgba(224,58,47,0.2); padding: 1px 6px; border-radius: 10px; margin-left: 6px; }
+  .bm-ws-low-tag  { font-size: 0.68rem; font-weight: 700; color: var(--yellow); background: rgba(245,200,66,0.18); padding: 1px 6px; border-radius: 10px; margin-left: 6px; }
   .ws-card-btn {
     align-self: flex-start;
     font-family: 'DM Sans', sans-serif;
@@ -2142,6 +2178,8 @@
 </div><!-- /#view-home -->
 
 <!-- ROCKET (repositioned by JS, then becomes nav trigger) -->
+<a href="dashboard.html" class="nav-signin" id="navSignin">Accedi</a>
+
 <div class="rocket-container" id="rocket">
   <!-- Inner wrapper — position:relative at SVG dimensions so left:50% = nozzle centre -->
   <div class="rocket-body-wrap">
@@ -2554,6 +2592,7 @@ function enableRocketNav() {
   rocket.addEventListener('mouseenter', onRocketHover);
   rocket.addEventListener('mouseleave', onRocketLeave);
   rocket.addEventListener('click', toggleDrawer);
+  document.getElementById('navSignin').classList.add('visible');
 }
 
 /* — Hover badges — */
@@ -2661,6 +2700,32 @@ function navigateWithRocket(url) {
   }, 350);
 
   requestAnimationFrame(liftOff);
+}
+
+/* ════════════════════════════════════════
+   WORKSHOP AVAILABILITY
+════════════════════════════════════════ */
+const SUPABASE_URL = 'https://pclnvexmbgtcbeujywdh.supabase.co';
+let workshopAvailability = {}; // num -> { spotsAvailable, isFull }
+
+async function fetchAvailability() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/get-workshop-availability`);
+    if (!res.ok) return;
+    const { availability } = await res.json();
+    workshopAvailability = {};
+    for (const a of (availability || [])) workshopAvailability[a.num] = a;
+    renderWorkshopCards();
+    renderBookingModal();
+  } catch (_) {}
+}
+
+function spotsLabel(num) {
+  const a = workshopAvailability[num];
+  if (!a) return '';
+  if (a.isFull) return '<span class="ws-spots ws-spots-full">Esaurito</span>';
+  if (a.spotsAvailable <= 5) return `<span class="ws-spots ws-spots-low">${a.spotsAvailable} posti rimasti</span>`;
+  return `<span class="ws-spots">${a.spotsAvailable} posti disponibili</span>`;
 }
 
 /* ════════════════════════════════════════
@@ -2983,6 +3048,7 @@ function renderWorkshopCards() {
       <div class="ws-card-subtitle">${w.title}</div>
       <div class="ws-card-date">📅 ${formatDate(w.date)}</div>
       <div class="ws-card-time">🕙 ${w.time}</div>
+      ${spotsLabel(w.num)}
       <div class="ws-card-concept">${w.concept}</div>
       <p class="ws-card-desc">${w.description}</p>
       <div class="ws-card-pills">${pills}</div>
@@ -2993,6 +3059,7 @@ function renderWorkshopCards() {
 
 renderNWPopup();
 renderWorkshopCards();
+fetchAvailability();
 
 /* ════════════════════════════════════════
    BOOKING MODAL
@@ -3028,13 +3095,18 @@ function renderWsSelectors() {
     const sel = WORKSHOPS[selectedIdx];
     const canRemove = bookingState.selections.length > 1;
     const options = WORKSHOPS.map((w, i) => {
-      const taken = used.has(i) && i !== selectedIdx;
-      const desc  = w.description.length > 110 ? w.description.slice(0, 110) + '…' : w.description;
-      return `<div class="bm-ws-option${taken ? ' disabled' : ''}" onclick="${taken ? '' : `selectWsSlot(${slotIdx},${i})`}">
+      const taken    = used.has(i) && i !== selectedIdx;
+      const avail    = workshopAvailability[w.num];
+      const isFull   = avail?.isFull ?? false;
+      const disabled = taken || (isFull && i !== selectedIdx);
+      const desc     = w.description.length > 110 ? w.description.slice(0, 110) + '…' : w.description;
+      const spotsTag = avail ? (isFull ? `<span class="bm-ws-full-tag">Esaurito</span>` : (avail.spotsAvailable <= 5 ? `<span class="bm-ws-low-tag">${avail.spotsAvailable} rimasti</span>` : '')) : '';
+      return `<div class="bm-ws-option${disabled ? ' disabled' : ''}" onclick="${disabled ? '' : `selectWsSlot(${slotIdx},${i})`}">
         <div class="bm-ws-opt-main">
           <span class="bm-workshop-num">M${w.num}</span>
           <span class="bm-workshop-title">${w.titleIT}</span>
           <span class="bm-workshop-date">${formatDate(w.date)}</span>
+          ${spotsTag}
         </div>
         <div class="bm-ws-tooltip">
           <div class="bm-ws-tooltip-concept">${w.concept}</div>
@@ -3321,7 +3393,6 @@ async function bmPay() {
   }
 
   // Create PaymentIntent via Supabase Edge Function
-  const SUPABASE_URL = 'https://pclnvexmbgtcbeujywdh.supabase.co';
   let clientSecret;
   try {
     const res = await fetch(`${SUPABASE_URL}/functions/v1/create-payment-intent`, {

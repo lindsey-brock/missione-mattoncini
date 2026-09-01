@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le mie prenotazioni — Missione Mattoncini</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #0d0d2b;
+      --surface:    #111d3d;
+      --surface2:   #162344;
+      --border:     rgba(255,255,255,0.08);
+      --border-mid: rgba(255,255,255,0.14);
+      --text:       #f8f6f0;
+      --muted:      #8892a4;
+      --yellow:     #f5c842;
+      --aqua:       #7edcca;
+      --brick:      #e03a2f;
+      --yellow-bg:  rgba(245,200,66,0.12);
+      --aqua-bg:    rgba(126,220,202,0.12);
+      --brick-bg:   rgba(224,58,47,0.12);
+    }
+
+    html { font-size: 16px; }
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0 16px 80px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── HEADER ── */
+    .site-header {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 28px 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .site-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none; color: var(--text);
+    }
+    .site-logo-name { font-size: 0.9rem; font-weight: 700; color: var(--yellow); }
+    .site-back { font-size: 0.82rem; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+    .site-back:hover { color: var(--text); }
+
+    /* ── AUTH CARD ── */
+    .auth-wrap {
+      max-width: 420px;
+      margin: 56px auto 0;
+    }
+    .auth-eyebrow {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--aqua); margin-bottom: 10px;
+    }
+    .auth-title { font-size: 1.7rem; font-weight: 700; line-height: 1.2; margin-bottom: 6px; text-wrap: balance; }
+    .auth-sub { font-size: 0.88rem; color: var(--muted); margin-bottom: 32px; line-height: 1.5; text-wrap: balance; }
+
+    .auth-tabs {
+      display: flex; gap: 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 28px;
+    }
+    .auth-tab {
+      font-family: inherit; font-size: 0.88rem; font-weight: 600;
+      color: var(--muted); background: none; border: none;
+      padding: 0 0 12px; margin-right: 24px; cursor: pointer;
+      border-bottom: 2px solid transparent; margin-bottom: -1px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .auth-tab.active { color: var(--yellow); border-bottom-color: var(--yellow); }
+
+    .auth-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 24px;
+    }
+
+    .form-group { margin-bottom: 16px; }
+    .form-label {
+      display: block; font-size: 0.78rem; font-weight: 600;
+      color: var(--muted); letter-spacing: 0.04em;
+      text-transform: uppercase; margin-bottom: 7px;
+    }
+    .form-input {
+      width: 100%; background: var(--surface2);
+      border: 1px solid var(--border-mid); border-radius: 8px;
+      color: var(--text); font-family: inherit; font-size: 0.95rem;
+      padding: 11px 14px; outline: none; transition: border-color 0.15s;
+    }
+    .form-input::placeholder { color: var(--muted); }
+    .form-input:focus { border-color: var(--aqua); }
+    .form-input.readonly { opacity: 0.6; cursor: default; }
+
+    .form-hint {
+      font-size: 0.75rem; color: var(--muted); margin-top: 6px; line-height: 1.4;
+    }
+    .form-error {
+      font-size: 0.8rem; color: var(--brick); margin-top: 8px; min-height: 18px;
+    }
+
+    .auth-btn {
+      width: 100%; font-family: inherit; font-size: 0.95rem; font-weight: 700;
+      background: var(--yellow); color: #0d0d2b; border: none;
+      border-radius: 8px; padding: 13px; cursor: pointer;
+      transition: opacity 0.15s; margin-top: 4px;
+    }
+    .auth-btn:hover { opacity: 0.88; }
+    .auth-btn:disabled { opacity: 0.45; cursor: default; }
+
+    .auth-divider {
+      text-align: center; font-size: 0.78rem; color: var(--muted);
+      margin: 20px 0; position: relative;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: ''; position: absolute; top: 50%; width: 42%;
+      height: 1px; background: var(--border);
+    }
+    .auth-divider::before { left: 0; }
+    .auth-divider::after { right: 0; }
+
+    .auth-success {
+      background: var(--aqua-bg); border: 1px solid rgba(126,220,202,0.25);
+      border-radius: 10px; padding: 16px 18px; font-size: 0.88rem;
+      color: var(--aqua); line-height: 1.5; margin-top: 8px;
+    }
+
+    /* ── DASHBOARD ── */
+    .dash-wrap { max-width: 560px; margin: 0 auto; }
+
+    .dash-header {
+      padding: 40px 0 0;
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+    }
+    .dash-greeting { font-size: 1.3rem; font-weight: 700; }
+    .dash-email { font-size: 0.82rem; color: var(--muted); margin-top: 3px; }
+    .signout-btn {
+      font-family: inherit; font-size: 0.78rem; font-weight: 600;
+      color: var(--muted); background: none;
+      border: 1px solid var(--border-mid); border-radius: 20px;
+      padding: 6px 14px; cursor: pointer; transition: color 0.15s, border-color 0.15s;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .signout-btn:hover { color: var(--text); border-color: var(--border-mid); }
+
+    .results-heading {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted); margin: 28px 0 14px;
+    }
+
+    .booking-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden; margin-bottom: 16px;
+    }
+    .booking-card-header {
+      padding: 18px 22px 14px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap;
+    }
+    .booking-name { font-size: 1rem; font-weight: 700; }
+    .booking-sub { font-size: 0.82rem; color: var(--muted); margin-top: 3px; }
+    .booking-amount { font-size: 1.05rem; font-weight: 700; color: var(--aqua); font-variant-numeric: tabular-nums; }
+    .booking-confirmed { font-size: 0.72rem; color: var(--muted); text-align: right; }
+
+    .ws-row {
+      padding: 15px 22px; display: flex; align-items: center;
+      gap: 14px; border-bottom: 1px solid var(--border);
+    }
+    .ws-row:last-child { border-bottom: none; }
+    .ws-row-num {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em;
+      color: var(--yellow); background: var(--yellow-bg);
+      border-radius: 6px; padding: 4px 8px; flex-shrink: 0;
+    }
+    .ws-row-info { flex: 1; min-width: 0; }
+    .ws-row-title { font-size: 0.92rem; font-weight: 600; }
+    .ws-row-date { font-size: 0.77rem; color: var(--muted); margin-top: 2px; }
+    .ws-switch-btn {
+      font-family: inherit; font-size: 0.77rem; font-weight: 600;
+      color: var(--aqua); background: var(--aqua-bg);
+      border: 1px solid rgba(126,220,202,0.2); border-radius: 6px;
+      padding: 6px 12px; cursor: pointer; transition: opacity 0.15s; white-space: nowrap;
+    }
+    .ws-switch-btn:hover { opacity: 0.8; }
+    .ws-switched-tag {
+      font-size: 0.72rem; font-weight: 600; color: var(--aqua);
+      background: var(--aqua-bg); border-radius: 6px; padding: 4px 10px;
+    }
+
+    /* ── STATES ── */
+    .state-box {
+      text-align: center; padding: 52px 24px; color: var(--muted); font-size: 0.9rem;
+    }
+    .state-box .state-icon { font-size: 2.2rem; margin-bottom: 14px; }
+    .state-box .state-title { font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    .spinner {
+      width: 22px; height: 22px; border: 2.5px solid var(--border-mid);
+      border-top-color: var(--aqua); border-radius: 50%;
+      animation: spin 0.7s linear infinite; margin: 0 auto 14px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── SWITCH MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.65);
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px; z-index: 100;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--surface); border: 1px solid var(--border-mid);
+      border-radius: 14px; width: 100%; max-width: 480px;
+      max-height: 90vh; overflow-y: auto; padding: 28px 24px 24px;
+      transform: translateY(12px); transition: transform 0.2s;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+    .modal-sub { font-size: 0.82rem; color: var(--muted); margin-bottom: 20px; }
+    .modal-from { background: var(--surface2); border-radius: 8px; padding: 12px 14px; margin-bottom: 20px; }
+    .modal-from-label { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 4px; }
+    .modal-from-ws { font-size: 0.9rem; font-weight: 600; }
+    .modal-section-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 10px; }
+    .modal-ws-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
+    .modal-ws-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; border-radius: 8px; border: 1px solid var(--border);
+      cursor: pointer; transition: border-color 0.15s, background 0.15s;
+    }
+    .modal-ws-item:hover:not(.disabled):not(.selected) { border-color: var(--border-mid); background: var(--surface2); }
+    .modal-ws-item.selected { border-color: var(--aqua); background: var(--aqua-bg); }
+    .modal-ws-item.disabled { opacity: 0.35; cursor: default; }
+    .modal-ws-num { font-size: 0.68rem; font-weight: 700; color: var(--yellow); background: var(--yellow-bg); padding: 3px 7px; border-radius: 5px; flex-shrink: 0; }
+    .modal-ws-info { flex: 1; min-width: 0; }
+    .modal-ws-name { font-size: 0.88rem; font-weight: 600; }
+    .modal-ws-date { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+    .modal-ws-spots { font-size: 0.7rem; font-weight: 600; flex-shrink: 0; }
+    .modal-ws-spots.full { color: #e87060; }
+    .modal-ws-spots.low  { color: var(--yellow); }
+    .modal-ws-spots.ok   { color: var(--aqua); }
+    .modal-ws-check { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border-mid); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; transition: all 0.15s; }
+    .modal-ws-item.selected .modal-ws-check { background: var(--aqua); border-color: var(--aqua); color: #0d0d2b; }
+    .modal-error { font-size: 0.8rem; color: var(--brick); margin-bottom: 12px; min-height: 18px; }
+    .modal-actions { display: flex; gap: 10px; }
+    .modal-cancel-btn { flex: 1; font-family: inherit; font-size: 0.88rem; font-weight: 600; padding: 12px; border-radius: 8px; border: 1px solid var(--border-mid); background: transparent; color: var(--muted); cursor: pointer; transition: color 0.15s; }
+    .modal-cancel-btn:hover { color: var(--text); }
+    .modal-confirm-btn { flex: 2; font-family: inherit; font-size: 0.88rem; font-weight: 700; padding: 12px; border-radius: 8px; border: none; background: var(--yellow); color: #0d0d2b; cursor: pointer; transition: opacity 0.15s; }
+    .modal-confirm-btn:hover { opacity: 0.88; }
+    .modal-confirm-btn:disabled { opacity: 0.4; cursor: default; }
+
+    .page-footer {
+      max-width: 560px; margin: 48px auto 0; padding-top: 24px;
+      border-top: 1px solid var(--border); font-size: 0.78rem; color: var(--muted);
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+    }
+    .page-footer a { color: var(--muted); text-decoration: none; }
+    .page-footer a:hover { color: var(--text); }
+
+    @media (max-width: 480px) {
+      .booking-card-header { flex-direction: column; }
+      .dash-header { flex-direction: column; gap: 12px; }
+    }
+    @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <a href="index.html" class="site-logo">
+      <span style="font-size:1.4rem">🚀</span>
+      <span class="site-logo-name">Missione Mattoncini</span>
+    </a>
+    <a href="index.html" class="site-back">← Torna al sito</a>
+  </header>
+
+  <!-- AUTH SECTION (shown when logged out) -->
+  <div id="auth-section" class="auth-wrap" style="display:none">
+    <div class="auth-eyebrow">Area personale</div>
+    <h1 class="auth-title" id="auth-title">Le mie prenotazioni</h1>
+    <p class="auth-sub" id="auth-sub">Accedi o crea un account con la stessa email usata per la prenotazione.</p>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Accedi</button>
+      <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Crea account</button>
+    </div>
+
+    <div class="auth-card">
+      <!-- LOGIN FORM -->
+      <div id="login-form">
+        <div class="form-group">
+          <label class="form-label" for="login-email">Email</label>
+          <input class="form-input" id="login-email" type="email" placeholder="la tua email" autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="login-password">Password</label>
+          <input class="form-input" id="login-password" type="password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <div class="form-error" id="login-error"></div>
+        <button class="auth-btn" id="login-btn" onclick="doLogin()">Accedi →</button>
+        <div style="margin-top:14px;text-align:center">
+          <button onclick="doForgotPassword()" style="font-family:inherit;font-size:0.78rem;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:underline">Password dimenticata?</button>
+        </div>
+        <div id="forgot-success" style="display:none" class="auth-success">
+          Link inviato! Controlla la tua email per reimpostare la password.
+        </div>
+      </div>
+
+      <!-- SIGNUP FORM -->
+      <div id="signup-form" style="display:none">
+        <div class="form-group">
+          <label class="form-label" for="signup-email">Email</label>
+          <input class="form-input" id="signup-email" type="email" placeholder="la tua email di prenotazione" autocomplete="email">
+          <div class="form-hint">Usa la stessa email con cui hai prenotato.</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signup-password">Scegli una password</label>
+          <input class="form-input" id="signup-password" type="password" placeholder="minimo 6 caratteri" autocomplete="new-password">
+        </div>
+        <div class="form-error" id="signup-error"></div>
+        <button class="auth-btn" id="signup-btn" onclick="doSignup()">Crea account →</button>
+        <div id="signup-success" style="display:none" class="auth-success">
+          Account creato! Controlla la tua email per confermare, poi accedi.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD SECTION (shown when logged in) -->
+  <div id="dash-section" class="dash-wrap" style="display:none">
+    <div class="dash-header">
+      <div>
+        <div class="dash-greeting">Le mie prenotazioni</div>
+        <div class="dash-email" id="dash-email"></div>
+      </div>
+      <button class="signout-btn" onclick="doSignout()">Esci</button>
+    </div>
+    <div id="bookings-area"></div>
+  </div>
+
+  <!-- SWITCH MODAL -->
+  <div class="modal-overlay" id="switch-modal" onclick="handleOverlayClick(event)">
+    <div class="modal">
+      <div class="modal-title">Cambia workshop</div>
+      <div class="modal-sub">Scegli il workshop su cui spostarti. Il cambio è gratuito e immediato.</div>
+      <div class="modal-from" id="modal-from"></div>
+      <div class="modal-section-label">Scegli la nuova data</div>
+      <div class="modal-ws-list" id="modal-ws-list"></div>
+      <div class="modal-error" id="modal-error"></div>
+      <div class="modal-actions">
+        <button class="modal-cancel-btn" onclick="closeModal()">Annulla</button>
+        <button class="modal-confirm-btn" id="modal-confirm-btn" onclick="doSwitch()">Conferma cambio →</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="page-footer">
+    <span>© 2026 Missione Mattoncini</span>
+    <a href="mailto:prenotazioni@missionemattoncini.it">prenotazioni@missionemattoncini.it</a>
+  </footer>
+
+  <script>
+    const SUPABASE_URL  = 'https://pclnvexmbgtcbeujywdh.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjbG52ZXhtYmd0Y2JldWp5d2RoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2NDc2NDAsImV4cCI6MjA5ODIyMzY0MH0.8m5ITVPEkw8ZFBzJD8TK0DsqPVSwKEzHeOLsgl_uKxE';
+
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+    const WORKSHOPS_META = [
+      { num: '01', titleIT: 'Costruiamo Forte',       date: '2026-10-17' },
+      { num: '02', titleIT: 'Il Ponte',               date: '2026-10-24' },
+      { num: '03', titleIT: "L'Arco Romano",          date: '2026-11-07' },
+      { num: '04', titleIT: 'Macchine Veloci',        date: '2026-11-21' },
+      { num: '05', titleIT: 'Affonda o Galleggia?',   date: '2026-11-28' },
+      { num: '06', titleIT: 'Ingegneri della Natura', date: '2026-12-05' },
+    ];
+
+    const DAYS_IT   = ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
+    const MONTHS_IT = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
+
+    function formatDate(dateStr) {
+      const p = dateStr.split('-');
+      const d = new Date(parseInt(p[0]), parseInt(p[1]) - 1, parseInt(p[2]));
+      return `${DAYS_IT[d.getDay()]} ${d.getDate()} ${MONTHS_IT[d.getMonth()]}`;
+    }
+    function formatDateTime(iso) {
+      const d = new Date(iso);
+      return `${d.getDate()} ${MONTHS_IT[d.getMonth()]} ${d.getFullYear()}`;
+    }
+    function escHtml(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    let currentUser     = null;
+    let currentBookings = [];
+    let availability    = {};
+    const switchedMap   = {};
+
+    /* ── INIT ── */
+    async function init() {
+      // Check URL params — pre-fill email and switch to signup tab if ?signup=1
+      const params = new URLSearchParams(window.location.search);
+      const urlEmail  = params.get('email') || '';
+      const wantSignup = params.get('signup') === '1';
+
+      // Check existing session
+      const { data: { session } } = await sb.auth.getSession();
+      if (session?.user) {
+        currentUser = session.user;
+        showDashboard();
+      } else {
+        showAuth();
+        if (urlEmail) {
+          document.getElementById('login-email').value = urlEmail;
+          document.getElementById('signup-email').value = urlEmail;
+        }
+        if (wantSignup) switchTab('signup');
+      }
+
+      // Listen for auth changes (e.g. after email confirmation redirect)
+      sb.auth.onAuthStateChange((_event, session) => {
+        if (session?.user && !currentUser) {
+          currentUser = session.user;
+          showDashboard();
+        }
+      });
+    }
+
+    /* ── AUTH VIEWS ── */
+    function showAuth() {
+      document.getElementById('auth-section').style.display = 'block';
+      document.getElementById('dash-section').style.display = 'none';
+    }
+    function showDashboard() {
+      document.getElementById('auth-section').style.display = 'none';
+      document.getElementById('dash-section').style.display = 'block';
+      document.getElementById('dash-email').textContent = currentUser.email;
+      loadBookings();
+    }
+
+    function switchTab(tab) {
+      const isLogin = tab === 'login';
+      document.getElementById('tab-login').classList.toggle('active', isLogin);
+      document.getElementById('tab-signup').classList.toggle('active', !isLogin);
+      document.getElementById('login-form').style.display  = isLogin ? 'block' : 'none';
+      document.getElementById('signup-form').style.display = isLogin ? 'none'  : 'block';
+    }
+
+    /* ── LOGIN ── */
+    async function doLogin() {
+      const email    = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const errEl    = document.getElementById('login-error');
+      const btn      = document.getElementById('login-btn');
+      errEl.textContent = '';
+
+      if (!email || !password) { errEl.textContent = 'Inserisci email e password.'; return; }
+
+      btn.disabled = true; btn.textContent = 'Accesso…';
+      const { data, error } = await sb.auth.signInWithPassword({ email, password });
+      btn.disabled = false; btn.textContent = 'Accedi →';
+
+      if (error) { errEl.textContent = error.message === 'Invalid login credentials' ? 'Email o password errata.' : error.message; return; }
+
+      currentUser = data.user;
+      showDashboard();
+    }
+
+    /* ── SIGNUP ── */
+    async function doSignup() {
+      const email    = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-password').value;
+      const errEl    = document.getElementById('signup-error');
+      const btn      = document.getElementById('signup-btn');
+      errEl.textContent = '';
+
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { errEl.textContent = 'Inserisci un\'email valida.'; return; }
+      if (!password || password.length < 6) { errEl.textContent = 'La password deve avere almeno 6 caratteri.'; return; }
+
+      btn.disabled = true; btn.textContent = 'Creazione…';
+      const { error } = await sb.auth.signUp({
+        email, password,
+        options: { emailRedirectTo: 'https://www.missionemattoncini.it/dashboard.html' }
+      });
+      btn.disabled = false; btn.textContent = 'Crea account →';
+
+      if (error) { errEl.textContent = error.message; return; }
+
+      document.getElementById('signup-success').style.display = 'block';
+      btn.style.display = 'none';
+    }
+
+    /* ── FORGOT PASSWORD ── */
+    async function doForgotPassword() {
+      const email = document.getElementById('login-email').value.trim();
+      if (!email) { document.getElementById('login-error').textContent = 'Inserisci prima la tua email.'; return; }
+      await sb.auth.resetPasswordForEmail(email, {
+        redirectTo: 'https://www.missionemattoncini.it/dashboard.html'
+      });
+      document.getElementById('forgot-success').style.display = 'block';
+    }
+
+    /* ── SIGN OUT ── */
+    async function doSignout() {
+      await sb.auth.signOut();
+      currentUser = null; currentBookings = [];
+      showAuth();
+    }
+
+    /* ── LOAD BOOKINGS ── */
+    async function loadBookings() {
+      const area = document.getElementById('bookings-area');
+      area.innerHTML = `<div class="state-box"><div class="spinner"></div><div class="state-title">Caricamento…</div></div>`;
+
+      try {
+        const { data: { session } } = await sb.auth.getSession();
+        const jwt = session?.access_token;
+
+        const [bookingsRes, availRes] = await Promise.all([
+          fetch(`${SUPABASE_URL}/functions/v1/get-my-bookings`, {
+            headers: { 'Authorization': `Bearer ${jwt}` }
+          }),
+          fetch(`${SUPABASE_URL}/functions/v1/get-workshop-availability`),
+        ]);
+
+        const bookingsData = await bookingsRes.json();
+        const availData    = await availRes.json();
+        if (!bookingsRes.ok) throw new Error(bookingsData.error || 'Errore del server');
+
+        currentBookings = bookingsData.bookings || [];
+        availability    = {};
+        for (const a of (availData.availability || [])) availability[a.num] = a;
+
+        renderBookings();
+      } catch (err) {
+        area.innerHTML = `<div class="state-box"><div class="state-icon">⚠️</div><div class="state-title">Errore di connessione</div><p>${err.message}</p></div>`;
+      }
+    }
+
+    function renderBookings() {
+      const area = document.getElementById('bookings-area');
+      if (!currentBookings.length) {
+        area.innerHTML = `<div class="state-box"><div class="state-icon">🔭</div><div class="state-title">Nessuna prenotazione trovata</div><p>Non risultano prenotazioni confermate per questa email.<br>Hai prenotato con un indirizzo diverso?</p></div>`;
+        return;
+      }
+      const heading = `<div class="results-heading">${currentBookings.length} prenotazion${currentBookings.length === 1 ? 'e' : 'i'}</div>`;
+      area.innerHTML = heading + currentBookings.map(renderBookingCard).join('');
+    }
+
+    function renderBookingCard(b) {
+      const amount  = (b.amount_cents / 100).toFixed(2);
+      const date    = b.confirmed_at ? formatDateTime(b.confirmed_at) : '—';
+      const bambini = b.bambini_count === 1 ? '1 bambino' : `${b.bambini_count} bambini`;
+
+      const wsRows = (b.workshops || []).map(num => {
+        const ws = WORKSHOPS_META.find(w => w.num === num);
+        if (!ws) return '';
+        const switchKey = `${b.id}::${num}`;
+        const switchedTo = switchedMap[switchKey];
+        if (switchedTo) {
+          const t = WORKSHOPS_META.find(w => w.num === switchedTo);
+          return `<div class="ws-row">
+            <span class="ws-row-num">M${t.num}</span>
+            <div class="ws-row-info"><div class="ws-row-title">${t.titleIT}</div><div class="ws-row-date">${formatDate(t.date)}</div></div>
+            <span class="ws-switched-tag">✓ Cambiato</span>
+          </div>`;
+        }
+        const isPast = new Date(ws.date) < new Date();
+        const action = isPast ? '' : `<button class="ws-switch-btn" onclick="openSwitchModal('${b.id}','${num}',${b.bambini_count})">Cambia data</button>`;
+        return `<div class="ws-row">
+          <span class="ws-row-num">M${ws.num}</span>
+          <div class="ws-row-info"><div class="ws-row-title">${ws.titleIT}</div><div class="ws-row-date">${formatDate(ws.date)}</div></div>
+          <div>${action}</div>
+        </div>`;
+      }).join('');
+
+      return `<div class="booking-card">
+        <div class="booking-card-header">
+          <div><div class="booking-name">${escHtml(b.nome_bambino || '—')}</div><div class="booking-sub">Genitore: ${escHtml(b.nome_genitore || '—')} · ${bambini} · ${date}</div></div>
+          <div><div class="booking-amount">€${amount}</div><div class="booking-confirmed">Confermato</div></div>
+        </div>
+        <div>${wsRows}</div>
+      </div>`;
+    }
+
+    /* ── SWITCH MODAL ── */
+    let modalState = { bookingId: null, fromNum: null, toNum: null, bambiniCount: 1 };
+
+    function openSwitchModal(bookingId, fromNum, bambiniCount) {
+      const booking = currentBookings.find(b => b.id === bookingId);
+      if (!booking) return;
+      modalState = { bookingId, fromNum, toNum: null, bambiniCount };
+      document.getElementById('modal-error').textContent = '';
+
+      const fromWs = WORKSHOPS_META.find(w => w.num === fromNum);
+      document.getElementById('modal-from').innerHTML = `
+        <div class="modal-from-label">Workshop attuale</div>
+        <div class="modal-from-ws">M${fromWs.num} · ${fromWs.titleIT} — ${formatDate(fromWs.date)}</div>`;
+
+      const alreadyBooked = new Set(booking.workshops);
+      document.getElementById('modal-ws-list').innerHTML = WORKSHOPS_META.map(ws => {
+        const isCurrent = ws.num === fromNum;
+        const isBooked  = alreadyBooked.has(ws.num) && !isCurrent;
+        const isPast    = new Date(ws.date) < new Date();
+        const avail     = availability[ws.num];
+        const isFull    = avail ? (avail.spotsAvailable < bambiniCount || avail.isFull) : false;
+        const disabled  = isCurrent || isBooked || isPast || isFull;
+
+        let spotsHtml = '';
+        if      (isPast || isCurrent) spotsHtml = `<span class="modal-ws-spots full">${isPast ? 'Passato' : 'Attuale'}</span>`;
+        else if (isBooked)            spotsHtml = `<span class="modal-ws-spots full">Già iscritto</span>`;
+        else if (avail?.isFull || (avail && avail.spotsAvailable < bambiniCount))
+                                      spotsHtml = `<span class="modal-ws-spots full">Esaurito</span>`;
+        else if (avail?.spotsAvailable <= 5)
+                                      spotsHtml = `<span class="modal-ws-spots low">${avail.spotsAvailable} rimasti</span>`;
+        else if (avail)               spotsHtml = `<span class="modal-ws-spots ok">${avail.spotsAvailable} posti</span>`;
+
+        const onclick = disabled ? '' : `onclick="selectModalWs('${ws.num}')"`;
+        return `<div class="modal-ws-item${disabled ? ' disabled' : ''}" id="mws-${ws.num}" ${onclick}>
+          <span class="modal-ws-num">M${ws.num}</span>
+          <div class="modal-ws-info"><div class="modal-ws-name">${ws.titleIT}</div><div class="modal-ws-date">${formatDate(ws.date)}</div></div>
+          ${spotsHtml}
+          <div class="modal-ws-check"></div>
+        </div>`;
+      }).join('');
+
+      document.getElementById('modal-confirm-btn').disabled = true;
+      document.getElementById('switch-modal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function selectModalWs(num) {
+      modalState.toNum = num;
+      document.querySelectorAll('.modal-ws-item').forEach(el => el.classList.remove('selected'));
+      document.querySelectorAll('.modal-ws-check').forEach(el => el.textContent = '');
+      const item = document.getElementById(`mws-${num}`);
+      if (item) { item.classList.add('selected'); item.querySelector('.modal-ws-check').textContent = '✓'; }
+      document.getElementById('modal-confirm-btn').disabled = false;
+    }
+
+    function closeModal() {
+      document.getElementById('switch-modal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function handleOverlayClick(e) {
+      if (e.target === document.getElementById('switch-modal')) closeModal();
+    }
+
+    async function doSwitch() {
+      const { bookingId, fromNum, toNum, bambiniCount } = modalState;
+      if (!toNum) return;
+      const btn   = document.getElementById('modal-confirm-btn');
+      const errEl = document.getElementById('modal-error');
+      errEl.textContent = '';
+      btn.disabled = true; btn.textContent = 'Cambio in corso…';
+
+      try {
+        const { data: { session } } = await sb.auth.getSession();
+        const res = await fetch(`${SUPABASE_URL}/functions/v1/switch-workshop`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
+          body: JSON.stringify({ bookingId, fromWorkshop: fromNum, toWorkshop: toNum }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Errore del server');
+
+        const booking = currentBookings.find(b => b.id === bookingId);
+        if (booking) booking.workshops = booking.workshops.map(w => w === fromNum ? toNum : w);
+        switchedMap[`${bookingId}::${fromNum}`] = toNum;
+        if (availability[fromNum]) availability[fromNum].spotsAvailable += bambiniCount;
+        if (availability[toNum])   availability[toNum].spotsAvailable   -= bambiniCount;
+
+        closeModal();
+        renderBookings();
+      } catch (err) {
+        errEl.textContent = err.message || 'Errore di connessione. Riprova.';
+        btn.disabled = false; btn.textContent = 'Conferma cambio →';
+      }
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    init();
+  </script>
+</body>
+</html>

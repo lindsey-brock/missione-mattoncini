@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.2" baseProfile="tiny-ps"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 100 100"
+  width="100" height="100">
+  <title>Missione Mattoncini</title>
+
+  <!-- Background circle -->
+  <circle cx="50" cy="50" r="50" fill="#0d0d2b"/>
+
+  <!-- Rocket body -->
+  <rect x="38" y="28" width="24" height="38" rx="12" fill="#F5C842"/>
+
+  <!-- Nose cone -->
+  <path d="M38 38 Q50 14 62 38Z" fill="#F5C842"/>
+
+  <!-- Highlight on nose -->
+  <path d="M42 36 Q50 18 55 33" stroke="#FFE080" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.6"/>
+
+  <!-- Window outer -->
+  <circle cx="50" cy="48" r="7" fill="#1A2E45"/>
+  <!-- Window inner -->
+  <circle cx="50" cy="48" r="5.5" fill="#0D1B2A"/>
+  <!-- Window shine -->
+  <circle cx="48" cy="46" r="1.8" fill="#7EDCCA" opacity="0.8"/>
+
+  <!-- Buttons row 1 -->
+  <circle cx="44" cy="60" r="2" fill="#E03A2F" opacity="0.9"/>
+  <circle cx="50" cy="60" r="2" fill="#E03A2F" opacity="0.9"/>
+  <circle cx="56" cy="60" r="2" fill="#E03A2F" opacity="0.9"/>
+
+  <!-- Left fin -->
+  <path d="M38 54 L26 72 L38 68Z" fill="#E03A2F"/>
+
+  <!-- Right fin -->
+  <path d="M62 54 L74 72 L62 68Z" fill="#E03A2F"/>
+
+  <!-- Nozzle -->
+  <path d="M42 66 Q50 71 58 66 L56 74 Q50 78 44 74Z" fill="#1A2E45"/>
+
+  <!-- Flame outer -->
+  <ellipse cx="50" cy="80" rx="6" ry="5" fill="#F5C842" opacity="0.9"/>
+  <!-- Flame inner -->
+  <ellipse cx="50" cy="80" rx="3.5" ry="3" fill="#FFE080"/>
+</svg>
