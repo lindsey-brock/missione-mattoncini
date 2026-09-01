@@ -137,26 +137,127 @@
     }
 
     /* ── DASHBOARD ── */
-    .dash-wrap { max-width: 560px; margin: 0 auto; }
+    .dash-wrap { max-width: 920px; margin: 0 auto; }
 
-    .dash-header {
-      padding: 40px 0 0;
-      display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+    .dash-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 28px;
+      padding-top: 36px;
+      align-items: start;
     }
-    .dash-greeting { font-size: 1.3rem; font-weight: 700; }
-    .dash-email { font-size: 0.82rem; color: var(--muted); margin-top: 3px; }
-    .signout-btn {
-      font-family: inherit; font-size: 0.78rem; font-weight: 600;
+
+    /* ── ACCOUNT PANEL (left) ── */
+    .account-panel {
+      position: sticky;
+      top: 24px;
+    }
+    .account-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .account-card-head {
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .account-card-title { font-size: 0.88rem; font-weight: 700; }
+    .account-edit-btn {
+      font-family: inherit; font-size: 0.72rem; font-weight: 600;
+      color: var(--aqua); background: var(--aqua-bg);
+      border: 1px solid rgba(126,220,202,0.2); border-radius: 6px;
+      padding: 5px 11px; cursor: pointer; transition: opacity 0.15s;
+    }
+    .account-edit-btn:hover { opacity: 0.8; }
+    .account-save-btn {
+      font-family: inherit; font-size: 0.72rem; font-weight: 700;
+      color: #0d0d2b; background: var(--yellow);
+      border: none; border-radius: 6px;
+      padding: 5px 11px; cursor: pointer; transition: opacity 0.15s;
+    }
+    .account-save-btn:hover { opacity: 0.85; }
+    .account-cancel-btn {
+      font-family: inherit; font-size: 0.72rem; font-weight: 600;
       color: var(--muted); background: none;
-      border: 1px solid var(--border-mid); border-radius: 20px;
-      padding: 6px 14px; cursor: pointer; transition: color 0.15s, border-color 0.15s;
-      white-space: nowrap; flex-shrink: 0;
+      border: 1px solid var(--border-mid); border-radius: 6px;
+      padding: 5px 11px; cursor: pointer; transition: color 0.15s;
+    }
+    .account-cancel-btn:hover { color: var(--text); }
+    .account-card-body { padding: 16px 18px; }
+    .account-field { margin-bottom: 14px; }
+    .account-field:last-child { margin-bottom: 0; }
+    .account-field-label {
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 5px;
+    }
+    .account-field-val { font-size: 0.88rem; color: var(--text); }
+    .account-field-val.muted { color: var(--muted); font-style: italic; }
+    .account-field-input {
+      width: 100%; background: var(--surface2);
+      border: 1px solid var(--border-mid); border-radius: 7px;
+      color: var(--text); font-family: inherit; font-size: 0.88rem;
+      padding: 8px 11px; outline: none; transition: border-color 0.15s;
+    }
+    .account-field-input::placeholder { color: var(--muted); }
+    .account-field-input:focus { border-color: var(--aqua); }
+    .account-field-input[readonly] { opacity: 0.55; cursor: default; }
+
+    /* kids list */
+    .kids-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+    .kid-row {
+      display: grid; grid-template-columns: 1fr 60px 22px; gap: 6px; align-items: center;
+    }
+    .kid-row-view {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.88rem;
+    }
+    .kid-age-tag {
+      font-size: 0.68rem; font-weight: 700;
+      background: var(--yellow-bg); color: var(--yellow);
+      border-radius: 5px; padding: 2px 7px;
+    }
+    .kid-remove-btn {
+      font-family: inherit; font-size: 0.85rem; font-weight: 700;
+      color: var(--muted); background: none; border: none;
+      cursor: pointer; line-height: 1; padding: 2px 4px;
+      transition: color 0.15s;
+    }
+    .kid-remove-btn:hover { color: #e87060; }
+    .add-kid-btn {
+      font-family: inherit; font-size: 0.78rem; font-weight: 600;
+      color: var(--aqua); background: none; border: none;
+      cursor: pointer; padding: 0; text-align: left;
+      transition: opacity 0.15s;
+    }
+    .add-kid-btn:hover { opacity: 0.7; }
+
+    .signout-btn {
+      font-family: inherit; font-size: 0.75rem; font-weight: 600;
+      color: var(--muted); background: none;
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 8px 14px; cursor: pointer; transition: color 0.15s, border-color 0.15s;
+      width: 100%; margin-top: 12px;
     }
     .signout-btn:hover { color: var(--text); border-color: var(--border-mid); }
+
+    /* ── DASH MAIN (right) ── */
+    .dash-main { min-width: 0; }
+    .dash-main-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .dash-greeting { font-size: 1.2rem; font-weight: 700; }
 
     .results-heading {
       font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em;
       text-transform: uppercase; color: var(--muted); margin: 28px 0 14px;
+    }
+
+    @media (max-width: 680px) {
+      .dash-layout { grid-template-columns: 1fr; padding-top: 24px; }
+      .account-panel { position: static; }
     }
 
     .booking-card {
@@ -405,19 +506,38 @@
 
   <!-- DASHBOARD SECTION (shown when logged in) -->
   <div id="dash-section" class="dash-wrap" style="display:none">
-    <div class="dash-header">
-      <div>
-        <div class="dash-greeting">Le mie prenotazioni</div>
-        <div class="dash-email" id="dash-email"></div>
+    <div class="dash-layout">
+
+      <!-- LEFT: account panel -->
+      <div class="account-panel">
+        <div class="account-card">
+          <div class="account-card-head">
+            <div class="account-card-title">Il mio profilo</div>
+            <div id="account-head-actions">
+              <button class="account-edit-btn" onclick="startEditProfile()">Modifica</button>
+            </div>
+          </div>
+          <div class="account-card-body" id="account-card-body">
+            <!-- rendered by renderProfileView() -->
+          </div>
+        </div>
+        <button class="signout-btn" onclick="doSignout()">Esci →</button>
       </div>
-      <button class="signout-btn" onclick="doSignout()">Esci</button>
-    </div>
-    <div id="bookings-area"></div>
-    <div class="ws-section" id="ws-section" style="display:none">
-      <div class="ws-section-header">
-        <div class="ws-section-heading">Prenota la tua prossima missione</div>
+
+      <!-- RIGHT: bookings + workshops -->
+      <div class="dash-main">
+        <div class="dash-main-head">
+          <div class="dash-greeting">Le mie prenotazioni</div>
+        </div>
+        <div id="bookings-area"></div>
+        <div class="ws-section" id="ws-section" style="display:none">
+          <div class="ws-section-header">
+            <div class="ws-section-heading">Prenota la tua prossima missione</div>
+          </div>
+          <div class="ws-carousel-wrap" id="ws-discover-list"></div>
+        </div>
       </div>
-      <div class="ws-carousel-wrap" id="ws-discover-list"></div>
+
     </div>
   </div>
 
@@ -516,8 +636,120 @@
     function showDashboard() {
       document.getElementById('auth-section').style.display = 'none';
       document.getElementById('dash-section').style.display = 'block';
-      document.getElementById('dash-email').textContent = currentUser.email;
+      renderProfileView();
       loadBookings();
+    }
+
+    /* ── PROFILE (localStorage) ── */
+    function profileKey() { return `mm_profile_${currentUser.id}`; }
+
+    function loadProfile() {
+      try { return JSON.parse(localStorage.getItem(profileKey())) || {}; } catch { return {}; }
+    }
+
+    function saveProfile(data) {
+      localStorage.setItem(profileKey(), JSON.stringify(data));
+    }
+
+    function renderProfileView() {
+      const p = loadProfile();
+      const email = currentUser.email;
+      const firstName = p.firstName || '';
+      const lastName  = p.lastName  || '';
+      const kids      = p.kids || [];
+
+      const nameVal = (firstName || lastName)
+        ? escHtml(`${firstName} ${lastName}`.trim())
+        : '<span class="muted">Non impostato</span>';
+
+      const kidsHtml = kids.length
+        ? kids.map(k => `<div class="kid-row-view">
+            <span>${escHtml(k.name || 'Bambino')}</span>
+            <span class="kid-age-tag">${escHtml(k.age ? k.age + ' anni' : '—')}</span>
+          </div>`).join('')
+        : '<span class="account-field-val muted">Nessun bambino aggiunto</span>';
+
+      document.getElementById('account-head-actions').innerHTML =
+        `<button class="account-edit-btn" onclick="startEditProfile()">Modifica</button>`;
+
+      document.getElementById('account-card-body').innerHTML = `
+        <div class="account-field">
+          <div class="account-field-label">Email</div>
+          <div class="account-field-val">${escHtml(email)}</div>
+        </div>
+        <div class="account-field">
+          <div class="account-field-label">Nome</div>
+          <div class="account-field-val">${nameVal}</div>
+        </div>
+        <div class="account-field">
+          <div class="account-field-label">Bambini</div>
+          <div class="kids-list">${kidsHtml}</div>
+        </div>
+      `;
+    }
+
+    function startEditProfile() {
+      const p = loadProfile();
+      const kids = p.kids && p.kids.length ? p.kids : [{ name: '', age: '' }];
+
+      document.getElementById('account-head-actions').innerHTML = `
+        <div style="display:flex;gap:6px">
+          <button class="account-cancel-btn" onclick="renderProfileView()">Annulla</button>
+          <button class="account-save-btn" onclick="saveProfileForm()">Salva</button>
+        </div>`;
+
+      document.getElementById('account-card-body').innerHTML = `
+        <div class="account-field">
+          <div class="account-field-label">Email</div>
+          <input class="account-field-input" type="email" value="${escHtml(currentUser.email)}" readonly>
+        </div>
+        <div class="account-field">
+          <div class="account-field-label">Nome</div>
+          <input class="account-field-input" id="pf-first" type="text" placeholder="Nome" value="${escHtml(p.firstName || '')}">
+        </div>
+        <div class="account-field">
+          <div class="account-field-label">Cognome</div>
+          <input class="account-field-input" id="pf-last" type="text" placeholder="Cognome" value="${escHtml(p.lastName || '')}">
+        </div>
+        <div class="account-field">
+          <div class="account-field-label">Bambini</div>
+          <div class="kids-list" id="pf-kids-list"></div>
+          <button class="add-kid-btn" onclick="addKidRow()">＋ Aggiungi bambino</button>
+        </div>
+      `;
+
+      kids.forEach(k => addKidRow(k));
+    }
+
+    let _kidIdx = 0;
+    function addKidRow(kid) {
+      const idx  = _kidIdx++;
+      const name = kid ? escHtml(kid.name || '') : '';
+      const age  = kid ? escHtml(String(kid.age || '')) : '';
+      const row  = document.createElement('div');
+      row.className = 'kid-row';
+      row.id = `kid-row-${idx}`;
+      row.innerHTML = `
+        <input class="account-field-input" placeholder="Nome bambino" value="${name}" data-kid-name="${idx}">
+        <input class="account-field-input" placeholder="età" type="number" min="1" max="18" value="${age}" data-kid-age="${idx}" style="text-align:center">
+        <button class="kid-remove-btn" onclick="document.getElementById('kid-row-${idx}').remove()" title="Rimuovi">×</button>
+      `;
+      document.getElementById('pf-kids-list').appendChild(row);
+    }
+
+    function saveProfileForm() {
+      const firstName = (document.getElementById('pf-first').value || '').trim();
+      const lastName  = (document.getElementById('pf-last').value  || '').trim();
+      const nameInputs = document.querySelectorAll('[data-kid-name]');
+      const ageInputs  = document.querySelectorAll('[data-kid-age]');
+      const kids = [];
+      nameInputs.forEach((el, i) => {
+        const name = el.value.trim();
+        const age  = ageInputs[i]?.value.trim() || '';
+        if (name || age) kids.push({ name, age });
+      });
+      saveProfile({ firstName, lastName, kids });
+      renderProfileView();
     }
 
     function switchTab(tab) {
