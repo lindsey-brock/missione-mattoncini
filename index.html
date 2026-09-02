@@ -65,9 +65,8 @@
     0%, 100% { opacity: 0;                    transform: scale(0.6); }
     50%       { opacity: var(--max-opacity);   transform: scale(1.2); }
   }
-  /* Mobile: simpler stars so GPU can composite them */
+  /* Mobile: drop expensive drop-shadow filter on large stars */
   @media (max-width: 768px) {
-    .star { clip-path: none; border-radius: 50%; }
     .star-large { filter: none; }
   }
 
