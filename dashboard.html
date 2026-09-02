@@ -414,7 +414,10 @@
     .modal-confirm-btn:disabled { opacity: 0.4; cursor: default; }
 
     /* ── WORKSHOPS CAROUSEL ── */
-    .ws-section { margin-top: 40px; }
+    .ws-section {
+      margin-top: 40px;
+      padding: 0 24px 32px;
+    }
     .ws-section-header {
       display: flex; align-items: baseline; justify-content: space-between;
       margin-bottom: 14px;
@@ -611,21 +614,23 @@
           <div class="dash-greeting">Le mie prenotazioni</div>
         </div>
         <div id="bookings-area"></div>
-        <div class="ws-section" id="ws-section" style="display:none">
-          <div class="ws-section-header">
-            <div class="ws-section-heading">Prenota la tua prossima missione</div>
-          </div>
-          <div class="ws-carousel-outer">
-            <button class="ws-chevron" id="ws-prev" onclick="wsNav(-1)" disabled>&#8249;</button>
-            <div class="ws-carousel-viewport">
-              <div class="ws-carousel-track" id="ws-discover-list"></div>
-            </div>
-            <button class="ws-chevron" id="ws-next" onclick="wsNav(1)">&#8250;</button>
-          </div>
-          <div class="ws-dots" id="ws-dots"></div>
-        </div>
       </div>
 
+    </div>
+
+    <!-- Full-width workshop carousel below the two-column layout -->
+    <div class="ws-section" id="ws-section" style="display:none">
+      <div class="ws-section-header">
+        <div class="ws-section-heading">Prenota la tua prossima missione</div>
+      </div>
+      <div class="ws-carousel-outer">
+        <button class="ws-chevron" id="ws-prev" onclick="wsNav(-1)" disabled>&#8249;</button>
+        <div class="ws-carousel-viewport">
+          <div class="ws-carousel-track" id="ws-discover-list"></div>
+        </div>
+        <button class="ws-chevron" id="ws-next" onclick="wsNav(1)">&#8250;</button>
+      </div>
+      <div class="ws-dots" id="ws-dots"></div>
     </div>
   </div>
 
