@@ -129,36 +129,46 @@
   }
 
   /* ── ROCKET ── */
+  /* ── HELMET NAV ── */
   .nav-signin {
     position: fixed;
-    top: 16px;
-    right: 20px;
+    top: 14px;
+    right: 18px;
     z-index: 150;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    text-decoration: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    cursor: pointer;
+  }
+  .nav-signin.visible { opacity: 1; pointer-events: auto; }
+  .nav-helmet {
+    position: relative;
+    width: 40px; height: 44px;
+    flex-shrink: 0;
+  }
+  .nav-helmet svg { width: 100%; height: 100%; }
+  /* avatar clipped inside the visor */
+  .nav-visor-avatar {
+    position: absolute;
+    top: 13px; left: 9px;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    object-fit: cover;
+    overflow: hidden;
+  }
+  .nav-label {
     font-family: 'DM Sans', sans-serif;
     font-size: 0.78rem;
     font-weight: 600;
-    color: rgba(248,246,240,0.6);
-    text-decoration: none;
+    color: rgba(248,246,240,0.75);
     letter-spacing: 0.03em;
-    padding: 6px 12px;
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 20px;
-    background: rgba(255,255,255,0.04);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s ease, color 0.2s, background 0.2s, border-color 0.2s;
+    transition: color 0.2s;
   }
-  .nav-signin.visible {
-    opacity: 1;
-    pointer-events: auto;
-  }
-  .nav-signin:hover {
-    color: #f8f6f0;
-    background: rgba(255,255,255,0.09);
-    border-color: rgba(255,255,255,0.22);
-  }
+  .nav-signin:hover .nav-label { color: #f8f6f0; }
 
   .rocket-container {
     position: fixed;
@@ -2178,7 +2188,36 @@
 </div><!-- /#view-home -->
 
 <!-- ROCKET (repositioned by JS, then becomes nav trigger) -->
-<a href="dashboard.html" class="nav-signin" id="navSignin">Accedi</a>
+<a href="dashboard.html" class="nav-signin" id="navSignin">
+  <span class="nav-helmet">
+    <!-- space helmet SVG -->
+    <svg viewBox="0 0 40 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- helmet shell -->
+      <ellipse cx="20" cy="21" rx="17" ry="18" fill="#1A2E45" stroke="rgba(126,220,202,0.4)" stroke-width="1.5"/>
+      <!-- visor opening -->
+      <ellipse cx="20" cy="22" rx="11" ry="11" fill="#0d1b2e" stroke="rgba(126,220,202,0.25)" stroke-width="1"/>
+      <!-- visor tint / glare -->
+      <ellipse cx="20" cy="22" rx="11" ry="11" fill="rgba(126,220,202,0.06)"/>
+      <path d="M13 16 Q16 13 21 14" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+      <!-- neck ring -->
+      <rect x="13" y="37" width="14" height="4" rx="2" fill="#1A2E45" stroke="rgba(126,220,202,0.3)" stroke-width="1"/>
+      <!-- shoulder flanges -->
+      <rect x="5"  y="38" width="10" height="3" rx="1.5" fill="#1A2E45" stroke="rgba(126,220,202,0.2)" stroke-width="0.8"/>
+      <rect x="25" y="38" width="10" height="3" rx="1.5" fill="#1A2E45" stroke="rgba(126,220,202,0.2)" stroke-width="0.8"/>
+      <!-- antenna -->
+      <rect x="30" y="8" width="2" height="6" rx="1" fill="rgba(126,220,202,0.5)"/>
+      <circle cx="31" cy="7" r="1.5" fill="#F5C842"/>
+    </svg>
+    <!-- avatar shown inside visor when logged in -->
+    <img id="navAvatarImg" class="nav-visor-avatar" src="" alt="" style="display:none"/>
+    <!-- default astronaut silhouette (logged out) -->
+    <svg id="navAstronaut" class="nav-visor-avatar" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" style="top:13px;left:9px;width:22px;height:22px;position:absolute">
+      <circle cx="11" cy="8" r="4" fill="rgba(126,220,202,0.35)"/>
+      <ellipse cx="11" cy="18" rx="6" ry="4" fill="rgba(126,220,202,0.25)"/>
+    </svg>
+  </span>
+  <span class="nav-label" id="navLabel">Accedi</span>
+</a>
 
 <div class="rocket-container" id="rocket">
   <!-- Inner wrapper — position:relative at SVG dimensions so left:50% = nozzle centre -->
@@ -2600,6 +2639,27 @@ function enableRocketNav() {
   rocket.addEventListener('click', toggleDrawer);
   document.getElementById('navSignin').classList.add('visible');
 }
+
+/* ── HELMET AUTH STATE ── */
+(async () => {
+  try {
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjbG52ZXhtYmd0Y2JldWp5d2RoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2NDc2NDAsImV4cCI6MjA5ODIyMzY0MH0.8m5ITVPEkw8ZFBzJD8TK0DsqPVSwKEzHeOLsgl_uKxE';
+    const sb = supabase.createClient('https://pclnvexmbgtcbeujywdh.supabase.co', SUPABASE_ANON);
+    const { data: { user } } = await sb.auth.getUser();
+    if (!user) return;
+    const label = document.getElementById('navLabel');
+    const avatarImg = document.getElementById('navAvatarImg');
+    const astronaut = document.getElementById('navAstronaut');
+    const firstName = (user.user_metadata?.full_name || user.email || '').split(/[\s@]/)[0];
+    if (label) label.textContent = firstName;
+    const avatarUrl = user.user_metadata?.avatar_url;
+    if (avatarUrl && avatarImg) {
+      avatarImg.src = avatarUrl;
+      avatarImg.style.display = 'block';
+      if (astronaut) astronaut.style.display = 'none';
+    }
+  } catch(_) {}
+})();
 
 /* — Hover badges — */
 function onRocketHover() {
