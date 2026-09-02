@@ -531,6 +531,28 @@
       .dash-header { flex-direction: column; gap: 12px; }
     }
     @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+
+    /* Booking iframe overlay */
+    #booking-iframe-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.7);
+      align-items: center; justify-content: center;
+    }
+    #booking-iframe-overlay.open { display: flex; }
+    #booking-iframe-overlay iframe {
+      width: min(540px, 96vw);
+      height: min(720px, 92vh);
+      border: none;
+      border-radius: 16px;
+      background: #0d0d2b;
+    }
+    #booking-iframe-close {
+      position: absolute; top: 16px; right: 20px;
+      background: none; border: none; color: #fff;
+      font-size: 1.6rem; cursor: pointer; opacity: 0.7; line-height: 1;
+    }
+    #booking-iframe-close:hover { opacity: 1; }
     /* M01 castle burst animation */
     @keyframes m01-book-in {
       0%   { opacity: 0; transform: translateY(-12px); }
@@ -747,6 +769,12 @@
       </div>
       <div class="ws-dots" id="ws-dots"></div>
     </div>
+  </div>
+
+  <!-- BOOKING IFRAME OVERLAY -->
+  <div id="booking-iframe-overlay" onclick="handleBookingOverlayClick(event)">
+    <button id="booking-iframe-close" onclick="closeBookingOverlay()" aria-label="Chiudi">×</button>
+    <iframe id="booking-iframe" src="" title="Prenota workshop"></iframe>
   </div>
 
   <!-- SWITCH MODAL -->
@@ -1577,7 +1605,19 @@
     }
 
     function bookWorkshop(num) {
-      window.location.href = `index.html?book=${num}`;
+      document.getElementById('booking-iframe').src = `index.html?book=${num}`;
+      document.getElementById('booking-iframe-overlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeBookingOverlay() {
+      document.getElementById('booking-iframe-overlay').classList.remove('open');
+      document.getElementById('booking-iframe').src = '';
+      document.body.style.overflow = '';
+    }
+
+    function handleBookingOverlayClick(e) {
+      if (e.target === document.getElementById('booking-iframe-overlay')) closeBookingOverlay();
     }
 
     function renderBookingCard(b) {
