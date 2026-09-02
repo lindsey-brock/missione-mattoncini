@@ -669,20 +669,58 @@
     const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
     const WS_SVG = {
-      /* Costruiamo Forte — castle */
+      /* Costruiamo Forte — castle with bricks */
       '01': `<svg viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
         <!-- side towers -->
-        <rect x="6"  y="30" width="14" height="28" rx="2" fill="#7EDCCA"/>
-        <rect x="60" y="30" width="14" height="28" rx="2" fill="#7EDCCA"/>
+        <rect x="6"  y="30" width="14" height="28" fill="#7EDCCA" rx="1"/>
+        <rect x="60" y="30" width="14" height="28" fill="#7EDCCA" rx="1"/>
+        <!-- brick lines left tower -->
+        <line x1="6"  y1="36" x2="20" y2="36" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="6"  y1="42" x2="20" y2="42" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="6"  y1="48" x2="20" y2="48" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="6"  y1="54" x2="20" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="13" y1="30" x2="13" y2="36" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="10" y1="36" x2="10" y2="42" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="16" y1="36" x2="16" y2="42" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="13" y1="42" x2="13" y2="48" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="10" y1="48" x2="10" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="16" y1="48" x2="16" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
+        <!-- brick lines right tower -->
+        <line x1="60" y1="36" x2="74" y2="36" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="60" y1="42" x2="74" y2="42" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="60" y1="48" x2="74" y2="48" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="60" y1="54" x2="74" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="67" y1="30" x2="67" y2="36" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="64" y1="36" x2="64" y2="42" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="70" y1="36" x2="70" y2="42" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="67" y1="42" x2="67" y2="48" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="64" y1="48" x2="64" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="70" y1="48" x2="70" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
         <!-- battlements side towers -->
         <rect x="6"  y="22" width="4" height="10" rx="1" fill="#7EDCCA"/>
         <rect x="12" y="22" width="4" height="10" rx="1" fill="#7EDCCA"/>
         <rect x="60" y="22" width="4" height="10" rx="1" fill="#7EDCCA"/>
         <rect x="66" y="22" width="4" height="10" rx="1" fill="#7EDCCA"/>
         <!-- curtain wall -->
-        <rect x="20" y="42" width="40" height="16" rx="2" fill="#7EDCCA"/>
+        <rect x="20" y="42" width="40" height="16" fill="#7EDCCA" rx="1"/>
+        <line x1="20" y1="48" x2="60" y2="48" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="20" y1="54" x2="60" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="30" y1="42" x2="30" y2="48" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="45" y1="42" x2="45" y2="48" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="25" y1="48" x2="25" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="38" y1="48" x2="38" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="52" y1="48" x2="52" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
         <!-- main keep -->
-        <rect x="28" y="22" width="24" height="22" rx="2" fill="#F5C842"/>
+        <rect x="28" y="22" width="24" height="22" fill="#F5C842" rx="1"/>
+        <!-- keep brick lines -->
+        <line x1="28" y1="28" x2="52" y2="28" stroke="#D4A820" stroke-width=".8"/>
+        <line x1="28" y1="34" x2="52" y2="34" stroke="#D4A820" stroke-width=".8"/>
+        <line x1="28" y1="40" x2="52" y2="40" stroke="#D4A820" stroke-width=".8"/>
+        <line x1="37" y1="22" x2="37" y2="28" stroke="#D4A820" stroke-width=".8"/>
+        <line x1="33" y1="28" x2="33" y2="34" stroke="#D4A820" stroke-width=".8"/>
+        <line x1="44" y1="28" x2="44" y2="34" stroke="#D4A820" stroke-width=".8"/>
+        <line x1="37" y1="34" x2="37" y2="40" stroke="#D4A820" stroke-width=".8"/>
+        <line x1="47" y1="34" x2="47" y2="40" stroke="#D4A820" stroke-width=".8"/>
         <!-- keep battlements -->
         <rect x="28" y="14" width="6" height="10" rx="1" fill="#F5C842"/>
         <rect x="37" y="14" width="6" height="10" rx="1" fill="#F5C842"/>
@@ -692,35 +730,69 @@
         <!-- ground -->
         <rect x="4" y="58" width="72" height="4" rx="2" fill="#7EDCCA"/>
       </svg>`,
-      /* Il Ponte — suspension bridge */
+      /* Il Ponte — arch bridge, arch behind pylons */
       '02': `<svg viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- pylons -->
-        <rect x="16" y="18" width="6" height="36" rx="2" fill="#7EDCCA"/>
-        <rect x="58" y="18" width="6" height="36" rx="2" fill="#7EDCCA"/>
+        <!-- arch in background -->
+        <path d="M6 50 Q6 14 40 10 Q74 14 74 50" stroke="#7EDCCA" stroke-width="4" fill="none" stroke-linecap="butt" opacity=".45"/>
+        <!-- pylon bases (darker) -->
+        <rect x="14" y="38" width="8" height="16" rx="1" fill="#4AADA0"/>
+        <rect x="58" y="38" width="8" height="16" rx="1" fill="#4AADA0"/>
+        <!-- pylon base brick lines -->
+        <line x1="14" y1="43" x2="22" y2="43" stroke="#3A8D82" stroke-width=".8"/>
+        <line x1="14" y1="49" x2="22" y2="49" stroke="#3A8D82" stroke-width=".8"/>
+        <line x1="18" y1="38" x2="18" y2="43" stroke="#3A8D82" stroke-width=".8"/>
+        <line x1="16" y1="43" x2="16" y2="49" stroke="#3A8D82" stroke-width=".8"/>
+        <line x1="20" y1="43" x2="20" y2="49" stroke="#3A8D82" stroke-width=".8"/>
+        <line x1="58" y1="43" x2="66" y2="43" stroke="#3A8D82" stroke-width=".8"/>
+        <line x1="58" y1="49" x2="66" y2="49" stroke="#3A8D82" stroke-width=".8"/>
+        <line x1="62" y1="38" x2="62" y2="43" stroke="#3A8D82" stroke-width=".8"/>
+        <line x1="60" y1="43" x2="60" y2="49" stroke="#3A8D82" stroke-width=".8"/>
+        <line x1="64" y1="43" x2="64" y2="49" stroke="#3A8D82" stroke-width=".8"/>
+        <!-- pylons upper (normal color) -->
+        <rect x="14" y="16" width="8" height="24" rx="1" fill="#7EDCCA"/>
+        <rect x="58" y="16" width="8" height="24" rx="1" fill="#7EDCCA"/>
         <!-- pylon caps -->
-        <rect x="14" y="14" width="10" height="6" rx="2" fill="#F5C842"/>
-        <rect x="56" y="14" width="10" height="6" rx="2" fill="#F5C842"/>
-        <!-- main cables -->
-        <path d="M4 24 Q19 14 40 10 Q61 14 76 24" stroke="#7EDCCA" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <rect x="12" y="12" width="12" height="6" rx="2" fill="#F5C842"/>
+        <rect x="56" y="12" width="12" height="6" rx="2" fill="#F5C842"/>
         <!-- hangers -->
-        <line x1="26" y1="17" x2="26" y2="46" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
-        <line x1="35" y1="12" x2="35" y2="46" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
-        <line x1="45" y1="12" x2="45" y2="46" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
-        <line x1="54" y1="17" x2="54" y2="46" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="26" y1="20" x2="26" y2="46" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="35" y1="13" x2="35" y2="46" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="45" y1="13" x2="45" y2="46" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="54" y1="20" x2="54" y2="46" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
         <!-- deck -->
         <rect x="4" y="44" width="72" height="5" rx="2" fill="#7EDCCA"/>
       </svg>`,
-      /* L'Arco Romano — roman arch */
+      /* L'Arco Romano — roman arch with bricks */
       '03': `<svg viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
         <!-- outer pillars -->
-        <rect x="6"  y="30" width="12" height="28" rx="2" fill="#7EDCCA"/>
-        <rect x="62" y="30" width="12" height="28" rx="2" fill="#7EDCCA"/>
+        <rect x="6"  y="30" width="12" height="26" fill="#7EDCCA" rx="1"/>
+        <rect x="62" y="30" width="12" height="26" fill="#7EDCCA" rx="1"/>
+        <!-- brick lines left pillar -->
+        <line x1="6"  y1="36" x2="18" y2="36" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="6"  y1="42" x2="18" y2="42" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="6"  y1="48" x2="18" y2="48" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="12" y1="30" x2="12" y2="36" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="9"  y1="36" x2="9"  y2="42" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="15" y1="36" x2="15" y2="42" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="12" y1="42" x2="12" y2="48" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="9"  y1="48" x2="9"  y2="54" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="15" y1="48" x2="15" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
+        <!-- brick lines right pillar -->
+        <line x1="62" y1="36" x2="74" y2="36" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="62" y1="42" x2="74" y2="42" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="62" y1="48" x2="74" y2="48" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="68" y1="30" x2="68" y2="36" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="65" y1="36" x2="65" y2="42" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="71" y1="36" x2="71" y2="42" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="68" y1="42" x2="68" y2="48" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="65" y1="48" x2="65" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
+        <line x1="71" y1="48" x2="71" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
         <!-- outer arch -->
         <path d="M6 38 Q6 10 40 10 Q74 10 74 38" stroke="#7EDCCA" stroke-width="5" fill="none" stroke-linecap="butt"/>
         <!-- inner arch -->
         <path d="M18 56 L18 38 Q18 22 40 22 Q62 22 62 38 L62 56" stroke="#F5C842" stroke-width="3.5" fill="none" stroke-linejoin="round"/>
         <!-- keystone -->
-        <rect x="36" y="8" width="8" height="8" rx="1" fill="#E03A2F"/>
+        <rect x="36" y="7" width="8" height="8" rx="1" fill="#E03A2F"/>
         <!-- ground -->
         <rect x="4" y="56" width="72" height="6" rx="2" fill="#7EDCCA"/>
       </svg>`,
