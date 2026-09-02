@@ -485,9 +485,9 @@
     }
     .ws-full-illustration {
       flex: 1; display: flex; align-items: center; justify-content: center;
-      padding: 8px 0;
+      padding: 12px 0;
     }
-    .ws-full-illustration svg { width: 100%; max-width: 140px; height: auto; }
+    .ws-full-illustration svg { width: 100%; max-width: 160px; height: auto; }
     .ws-full-cta {
       font-family: inherit; font-size: 0.85rem; font-weight: 700;
       background: var(--yellow); color: #0d0d2b;
@@ -669,62 +669,74 @@
     const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
     const WS_SVG = {
-      '01': `<svg viewBox="0 0 80 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="10" y="30" width="14" height="24" rx="2" fill="#7edcca" opacity=".25"/>
-        <rect x="56" y="30" width="14" height="24" rx="2" fill="#7edcca" opacity=".25"/>
-        <rect x="24" y="36" width="32" height="18" rx="2" fill="#7edcca" opacity=".35"/>
-        <rect x="10" y="22" width="6" height="10" rx="1" fill="#7edcca" opacity=".5"/>
-        <rect x="18" y="22" width="6" height="10" rx="1" fill="#7edcca" opacity=".5"/>
-        <rect x="56" y="22" width="6" height="10" rx="1" fill="#7edcca" opacity=".5"/>
-        <rect x="64" y="22" width="6" height="10" rx="1" fill="#7edcca" opacity=".5"/>
-        <rect x="32" y="18" width="16" height="20" rx="2" fill="#F5C518" opacity=".6"/>
-        <rect x="36" y="8" width="8" height="12" rx="1" fill="#F5C518" opacity=".8"/>
-        <rect x="6" y="54" width="68" height="3" rx="1.5" fill="#7edcca" opacity=".2"/>
+      /* Costruiamo Forte — castle */
+      '01': `<svg viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="8"  y="32" width="12" height="26" rx="2" fill="#1A2E45"/>
+        <rect x="60" y="32" width="12" height="26" rx="2" fill="#1A2E45"/>
+        <rect x="20" y="40" width="40" height="18" rx="2" fill="#1A2E45"/>
+        <rect x="8"  y="24" width="4"  height="10" rx="1" fill="#7EDCCA"/>
+        <rect x="16" y="24" width="4"  height="10" rx="1" fill="#7EDCCA"/>
+        <rect x="60" y="24" width="4"  height="10" rx="1" fill="#7EDCCA"/>
+        <rect x="68" y="24" width="4"  height="10" rx="1" fill="#7EDCCA"/>
+        <rect x="28" y="20" width="24" height="22" rx="2" fill="#F5C842"/>
+        <rect x="34" y="10" width="12" height="14" rx="2" fill="#F5C842"/>
+        <rect x="34" y="8"  width="4"  height="8"  rx="1" fill="#E03A2F"/>
+        <rect x="42" y="8"  width="4"  height="8"  rx="1" fill="#E03A2F"/>
+        <rect x="36" y="44" width="8"  height="14" rx="1" fill="#7EDCCA"/>
+        <rect x="6"  y="58" width="68" height="4"  rx="2" fill="#1A2E45"/>
       </svg>`,
-      '02': `<svg viewBox="0 0 80 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M8 44 Q40 18 72 44" stroke="#7edcca" stroke-width="3" stroke-linecap="round" fill="none" opacity=".6"/>
-        <line x1="8" y1="44" x2="8" y2="54" stroke="#7edcca" stroke-width="3" stroke-linecap="round" opacity=".4"/>
-        <line x1="72" y1="44" x2="72" y2="54" stroke="#7edcca" stroke-width="3" stroke-linecap="round" opacity=".4"/>
-        <line x1="24" y1="36" x2="24" y2="54" stroke="#F5C518" stroke-width="2" stroke-linecap="round" opacity=".7"/>
-        <line x1="40" y1="25" x2="40" y2="54" stroke="#F5C518" stroke-width="2" stroke-linecap="round" opacity=".7"/>
-        <line x1="56" y1="36" x2="56" y2="54" stroke="#F5C518" stroke-width="2" stroke-linecap="round" opacity=".7"/>
-        <rect x="6" y="52" width="68" height="4" rx="2" fill="#7edcca" opacity=".2"/>
+      /* Il Ponte — suspension bridge */
+      '02': `<svg viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="8"  y="20" width="6" height="38" rx="2" fill="#1A2E45"/>
+        <rect x="66" y="20" width="6" height="38" rx="2" fill="#1A2E45"/>
+        <path d="M11 20 Q40 4 69 20" stroke="#7EDCCA" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        <line x1="24" y1="17" x2="24" y2="46" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="36" y1="10" x2="36" y2="46" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="44" y1="10" x2="44" y2="46" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="56" y1="17" x2="56" y2="46" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
+        <rect x="4"  y="44" width="72" height="5" rx="2" fill="#7EDCCA"/>
+        <rect x="4"  y="49" width="72" height="5" rx="2" fill="#1A2E45"/>
       </svg>`,
-      '03': `<svg viewBox="0 0 80 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 54 L12 34 Q40 10 68 34 L68 54" stroke="#7edcca" stroke-width="3" stroke-linejoin="round" fill="none" opacity=".5"/>
-        <path d="M22 54 L22 38 Q40 22 58 38 L58 54" fill="#7edcca" opacity=".15"/>
-        <path d="M22 54 L22 38 Q40 22 58 38 L58 54" stroke="#F5C518" stroke-width="2" fill="none" opacity=".7"/>
-        <rect x="6" y="52" width="68" height="4" rx="2" fill="#7edcca" opacity=".2"/>
-        <rect x="8" y="34" width="8" height="20" rx="1" fill="#7edcca" opacity=".3"/>
-        <rect x="64" y="34" width="8" height="20" rx="1" fill="#7edcca" opacity=".3"/>
+      /* L'Arco Romano — roman arch */
+      '03': `<svg viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="6"  y="26" width="12" height="32" rx="2" fill="#7EDCCA"/>
+        <rect x="62" y="26" width="12" height="32" rx="2" fill="#7EDCCA"/>
+        <path d="M18 56 L18 36 Q40 12 62 36 L62 56" fill="#1A2E45" stroke="#7EDCCA" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M26 56 L26 40 Q40 22 54 40 L54 56" fill="#F5C842" stroke="#F5C842" stroke-width="1.5" stroke-linejoin="round"/>
+        <rect x="32" y="42" width="16" height="16" rx="1" fill="#1A2E45"/>
+        <rect x="4"  y="56" width="72" height="6"  rx="2" fill="#7EDCCA"/>
       </svg>`,
-      '04': `<svg viewBox="0 0 80 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="12" y="32" width="46" height="16" rx="5" fill="#7edcca" opacity=".25"/>
-        <rect x="20" y="24" width="28" height="14" rx="4" fill="#7edcca" opacity=".35"/>
-        <rect x="36" y="20" width="14" height="10" rx="3" fill="#F5C518" opacity=".6"/>
-        <circle cx="22" cy="48" r="7" fill="#0d1b3e" stroke="#7edcca" stroke-width="2.5" opacity=".8"/>
-        <circle cx="22" cy="48" r="3" fill="#7edcca" opacity=".5"/>
-        <circle cx="56" cy="48" r="7" fill="#0d1b3e" stroke="#7edcca" stroke-width="2.5" opacity=".8"/>
-        <circle cx="56" cy="48" r="3" fill="#7edcca" opacity=".5"/>
-        <rect x="56" y="30" width="14" height="6" rx="2" fill="#F5C518" opacity=".5"/>
-        <path d="M8 38 L16 33" stroke="#F5C518" stroke-width="2" stroke-linecap="round" opacity=".6"/>
-        <path d="M4 42 L12 38" stroke="#F5C518" stroke-width="1.5" stroke-linecap="round" opacity=".4"/>
+      /* Macchine Veloci — race car */
+      '04': `<svg viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="8"  y="34" width="54" height="16" rx="5" fill="#7EDCCA"/>
+        <rect x="18" y="24" width="30" height="14" rx="4" fill="#F5C842"/>
+        <rect x="40" y="22" width="16" height="10" rx="3" fill="#F5C842"/>
+        <rect x="40" y="22" width="16" height="4"  rx="2" fill="#1A2E45"/>
+        <circle cx="22" cy="50" r="8" fill="#1A2E45" stroke="#F5C842" stroke-width="2.5"/>
+        <circle cx="22" cy="50" r="3.5" fill="#F5C842"/>
+        <circle cx="56" cy="50" r="8" fill="#1A2E45" stroke="#F5C842" stroke-width="2.5"/>
+        <circle cx="56" cy="50" r="3.5" fill="#F5C842"/>
+        <rect x="60" y="32" width="12" height="5" rx="2" fill="#E03A2F"/>
+        <path d="M4 38 L12 32" stroke="#E03A2F" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M2 44 L10 39" stroke="#E03A2F" stroke-width="1.8" stroke-linecap="round"/>
       </svg>`,
-      '05': `<svg viewBox="0 0 80 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M4 44 Q14 38 24 44 Q34 50 44 44 Q54 38 64 44 Q74 50 78 44" stroke="#7edcca" stroke-width="2.5" stroke-linecap="round" fill="none" opacity=".5"/>
-        <path d="M4 52 Q14 46 24 52 Q34 58 44 52 Q54 46 64 52 Q74 58 78 52" stroke="#7edcca" stroke-width="2" stroke-linecap="round" fill="none" opacity=".25"/>
-        <path d="M20 44 L18 28 L48 28 L52 44 Z" fill="#F5C518" opacity=".5"/>
-        <path d="M28 28 L34 14 L44 28 Z" fill="#F5C518" opacity=".7"/>
-        <rect x="18" y="40" width="36" height="4" rx="2" fill="#F5C518" opacity=".3"/>
+      /* Affonda o Galleggia? — boat on waves */
+      '05': `<svg viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 42 L14 28 L50 28 L56 42 Z" fill="#F5C842"/>
+        <path d="M28 28 L34 12 L46 28 Z" fill="#E03A2F"/>
+        <rect x="33" y="12" width="2.5" height="16" fill="#1A2E45"/>
+        <rect x="14" y="40" width="44" height="5" rx="2" fill="#F5C842"/>
+        <path d="M4  50 Q14 44 24 50 Q34 56 44 50 Q54 44 64 50 Q74 56 78 50" stroke="#7EDCCA" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        <path d="M4  58 Q14 52 24 58 Q34 64 44 58 Q54 52 64 58 Q74 64 78 58" stroke="#7EDCCA" stroke-width="1.8" stroke-linecap="round" fill="none"/>
       </svg>`,
-      '06': `<svg viewBox="0 0 80 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="40" cy="24" r="16" fill="#7edcca" opacity=".15" stroke="#7edcca" stroke-width="2" opacity=".4"/>
-        <path d="M40 8 Q50 18 40 28 Q30 18 40 8Z" fill="#7edcca" opacity=".5"/>
-        <path d="M40 12 Q46 20 40 26 Q34 20 40 12Z" fill="#F5C518" opacity=".6"/>
-        <rect x="37" y="28" width="6" height="18" rx="3" fill="#7edcca" opacity=".4"/>
-        <path d="M30 36 Q37 32 40 38" stroke="#7edcca" stroke-width="2" stroke-linecap="round" fill="none" opacity=".5"/>
-        <path d="M50 38 Q43 34 40 40" stroke="#7edcca" stroke-width="2" stroke-linecap="round" fill="none" opacity=".5"/>
-        <rect x="6" y="54" width="68" height="3" rx="1.5" fill="#7edcca" opacity=".15"/>
+      /* Ingegneri della Natura — tree/leaf */
+      '06': `<svg viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="36" y="38" width="8" height="20" rx="3" fill="#7EDCCA"/>
+        <circle cx="40" cy="26" r="18" fill="#1A2E45"/>
+        <path d="M40 8 Q58 20 52 38 Q40 44 28 38 Q22 20 40 8Z" fill="#7EDCCA"/>
+        <path d="M40 12 Q54 22 48 36 Q40 40 32 36 Q26 22 40 12Z" fill="#F5C842"/>
+        <path d="M40 18 Q50 26 46 34 Q40 36 34 34 Q30 26 40 18Z" fill="#7EDCCA"/>
+        <rect x="30" y="46" width="20" height="4" rx="2" fill="#7EDCCA"/>
       </svg>`,
     };
 
