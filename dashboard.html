@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <script src="https://js.stripe.com/v3/" async></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -782,8 +783,8 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label" id="captcha-label">Verifica: <span id="captcha-q"></span> = ?</label>
-          <input class="form-input" id="captcha-answer" type="number" placeholder="la tua risposta" autocomplete="off">
+          <div id="turnstile-widget" class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY" data-theme="dark"></div>
+          <div class="form-error" id="captcha-error"></div>
         </div>
         <div class="form-error" id="signup-error"></div>
         <button class="auth-btn" id="signup-btn" onclick="doSignup()">Crea account →</button>
@@ -1285,7 +1286,7 @@
           document.getElementById('login-email').value = urlEmail;
           document.getElementById('signup-email').value = urlEmail;
         }
-        if (wantSignup) { switchTab('signup'); initCaptcha(); }
+        if (wantSignup) switchTab('signup');
       }
 
       // Listen for auth changes (e.g. after email confirmation redirect)
@@ -1535,41 +1536,42 @@
         : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
     }
 
-    /* ── CAPTCHA ── */
-    let _captchaAnswer = 0;
-    function initCaptcha() {
-      const a = Math.floor(Math.random() * 10) + 1;
-      const b = Math.floor(Math.random() * 10) + 1;
-      _captchaAnswer = a + b;
-      document.getElementById('captcha-q').textContent = a + ' + ' + b;
-      document.getElementById('captcha-answer').value = '';
+    /* ── TURNSTILE CAPTCHA ── */
+    function getTurnstileToken() {
+      const el = document.querySelector('[name="cf-turnstile-response"]');
+      return el ? el.value : '';
     }
-    // init when tab becomes visible
-    document.getElementById('tab-signup').addEventListener('click', initCaptcha);
+    function resetTurnstile() {
+      if (window.turnstile) window.turnstile.reset('#turnstile-widget');
+    }
 
     /* ── SIGNUP ── */
     async function doSignup() {
       const email    = document.getElementById('signup-email').value.trim();
       const password = document.getElementById('signup-password').value;
       const confirm  = document.getElementById('signup-confirm').value;
-      const captcha  = parseInt(document.getElementById('captcha-answer').value, 10);
+      const captchaToken = getTurnstileToken();
       const errEl    = document.getElementById('signup-error');
+      const capErrEl = document.getElementById('captcha-error');
       const btn      = document.getElementById('signup-btn');
-      errEl.textContent = '';
+      errEl.textContent = ''; capErrEl.textContent = '';
 
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { errEl.textContent = 'Inserisci un\'email valida.'; return; }
       if (!password || password.length < 6) { errEl.textContent = 'La password deve avere almeno 6 caratteri.'; return; }
       if (password !== confirm) { errEl.textContent = 'Le password non corrispondono.'; return; }
-      if (isNaN(captcha) || captcha !== _captchaAnswer) { errEl.textContent = 'Risposta errata. Riprova.'; initCaptcha(); return; }
+      if (!captchaToken) { capErrEl.textContent = 'Completa la verifica CAPTCHA.'; return; }
 
       btn.disabled = true; btn.textContent = 'Creazione…';
       const { error } = await sb.auth.signUp({
         email, password,
-        options: { emailRedirectTo: 'https://www.missionemattoncini.it/dashboard.html' }
+        options: {
+          emailRedirectTo: 'https://www.missionemattoncini.it/dashboard.html',
+          captchaToken,
+        }
       });
       btn.disabled = false; btn.textContent = 'Crea account →';
 
-      if (error) { errEl.textContent = error.message; return; }
+      if (error) { errEl.textContent = error.message; resetTurnstile(); return; }
 
       document.getElementById('signup-success').style.display = 'block';
       btn.style.display = 'none';
