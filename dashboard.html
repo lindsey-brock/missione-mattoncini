@@ -592,16 +592,17 @@
     .ws-full-card:hover #m03-sol2 { animation: m03-march-right 0.55s ease-out 0.3s both; }
     /* M06 bee zoom-around and land */
     @keyframes m06-bee-fly {
-      0%   { transform: translate(0, 0)        scale(1)    rotate(0deg);   }
-      20%  { transform: translate(30px, -8px)  scale(0.83) rotate(40deg);  }
-      42%  { transform: translate(22px, -55px) scale(0.70) rotate(135deg); }
-      64%  { transform: translate(-26px,-50px) scale(0.72) rotate(240deg); }
-      84%  { transform: translate(-8px, -28px) scale(0.96) rotate(330deg); }
-      93%  { transform: translate(-5px, -33px) scale(1)    rotate(358deg); }
-      100% { transform: translate(-5px, -33px) scaleX(-1);                 }
+      0%   { transform: translate(0, 0)          scale(1);    }
+      16%  { transform: translate(20px,  6px)    scale(0.9);  }
+      34%  { transform: translate(26px, -46px)   scale(0.79); }
+      52%  { transform: translate(6px,  -62px)   scale(0.75); }
+      68%  { transform: translate(-24px,-50px)   scale(0.80); }
+      83%  { transform: translate(-10px,-29px)   scale(0.96); }
+      94%  { transform: translate(-5px, -33px)   scale(1);    }
+      100% { transform: translate(-5px, -33px)   scaleX(-1);  }
     }
     #m06-bee { transform-origin: 40px 54px; }
-    .ws-full-card:hover #m06-bee { animation: m06-bee-fly 2.2s cubic-bezier(.4,0,.2,1) forwards; }
+    .ws-full-card:hover #m06-bee { animation: m06-bee-fly 2.4s ease-in-out forwards; }
 
     /* M05 floating boat + scrolling waves */
     @keyframes m05-bob {
