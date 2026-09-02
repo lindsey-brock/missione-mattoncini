@@ -3017,11 +3017,21 @@ function enableRocketNav() {
     const label     = document.getElementById('navLabel');
     const avatarEl  = document.getElementById('navAvatarSVG');
     const astronaut = document.getElementById('navAstronaut');
-    const displayName = user.user_metadata?.name || user.user_metadata?.full_name || '';
-    const firstName = displayName ? displayName.split(/\s/)[0] : 'Astronauta';
-    if (label) label.textContent = `Benvenuto, ${firstName}!`;
+    // Profile name is stored in localStorage by dashboard.html (key: mm_profile_<uid>)
+    let firstName = '';
+    try {
+      const p = JSON.parse(localStorage.getItem(`mm_profile_${user.id}`)) || {};
+      firstName = p.firstName || '';
+    } catch {}
+    // Fall back to OAuth metadata name if no local profile yet
+    if (!firstName) {
+      const meta = user.user_metadata?.name || user.user_metadata?.full_name || '';
+      firstName = meta ? meta.split(/\s/)[0] : '';
+    }
+    const greet = firstName || 'Astronauta';
+    if (label) label.textContent = `Benvenuto, ${greet}!`;
     const drawerLabel = document.getElementById('drawerMobLabel');
-    if (drawerLabel) drawerLabel.textContent = `Benvenuto, ${firstName}!`;
+    if (drawerLabel) drawerLabel.textContent = `Benvenuto, ${greet}!`;
     const avatarUrl = user.user_metadata?.avatar_url;
     if (avatarUrl && avatarEl) {
       avatarEl.setAttribute('href', avatarUrl);
