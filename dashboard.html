@@ -425,7 +425,6 @@
     .ws-section-heading { font-size: 1rem; font-weight: 700; color: var(--text); }
     .ws-carousel-outer {
       display: flex; align-items: center; gap: 10px;
-      padding: 8px 0 12px;
     }
     .ws-chevron {
       font-family: inherit; font-size: 1.8rem; font-weight: 400; line-height: 1;
@@ -439,9 +438,7 @@
     .ws-chevron:hover { background: var(--border-mid); border-color: var(--aqua); color: var(--aqua); }
     .ws-chevron:disabled { opacity: 0.2; cursor: default; }
     .ws-carousel-viewport {
-      flex: 1;
-      overflow-x: clip;
-      overflow-y: visible;
+      flex: 1; overflow: hidden;
     }
     .ws-carousel-track {
       display: flex;
@@ -464,8 +461,8 @@
     }
     .ws-full-card:hover:not(.past):not(.booked) {
       border-color: var(--aqua);
-      transform: translateY(-6px) scale(1.01);
-      box-shadow: 0 12px 36px rgba(126,220,202,0.18), 0 2px 8px rgba(0,0,0,0.3);
+      transform: scale(1.02);
+      box-shadow: 0 0 0 2px rgba(126,220,202,0.35), 0 4px 24px rgba(126,220,202,0.15);
       background: var(--surface2);
     }
     .ws-full-card:hover:not(.past):not(.booked) .ws-full-illustration svg {
