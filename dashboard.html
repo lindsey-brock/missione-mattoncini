@@ -455,11 +455,21 @@
       flex-direction: column;
       gap: 8px;
       cursor: pointer;
-      transition: border-color 0.15s;
+      transition: border-color 0.22s, transform 0.22s, box-shadow 0.22s, background 0.22s;
       box-sizing: border-box;
       min-height: 320px;
     }
-    .ws-full-card:hover:not(.past):not(.booked) { border-color: var(--border-mid); }
+    .ws-full-card:hover:not(.past):not(.booked) {
+      border-color: var(--aqua);
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 12px 36px rgba(126,220,202,0.18), 0 2px 8px rgba(0,0,0,0.3);
+      background: var(--surface2);
+    }
+    .ws-full-card:hover:not(.past):not(.booked) .ws-full-illustration svg {
+      transform: scale(1.06);
+      transition: transform 0.3s ease;
+    }
+    .ws-full-illustration svg { transition: transform 0.3s ease; }
     .ws-full-card.past { opacity: 0.4; pointer-events: none; }
     .ws-full-card.booked { border-color: rgba(126,220,202,0.3); cursor: default; }
     .ws-full-card-top {
