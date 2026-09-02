@@ -965,16 +965,22 @@
   .ws-card-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(245,200,66,0.35); }
 
   /* ── WORKSHOP ILLUSTRATIONS ── */
+  .ws-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .ws-card-meta { flex: 1; min-width: 0; }
   .ws-card-illustration {
-    width: 100%;
-    height: 96px;
+    flex-shrink: 0;
+    width: 100px;
+    height: 90px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 6px;
-    border-radius: 6px;
-    background: rgba(126,220,202,0.06);
-    overflow: hidden;
+    overflow: visible;
   }
   .ws-card-illustration svg {
     width: 100%;
@@ -3391,13 +3397,17 @@ function renderWorkshopCards() {
     const svg = WS_SVG[w.num] || '';
     return `<div class="ws-card${i === nextIdx ? ' is-next' : ''}">
       ${i === nextIdx ? `<div class="ws-card-next-label">Il prossimo workshop</div>` : ''}
-      <div class="ws-card-illustration">${svg}</div>
-      <div class="ws-card-badge">M${w.num}</div>
-      <div class="ws-card-title">${w.titleIT}</div>
-      <div class="ws-card-subtitle">${w.title}</div>
-      <div class="ws-card-date">📅 ${formatDate(w.date)}</div>
-      <div class="ws-card-time">🕙 ${w.time}</div>
-      ${spotsLabel(w.num)}
+      <div class="ws-card-header">
+        <div class="ws-card-meta">
+          <div class="ws-card-badge">M${w.num}</div>
+          <div class="ws-card-title">${w.titleIT}</div>
+          <div class="ws-card-subtitle">${w.title}</div>
+          <div class="ws-card-date">📅 ${formatDate(w.date)}</div>
+          <div class="ws-card-time">🕙 ${w.time}</div>
+          ${spotsLabel(w.num)}
+        </div>
+        <div class="ws-card-illustration">${svg}</div>
+      </div>
       <div class="ws-card-concept">${w.concept}</div>
       <p class="ws-card-desc">${w.description}</p>
       <div class="ws-card-pills">${pills}</div>
