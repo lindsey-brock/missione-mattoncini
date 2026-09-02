@@ -590,6 +590,22 @@
     #m03-sol1, #m03-sol2 { opacity: 0; }
     .ws-full-card:hover #m03-sol1 { opacity: 1; animation: m03-march-left  0.55s ease-out 0.1s forwards; }
     .ws-full-card:hover #m03-sol2 { opacity: 1; animation: m03-march-right 0.55s ease-out 0.3s forwards; }
+    /* M05 floating boat + scrolling waves */
+    @keyframes m05-bob {
+      0%,100% { transform: translateY(0) rotate(0deg); }
+      25%     { transform: translateY(-3px) rotate(1deg); }
+      75%     { transform: translateY(-1px) rotate(-1deg); }
+    }
+    @keyframes m05-wave-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-40px); }
+    }
+    #m05-boat  { transform-origin: 40px 35px; }
+    #m05-waves { overflow: visible; }
+    .ws-full-card:hover #m05-boat       { animation: m05-bob 2s ease-in-out infinite; }
+    .ws-full-card:hover #m05-wave1      { animation: m05-wave-scroll 2s linear infinite; }
+    .ws-full-card:hover #m05-wave2      { animation: m05-wave-scroll 2s linear 1s infinite; }
+
     /* M04 spinning wheels + car rumble */
     @keyframes m04-spin    { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     @keyframes m04-rumble  {
@@ -1018,31 +1034,48 @@
       </svg>`,
       /* Affonda o Galleggia? — boat with bricks */
       '05': `<svg viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- boat hull -->
-        <path d="M14 28 L14 44 Q14 50 20 52 L40 54 L60 52 Q66 50 66 44 L66 28 Z" fill="#F5C842"/>
-        <!-- hull brick lines (horizontal) -->
-        <line x1="15" y1="36" x2="65" y2="36" stroke="#D4A820" stroke-width=".9"/>
-        <line x1="15" y1="44" x2="65" y2="44" stroke="#D4A820" stroke-width=".9"/>
-        <!-- hull brick joints row 1 (y=28-36) -->
-        <line x1="25" y1="29" x2="25" y2="35" stroke="#D4A820" stroke-width=".9"/>
-        <line x1="36" y1="29" x2="36" y2="35" stroke="#D4A820" stroke-width=".9"/>
-        <line x1="47" y1="29" x2="47" y2="35" stroke="#D4A820" stroke-width=".9"/>
-        <line x1="58" y1="29" x2="58" y2="35" stroke="#D4A820" stroke-width=".9"/>
-        <!-- hull brick joints row 2 (y=36-44, staggered) -->
-        <line x1="19" y1="37" x2="19" y2="43" stroke="#D4A820" stroke-width=".9"/>
-        <line x1="30" y1="37" x2="30" y2="43" stroke="#D4A820" stroke-width=".9"/>
-        <line x1="41" y1="37" x2="41" y2="43" stroke="#D4A820" stroke-width=".9"/>
-        <line x1="52" y1="37" x2="52" y2="43" stroke="#D4A820" stroke-width=".9"/>
-        <line x1="63" y1="37" x2="63" y2="43" stroke="#D4A820" stroke-width=".9"/>
-        <!-- hull stripe -->
-        <rect x="14" y="44" width="52" height="4" fill="#E03A2F"/>
-        <!-- mast -->
-        <rect x="39" y="10" width="3" height="20" rx="1" fill="#7EDCCA"/>
-        <!-- sails -->
-        <path d="M42 12 L58 28 L42 28 Z" fill="#7EDCCA"/>
-        <path d="M39 12 L23 28 L39 28 Z" fill="#7EDCCA" opacity=".6"/>
-        <!-- waves -->
-        <path d="M4 56 Q14 50 24 56 Q34 62 44 56 Q54 50 64 56 Q74 62 78 56" stroke="#7EDCCA" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        <defs>
+          <clipPath id="m05-wave-clip">
+            <rect x="0" y="48" width="80" height="20"/>
+          </clipPath>
+        </defs>
+        <!-- boat (bobs on hover) -->
+        <g id="m05-boat">
+          <!-- boat hull -->
+          <path d="M14 28 L14 44 Q14 50 20 52 L40 54 L60 52 Q66 50 66 44 L66 28 Z" fill="#F5C842"/>
+          <!-- hull brick lines (horizontal) -->
+          <line x1="15" y1="36" x2="65" y2="36" stroke="#D4A820" stroke-width=".9"/>
+          <line x1="15" y1="44" x2="65" y2="44" stroke="#D4A820" stroke-width=".9"/>
+          <!-- hull brick joints row 1 -->
+          <line x1="25" y1="29" x2="25" y2="35" stroke="#D4A820" stroke-width=".9"/>
+          <line x1="36" y1="29" x2="36" y2="35" stroke="#D4A820" stroke-width=".9"/>
+          <line x1="47" y1="29" x2="47" y2="35" stroke="#D4A820" stroke-width=".9"/>
+          <line x1="58" y1="29" x2="58" y2="35" stroke="#D4A820" stroke-width=".9"/>
+          <!-- hull brick joints row 2 (staggered) -->
+          <line x1="19" y1="37" x2="19" y2="43" stroke="#D4A820" stroke-width=".9"/>
+          <line x1="30" y1="37" x2="30" y2="43" stroke="#D4A820" stroke-width=".9"/>
+          <line x1="41" y1="37" x2="41" y2="43" stroke="#D4A820" stroke-width=".9"/>
+          <line x1="52" y1="37" x2="52" y2="43" stroke="#D4A820" stroke-width=".9"/>
+          <line x1="63" y1="37" x2="63" y2="43" stroke="#D4A820" stroke-width=".9"/>
+          <!-- hull stripe -->
+          <rect x="14" y="44" width="52" height="4" fill="#E03A2F"/>
+          <!-- mast -->
+          <rect x="39" y="10" width="3" height="20" rx="1" fill="#7EDCCA"/>
+          <!-- sails -->
+          <path d="M42 12 L58 28 L42 28 Z" fill="#7EDCCA"/>
+          <path d="M39 12 L23 28 L39 28 Z" fill="#7EDCCA" opacity=".6"/>
+        </g>
+        <!-- scrolling waves (two offset copies tile seamlessly) -->
+        <g id="m05-waves" clip-path="url(#m05-wave-clip)">
+          <!-- wave 1 — one full period = 40px, two repeats cover 0..80 -->
+          <g id="m05-wave1">
+            <path d="M0 56 Q5 50 10 56 Q15 62 20 56 Q25 50 30 56 Q35 62 40 56 Q45 50 50 56 Q55 62 60 56 Q65 50 70 56 Q75 62 80 56 Q85 50 90 56 Q95 62 100 56 Q105 50 110 56 Q115 62 120 56" stroke="#7EDCCA" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          </g>
+          <!-- wave 2 — offset by 20px horizontally and 3px vertically for depth -->
+          <g id="m05-wave2">
+            <path d="M0 59 Q5 53 10 59 Q15 65 20 59 Q25 53 30 59 Q35 65 40 59 Q45 53 50 59 Q55 65 60 59 Q65 53 70 59 Q75 65 80 59 Q85 53 90 59 Q95 65 100 59 Q105 53 110 59 Q115 65 120 59" stroke="#4AADA0" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".7"/>
+          </g>
+        </g>
       </svg>`,
       /* Ingegneri della Natura — tessellated honeycomb + bee */
       '06': `<svg viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
