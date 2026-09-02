@@ -74,11 +74,18 @@
     .title-block { text-align: left; }
     .cta-wrap { align-self: stretch; }
 
-    /* Center the red tab so text isn't cut off */
-    .nw-popup-eb-tab { left: 50%; transform: translateX(-50%); }
+    /* Red tab: stretch full width, center text, allow wrapping */
+    .nw-popup-eb-tab {
+      left: 0; right: 0;
+      text-align: center;
+      white-space: normal;
+      border-radius: 0;
+      font-size: 0.48rem;
+      padding: 5px 36px 5px 12px; /* right pad leaves room for X */
+    }
 
-    /* Move close X to top-right of popup */
-    .nw-popup-close { left: auto; right: 12px; top: 12px; transform: none; }
+    /* Move close X to top-right corner of popup */
+    .nw-popup-close { left: auto; right: 8px; top: -22px; transform: none; color: #fff; }
 
     /* WhatsApp behind the popup */
     .wa-blurb { z-index: 85; }
