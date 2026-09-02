@@ -590,6 +590,19 @@
     #m03-sol1, #m03-sol2 { opacity: 0; }
     .ws-full-card:hover #m03-sol1 { animation: m03-march-left  0.55s ease-out 0.1s both; }
     .ws-full-card:hover #m03-sol2 { animation: m03-march-right 0.55s ease-out 0.3s both; }
+    /* M06 bee zoom-around and land */
+    @keyframes m06-bee-fly {
+      0%   { transform: translate(0, 0)        scale(1)    rotate(0deg);   }
+      20%  { transform: translate(30px, -8px)  scale(0.83) rotate(40deg);  }
+      42%  { transform: translate(22px, -55px) scale(0.70) rotate(135deg); }
+      64%  { transform: translate(-26px,-50px) scale(0.72) rotate(240deg); }
+      84%  { transform: translate(-8px, -28px) scale(0.96) rotate(330deg); }
+      93%  { transform: translate(-5px, -33px) scale(1)    rotate(358deg); }
+      100% { transform: translate(-5px, -33px) scaleX(-1);                 }
+    }
+    #m06-bee { transform-origin: 40px 54px; }
+    .ws-full-card:hover #m06-bee { animation: m06-bee-fly 2.2s cubic-bezier(.4,0,.2,1) forwards; }
+
     /* M05 floating boat + scrolling waves */
     @keyframes m05-bob {
       0%,100% { transform: translateY(0) rotate(0deg); }
@@ -1091,27 +1104,29 @@
         <polygon points="26,26 33,30 33,38 26,42 19,38 19,30" fill="#F5C842" stroke="#D4A820" stroke-width="1.2"/>
         <polygon points="40,26 47,30 47,38 40,42 33,38 33,30" fill="#F5C842" stroke="#D4A820" stroke-width="1.2"/>
         <polygon points="54,26 61,30 61,38 54,42 47,38 47,30" fill="#F5C842" stroke="#D4A820" stroke-width="1.2"/>
-        <!-- bee shifted down 2px: gap between honeycomb (y=42) and bee (y≈48) -->
-        <!-- wings -->
-        <ellipse cx="36" cy="52" rx="8" ry="4.5" fill="#7EDCCA" transform="rotate(-25 36 52)"/>
-        <ellipse cx="44" cy="52" rx="8" ry="4.5" fill="#7EDCCA" transform="rotate(25 44 52)"/>
-        <!-- body -->
-        <ellipse cx="40" cy="57" rx="11" ry="6" fill="#F5C842"/>
-        <!-- stripes -->
-        <rect x="32" y="54" width="4" height="6" rx="1" fill="#0d1440" opacity=".75"/>
-        <rect x="38" y="54" width="4" height="6" rx="1" fill="#0d1440" opacity=".75"/>
-        <rect x="44" y="54" width="4" height="6" rx="1" fill="#0d1440" opacity=".75"/>
-        <!-- stinger -->
-        <path d="M29 57 L25 57" stroke="#F5C842" stroke-width="2" stroke-linecap="round"/>
-        <!-- head -->
-        <circle cx="51" cy="56" r="5.5" fill="#F5C842"/>
-        <!-- eye -->
-        <circle cx="53" cy="54" r="1.4" fill="#0d1440"/>
-        <!-- antennae (tips at y=47, just below honeycomb gap) -->
-        <path d="M50 51 Q48 48 46 47" stroke="#F5C842" stroke-width="1.2" stroke-linecap="round" fill="none"/>
-        <path d="M53 51 Q55 48 57 47" stroke="#F5C842" stroke-width="1.2" stroke-linecap="round" fill="none"/>
-        <circle cx="46" cy="47" r="1.5" fill="#F5C842"/>
-        <circle cx="57" cy="47" r="1.5" fill="#F5C842"/>
+        <!-- bee (animates on hover) -->
+        <g id="m06-bee">
+          <!-- wings -->
+          <ellipse cx="36" cy="52" rx="8" ry="4.5" fill="#7EDCCA" stroke="#1A2E45" stroke-width="0.8" transform="rotate(-25 36 52)"/>
+          <ellipse cx="44" cy="52" rx="8" ry="4.5" fill="#7EDCCA" stroke="#1A2E45" stroke-width="0.8" transform="rotate(25 44 52)"/>
+          <!-- body -->
+          <ellipse cx="40" cy="57" rx="11" ry="6" fill="#F5C842" stroke="#1A2E45" stroke-width="1"/>
+          <!-- stripes -->
+          <rect x="32" y="54" width="4" height="6" rx="1" fill="#0d1440" opacity=".8"/>
+          <rect x="38" y="54" width="4" height="6" rx="1" fill="#0d1440" opacity=".8"/>
+          <rect x="44" y="54" width="4" height="6" rx="1" fill="#0d1440" opacity=".8"/>
+          <!-- stinger -->
+          <path d="M29 57 L24.5 57" stroke="#D4A820" stroke-width="2" stroke-linecap="round"/>
+          <!-- head -->
+          <circle cx="51" cy="56" r="5.5" fill="#F5C842" stroke="#1A2E45" stroke-width="1"/>
+          <!-- eye -->
+          <circle cx="53" cy="54" r="1.4" fill="#0d1440"/>
+          <!-- antennae -->
+          <path d="M50 51 Q48 48 46 47" stroke="#1A2E45" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+          <path d="M53 51 Q55 48 57 47" stroke="#1A2E45" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+          <circle cx="46" cy="47" r="1.5" fill="#F5C842" stroke="#1A2E45" stroke-width="0.7"/>
+          <circle cx="57" cy="47" r="1.5" fill="#F5C842" stroke="#1A2E45" stroke-width="0.7"/>
+        </g>
       </svg>`,
     };
 
