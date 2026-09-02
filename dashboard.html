@@ -776,7 +776,16 @@
           <rect x="46" y="14" width="6" height="10" rx="1" fill="#F5C842"/>
           <rect x="35" y="34" width="10" height="10" rx="2" fill="#E03A2F"/>
         </g>
-        <!-- rubble pile (appears after burst) — all bricks 12×3.5 with outline -->
+        <!-- book stack — drawn first so rubble renders on top -->
+        <g id="m01-books">
+          <g id="m01-b1" opacity="0"><rect x="29" y="12" width="22" height="2" rx="1" fill="#E03A2F"/><line x1="31.5" y1="12" x2="31.5" y2="14" stroke="#901818" stroke-width=".9"/></g>
+          <g id="m01-b2" opacity="0"><rect x="29" y="10" width="22" height="2" rx="1" fill="#7EDCCA"/><line x1="31.5" y1="10" x2="31.5" y2="12" stroke="#3A9A8A" stroke-width=".9"/></g>
+          <g id="m01-b3" opacity="0"><rect x="29" y="8"  width="22" height="2" rx="1" fill="#F5C842"/><line x1="31.5" y1="8"  x2="31.5" y2="10" stroke="#B8941A" stroke-width=".9"/></g>
+          <g id="m01-b4" opacity="0"><rect x="29" y="6"  width="22" height="2" rx="1" fill="#E03A2F"/><line x1="31.5" y1="6"  x2="31.5" y2="8"  stroke="#901818" stroke-width=".9"/></g>
+          <g id="m01-b5" opacity="0"><rect x="29" y="4"  width="22" height="2" rx="1" fill="#7EDCCA"/><line x1="31.5" y1="4"  x2="31.5" y2="6"  stroke="#3A9A8A" stroke-width=".9"/></g>
+          <g id="m01-b6" opacity="0"><rect x="29" y="2"  width="22" height="2" rx="1" fill="#F5C842"/><line x1="31.5" y1="2"  x2="31.5" y2="4"  stroke="#B8941A" stroke-width=".9"/></g>
+        </g>
+        <!-- rubble pile (appears after burst, draws over books) — all bricks 12×3.5 with outline -->
         <g id="m01-rubble" opacity="0">
           <!-- bottom row -->
           <rect x="4"  y="54" width="12" height="3.5" rx="1" fill="#7EDCCA" stroke="#3A8A7E" stroke-width=".7" transform="rotate(-8,10,55.5)"/>
@@ -797,15 +806,6 @@
           <rect x="20" y="47" width="12" height="3.5" rx="1" fill="#F5C842" stroke="#B8901A" stroke-width=".7" transform="rotate(8,26,48.5)"/>
           <rect x="47" y="46" width="12" height="3.5" rx="1" fill="#F5C842" stroke="#B8901A" stroke-width=".7" transform="rotate(-10,53,47.5)"/>
           <rect x="59" y="47" width="12" height="3.5" rx="1" fill="#7EDCCA" stroke="#3A8A7E" stroke-width=".7" transform="rotate(12,65,48.5)"/>
-        </g>
-        <!-- book stack — height=2 keeps all 6 within viewBox, no clipping flash -->
-        <g id="m01-books">
-          <g id="m01-b1" opacity="0"><rect x="29" y="12" width="22" height="2" rx="1" fill="#E03A2F"/><line x1="31.5" y1="12" x2="31.5" y2="14" stroke="#901818" stroke-width=".9"/></g>
-          <g id="m01-b2" opacity="0"><rect x="29" y="10" width="22" height="2" rx="1" fill="#7EDCCA"/><line x1="31.5" y1="10" x2="31.5" y2="12" stroke="#3A9A8A" stroke-width=".9"/></g>
-          <g id="m01-b3" opacity="0"><rect x="29" y="8"  width="22" height="2" rx="1" fill="#F5C842"/><line x1="31.5" y1="8"  x2="31.5" y2="10" stroke="#B8941A" stroke-width=".9"/></g>
-          <g id="m01-b4" opacity="0"><rect x="29" y="6"  width="22" height="2" rx="1" fill="#E03A2F"/><line x1="31.5" y1="6"  x2="31.5" y2="8"  stroke="#901818" stroke-width=".9"/></g>
-          <g id="m01-b5" opacity="0"><rect x="29" y="4"  width="22" height="2" rx="1" fill="#7EDCCA"/><line x1="31.5" y1="4"  x2="31.5" y2="6"  stroke="#3A9A8A" stroke-width=".9"/></g>
-          <g id="m01-b6" opacity="0"><rect x="29" y="2"  width="22" height="2" rx="1" fill="#F5C842"/><line x1="31.5" y1="2"  x2="31.5" y2="4"  stroke="#B8941A" stroke-width=".9"/></g>
         </g>
       </svg>`,
       /* Il Ponte — arch bridge, arch behind pylons */
