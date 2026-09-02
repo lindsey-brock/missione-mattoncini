@@ -531,9 +531,9 @@
       .dash-header { flex-direction: column; gap: 12px; }
     }
     @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
-    /* M01 castle collapse animation */
+    /* M01 castle burst animation */
     @keyframes m01-book-in {
-      0%   { opacity: 0; transform: translateY(-14px); }
+      0%   { opacity: 0; transform: translateY(-12px); }
       65%  { opacity: 1; transform: translateY(2px); }
       100% { opacity: 1; transform: translateY(0); }
     }
@@ -544,23 +544,34 @@
       60%     { transform: translateX(-3px) rotate(-2deg); }
       80%     { transform: translateX(3px) rotate(2deg); }
     }
-    @keyframes m01-fall {
-      0%   { transform: rotate(0deg) translateX(0) translateY(0); opacity: 1; }
-      100% { transform: rotate(38deg) translateX(22px) translateY(6px); opacity: 0; }
+    @keyframes m01-burst {
+      0%   { transform: scale(1);    opacity: 1; }
+      30%  { transform: scale(1.12); opacity: 0.9; }
+      100% { transform: scale(1.5);  opacity: 0; }
     }
-    .ws-full-card:hover #m01-b1 {
-      animation: m01-book-in 0.35s cubic-bezier(.22,.68,0,1.3) 0.15s forwards;
+    @keyframes m01-rubble-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
     }
-    .ws-full-card:hover #m01-b2 {
-      animation: m01-book-in 0.35s cubic-bezier(.22,.68,0,1.3) 0.65s forwards;
+    @keyframes m01-books-fall {
+      0%   { transform: translateY(0); }
+      55%  { transform: translateY(42px); }
+      75%  { transform: translateY(36px); }
+      88%  { transform: translateY(39px); }
+      100% { transform: translateY(37px); }
     }
-    .ws-full-card:hover #m01-b3 {
-      animation: m01-book-in 0.35s cubic-bezier(.22,.68,0,1.3) 1.15s forwards;
+    .ws-full-card:hover #m01-b1 { animation: m01-book-in 0.3s cubic-bezier(.22,.68,0,1.3) 0.1s  forwards; }
+    .ws-full-card:hover #m01-b2 { animation: m01-book-in 0.3s cubic-bezier(.22,.68,0,1.3) 0.48s forwards; }
+    .ws-full-card:hover #m01-b3 { animation: m01-book-in 0.3s cubic-bezier(.22,.68,0,1.3) 0.86s forwards; }
+    .ws-full-card:hover #m01-b4 { animation: m01-book-in 0.3s cubic-bezier(.22,.68,0,1.3) 1.24s forwards; }
+    .ws-full-card:hover #m01-b5 { animation: m01-book-in 0.3s cubic-bezier(.22,.68,0,1.3) 1.62s forwards; }
+    .ws-full-card:hover #m01-b6 { animation: m01-book-in 0.3s cubic-bezier(.22,.68,0,1.3) 2.0s  forwards; }
+    .ws-full-card:hover #m01-castle-body {
+      transform-origin: 40px 40px;
+      animation: m01-shake 0.4s ease 2.5s, m01-burst 0.42s ease forwards 3.0s;
     }
-    .ws-full-card:hover #m01-castle {
-      transform-origin: 40px 58px;
-      animation: m01-shake 0.45s ease 1.7s, m01-fall 0.55s ease forwards 2.2s;
-    }
+    .ws-full-card:hover #m01-rubble { animation: m01-rubble-in 0.3s ease 3.35s forwards; }
+    .ws-full-card:hover #m01-books  { animation: m01-books-fall 0.5s cubic-bezier(.22,.68,0,1.3) 3.3s forwards; }
   </style>
 </head>
 <body>
@@ -713,11 +724,12 @@
     const WS_SVG = {
       /* Costruiamo Forte — castle with bricks */
       '01': `<svg viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g id="m01-castle">
-          <!-- side towers -->
+        <!-- permanent ground -->
+        <rect x="4" y="58" width="72" height="4" rx="2" fill="#7EDCCA"/>
+        <!-- castle body (shakes then bursts) -->
+        <g id="m01-castle-body">
           <rect x="6"  y="30" width="14" height="28" fill="#7EDCCA" rx="1"/>
           <rect x="60" y="30" width="14" height="28" fill="#7EDCCA" rx="1"/>
-          <!-- brick lines left tower -->
           <line x1="6"  y1="36" x2="20" y2="36" stroke="#5BBFAD" stroke-width=".8"/>
           <line x1="6"  y1="42" x2="20" y2="42" stroke="#5BBFAD" stroke-width=".8"/>
           <line x1="6"  y1="48" x2="20" y2="48" stroke="#5BBFAD" stroke-width=".8"/>
@@ -728,7 +740,6 @@
           <line x1="13" y1="42" x2="13" y2="48" stroke="#5BBFAD" stroke-width=".8"/>
           <line x1="10" y1="48" x2="10" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
           <line x1="16" y1="48" x2="16" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
-          <!-- brick lines right tower -->
           <line x1="60" y1="36" x2="74" y2="36" stroke="#5BBFAD" stroke-width=".8"/>
           <line x1="60" y1="42" x2="74" y2="42" stroke="#5BBFAD" stroke-width=".8"/>
           <line x1="60" y1="48" x2="74" y2="48" stroke="#5BBFAD" stroke-width=".8"/>
@@ -739,12 +750,10 @@
           <line x1="67" y1="42" x2="67" y2="48" stroke="#5BBFAD" stroke-width=".8"/>
           <line x1="64" y1="48" x2="64" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
           <line x1="70" y1="48" x2="70" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
-          <!-- battlements side towers -->
           <rect x="6"  y="22" width="4" height="10" rx="1" fill="#7EDCCA"/>
           <rect x="12" y="22" width="4" height="10" rx="1" fill="#7EDCCA"/>
           <rect x="60" y="22" width="4" height="10" rx="1" fill="#7EDCCA"/>
           <rect x="66" y="22" width="4" height="10" rx="1" fill="#7EDCCA"/>
-          <!-- curtain wall -->
           <rect x="20" y="42" width="40" height="16" fill="#7EDCCA" rx="1"/>
           <line x1="20" y1="48" x2="60" y2="48" stroke="#5BBFAD" stroke-width=".8"/>
           <line x1="20" y1="54" x2="60" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
@@ -753,9 +762,7 @@
           <line x1="25" y1="48" x2="25" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
           <line x1="38" y1="48" x2="38" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
           <line x1="52" y1="48" x2="52" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
-          <!-- main keep -->
           <rect x="28" y="22" width="24" height="22" fill="#F5C842" rx="1"/>
-          <!-- keep brick lines -->
           <line x1="28" y1="28" x2="52" y2="28" stroke="#D4A820" stroke-width=".8"/>
           <line x1="28" y1="34" x2="52" y2="34" stroke="#D4A820" stroke-width=".8"/>
           <line x1="28" y1="40" x2="52" y2="40" stroke="#D4A820" stroke-width=".8"/>
@@ -764,27 +771,27 @@
           <line x1="44" y1="28" x2="44" y2="34" stroke="#D4A820" stroke-width=".8"/>
           <line x1="37" y1="34" x2="37" y2="40" stroke="#D4A820" stroke-width=".8"/>
           <line x1="47" y1="34" x2="47" y2="40" stroke="#D4A820" stroke-width=".8"/>
-          <!-- keep battlements -->
           <rect x="28" y="14" width="6" height="10" rx="1" fill="#F5C842"/>
           <rect x="37" y="14" width="6" height="10" rx="1" fill="#F5C842"/>
           <rect x="46" y="14" width="6" height="10" rx="1" fill="#F5C842"/>
-          <!-- keep door -->
           <rect x="35" y="34" width="10" height="10" rx="2" fill="#E03A2F"/>
-          <!-- ground -->
-          <rect x="4" y="58" width="72" height="4" rx="2" fill="#7EDCCA"/>
-          <!-- books (hidden until hover) -->
-          <g id="m01-b1" opacity="0">
-            <rect x="29" y="11" width="22" height="3.5" rx="1" fill="#E03A2F"/>
-            <line x1="31.5" y1="11" x2="31.5" y2="14.5" stroke="#A02020" stroke-width="1"/>
-          </g>
-          <g id="m01-b2" opacity="0">
-            <rect x="29" y="7.5" width="22" height="3.5" rx="1" fill="#7EDCCA"/>
-            <line x1="31.5" y1="7.5" x2="31.5" y2="11" stroke="#3A9A8A" stroke-width="1"/>
-          </g>
-          <g id="m01-b3" opacity="0">
-            <rect x="29" y="4" width="22" height="3.5" rx="1" fill="#F5C842"/>
-            <line x1="31.5" y1="4" x2="31.5" y2="7.5" stroke="#B8941A" stroke-width="1"/>
-          </g>
+        </g>
+        <!-- rubble pile (appears after burst) -->
+        <g id="m01-rubble" opacity="0">
+          <rect x="14" y="52" width="10" height="4" rx="1" fill="#F5C842" transform="rotate(-12,19,54)"/>
+          <rect x="26" y="53" width="13" height="4" rx="1" fill="#7EDCCA" transform="rotate(4,32,55)"/>
+          <rect x="41" y="51" width="9"  height="4" rx="1" fill="#E03A2F" transform="rotate(8,45,53)"/>
+          <rect x="52" y="53" width="11" height="4" rx="1" fill="#F5C842" transform="rotate(-6,57,55)"/>
+          <rect x="33" y="48" width="8"  height="3" rx="1" fill="#7EDCCA" transform="rotate(-3,37,49)"/>
+        </g>
+        <!-- book stack (stacks on battlements, falls to rubble) -->
+        <g id="m01-books">
+          <g id="m01-b1" opacity="0"><rect x="29" y="11"   width="22" height="3" rx="1" fill="#E03A2F"/><line x1="31.5" y1="11"   x2="31.5" y2="14"   stroke="#901818" stroke-width="1"/></g>
+          <g id="m01-b2" opacity="0"><rect x="29" y="8"    width="22" height="3" rx="1" fill="#7EDCCA"/><line x1="31.5" y1="8"    x2="31.5" y2="11"   stroke="#3A9A8A" stroke-width="1"/></g>
+          <g id="m01-b3" opacity="0"><rect x="29" y="5"    width="22" height="3" rx="1" fill="#F5C842"/><line x1="31.5" y1="5"    x2="31.5" y2="8"    stroke="#B8941A" stroke-width="1"/></g>
+          <g id="m01-b4" opacity="0"><rect x="29" y="2"    width="22" height="3" rx="1" fill="#E03A2F"/><line x1="31.5" y1="2"    x2="31.5" y2="5"    stroke="#901818" stroke-width="1"/></g>
+          <g id="m01-b5" opacity="0"><rect x="29" y="-1"   width="22" height="3" rx="1" fill="#7EDCCA"/><line x1="31.5" y1="-1"   x2="31.5" y2="2"    stroke="#3A9A8A" stroke-width="1"/></g>
+          <g id="m01-b6" opacity="0"><rect x="29" y="-4"   width="22" height="3" rx="1" fill="#F5C842"/><line x1="31.5" y1="-4"   x2="31.5" y2="-1"   stroke="#B8941A" stroke-width="1"/></g>
         </g>
       </svg>`,
       /* Il Ponte — arch bridge, arch behind pylons */
