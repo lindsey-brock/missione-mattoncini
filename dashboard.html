@@ -1568,7 +1568,7 @@
     function renderBookings() {
       const area = document.getElementById('bookings-area');
       if (!currentBookings.length) {
-        area.innerHTML = `<div class="state-box"><div class="state-icon">🔭</div><div class="state-title">Nessuna prenotazione trovata</div><p>Non risultano prenotazioni confermate per questa email.<br>Hai prenotato con un indirizzo diverso?</p></div>`;
+        area.innerHTML = `<div class="state-box"><div class="state-icon">🔭</div><div class="state-title">Nessuna missione trovata</div><p>Non risultano missioni confermate per questa email.<br>Hai prenotato con un indirizzo diverso?</p></div>`;
       } else {
         const heading = `<div class="results-heading">${currentBookings.length} prenotazion${currentBookings.length === 1 ? 'e' : 'i'}</div>`;
         area.innerHTML = heading + currentBookings.map(renderBookingCard).join('');
