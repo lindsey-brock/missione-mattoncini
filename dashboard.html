@@ -584,6 +584,12 @@
     #m02-car1, #m02-car2 { opacity: 0; }
     .ws-full-card:hover #m02-car1 { opacity: 1; animation: m02-drive-right 2.4s linear infinite; }
     .ws-full-card:hover #m02-car2 { opacity: 1; animation: m02-drive-left  3.0s linear 0.7s infinite backwards; }
+    /* M03 Roman soldiers march in */
+    @keyframes m03-march-left  { from { transform: translateX(-18px); } to { transform: translateX(20px); } }
+    @keyframes m03-march-right { from { transform: translateX(80px);  } to { transform: translateX(50px); } }
+    #m03-sol1, #m03-sol2 { opacity: 0; }
+    .ws-full-card:hover #m03-sol1 { opacity: 1; animation: m03-march-left  0.55s ease-out 0.1s forwards; }
+    .ws-full-card:hover #m03-sol2 { opacity: 1; animation: m03-march-right 0.55s ease-out 0.3s forwards; }
   </style>
 </head>
 <body>
@@ -909,6 +915,41 @@
         <line x1="68" y1="42" x2="68" y2="48" stroke="#5BBFAD" stroke-width=".8"/>
         <line x1="65" y1="48" x2="65" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
         <line x1="71" y1="48" x2="71" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
+        <!-- Roman soldiers (march in on hover, feet at y=56) -->
+        <g id="m03-sol1" transform="translate(0,38)">
+          <!-- cape -->
+          <polygon points="5,5 0,18 10,18" fill="#5B3A8F"/>
+          <!-- armor -->
+          <rect x="2" y="8" width="6" height="5" rx=".5" fill="#8B5E2A"/>
+          <circle cx="5" cy="10.5" r="1.5" fill="#6B4A1A"/>
+          <!-- head -->
+          <circle cx="5" cy="4" r="3" fill="#F0A07A"/>
+          <!-- helmet -->
+          <rect x="2" y="1.5" width="6" height="3" rx="1" fill="#707070"/>
+          <!-- plume -->
+          <rect x="4.5" y="0" width="1.5" height="2.5" rx=".5" fill="#E03A2F"/>
+          <!-- tunic -->
+          <rect x="2" y="13" width="6" height="3" rx=".5" fill="#F5F5F5"/>
+          <line x1="2" y1="14.5" x2="8" y2="14.5" stroke="#E03A2F" stroke-width=".6"/>
+          <!-- legs -->
+          <rect x="2.5" y="16" width="2" height="2" rx=".3" fill="#F0A07A"/>
+          <rect x="5.5" y="16" width="2" height="2" rx=".3" fill="#F0A07A"/>
+        </g>
+        <g id="m03-sol2" transform="translate(0,38)">
+          <!-- mirrored soldier (faces left) -->
+          <g transform="translate(10,0) scale(-1,1)">
+            <polygon points="5,5 0,18 10,18" fill="#5B3A8F"/>
+            <rect x="2" y="8" width="6" height="5" rx=".5" fill="#8B5E2A"/>
+            <circle cx="5" cy="10.5" r="1.5" fill="#6B4A1A"/>
+            <circle cx="5" cy="4" r="3" fill="#F0A07A"/>
+            <rect x="2" y="1.5" width="6" height="3" rx="1" fill="#707070"/>
+            <rect x="4.5" y="0" width="1.5" height="2.5" rx=".5" fill="#E03A2F"/>
+            <rect x="2" y="13" width="6" height="3" rx=".5" fill="#F5F5F5"/>
+            <line x1="2" y1="14.5" x2="8" y2="14.5" stroke="#E03A2F" stroke-width=".6"/>
+            <rect x="2.5" y="16" width="2" height="2" rx=".3" fill="#F0A07A"/>
+            <rect x="5.5" y="16" width="2" height="2" rx=".3" fill="#F0A07A"/>
+          </g>
+        </g>
         <!-- ground -->
         <rect x="4" y="56" width="72" height="6" rx="2" fill="#7EDCCA"/>
       </svg>`,
