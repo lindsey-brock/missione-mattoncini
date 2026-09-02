@@ -590,10 +590,18 @@
     #m03-sol1, #m03-sol2 { opacity: 0; }
     .ws-full-card:hover #m03-sol1 { opacity: 1; animation: m03-march-left  0.55s ease-out 0.1s forwards; }
     .ws-full-card:hover #m03-sol2 { opacity: 1; animation: m03-march-right 0.55s ease-out 0.3s forwards; }
-    /* M04 spinning wheels */
-    @keyframes m04-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    .ws-full-card:hover #m04-wheel1 { transform-origin: 26px 50px; animation: m04-spin 0.7s linear infinite; }
-    .ws-full-card:hover #m04-wheel2 { transform-origin: 58px 50px; animation: m04-spin 0.7s linear infinite; }
+    /* M04 spinning wheels + car rumble */
+    @keyframes m04-spin    { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes m04-rumble  {
+      0%,100% { transform: translate(0, 0); }
+      20%     { transform: translate(.6px, -1px); }
+      40%     { transform: translate(-.6px, -.5px); }
+      60%     { transform: translate(.6px, -1px); }
+      80%     { transform: translate(-.4px, -.5px); }
+    }
+    .ws-full-card:hover #m04-wheel1    { transform-origin: 26px 50px; animation: m04-spin 0.7s linear infinite; }
+    .ws-full-card:hover #m04-wheel2    { transform-origin: 58px 50px; animation: m04-spin 0.7s linear infinite; }
+    .ws-full-card:hover #m04-car-body  { animation: m04-rumble 0.12s ease-in-out infinite; }
   </style>
 </head>
 <body>
@@ -959,6 +967,7 @@
         <line x1="2"  y1="34" x2="14" y2="34" stroke="#E03A2F" stroke-width="2.5" stroke-linecap="round"/>
         <line x1="2"  y1="40" x2="10" y2="40" stroke="#E03A2F" stroke-width="2"   stroke-linecap="round"/>
         <line x1="2"  y1="46" x2="12" y2="46" stroke="#E03A2F" stroke-width="1.5" stroke-linecap="round"/>
+        <g id="m04-car-body">
         <!-- car body -->
         <rect x="12" y="34" width="56" height="16" rx="5" fill="#7EDCCA"/>
         <!-- body brick lines -->
@@ -990,6 +999,7 @@
         <circle cx="13" cy="46" r="5" fill="#FFE080"/>
         <circle cx="13" cy="37" r="2.5" fill="#fff" opacity=".6"/>
         <circle cx="13" cy="46" r="2.5" fill="#fff" opacity=".6"/>
+        </g>
         <!-- wheels with spokes (rotate on hover) -->
         <g id="m04-wheel1">
           <circle cx="26" cy="50" r="8" fill="#F5C842"/>
