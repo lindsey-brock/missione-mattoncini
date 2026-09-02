@@ -778,20 +778,25 @@
         </g>
         <!-- rubble pile (appears after burst) -->
         <g id="m01-rubble" opacity="0">
-          <rect x="14" y="52" width="10" height="4" rx="1" fill="#F5C842" transform="rotate(-12,19,54)"/>
-          <rect x="26" y="53" width="13" height="4" rx="1" fill="#7EDCCA" transform="rotate(4,32,55)"/>
-          <rect x="41" y="51" width="9"  height="4" rx="1" fill="#E03A2F" transform="rotate(8,45,53)"/>
-          <rect x="52" y="53" width="11" height="4" rx="1" fill="#F5C842" transform="rotate(-6,57,55)"/>
-          <rect x="33" y="48" width="8"  height="3" rx="1" fill="#7EDCCA" transform="rotate(-3,37,49)"/>
+          <!-- big red block (door-sized) -->
+          <rect x="33" y="48" width="10" height="10" rx="2" fill="#E03A2F"/>
+          <!-- teal bricks -->
+          <rect x="12" y="53" width="14" height="4" rx="1" fill="#7EDCCA" transform="rotate(-13,19,55)"/>
+          <rect x="45" y="52" width="14" height="4" rx="1" fill="#7EDCCA" transform="rotate(10,52,54)"/>
+          <rect x="24" y="55" width="9"  height="3" rx="1" fill="#7EDCCA" transform="rotate(-4,28,56)"/>
+          <!-- yellow bricks -->
+          <rect x="15" y="48" width="11" height="4" rx="1" fill="#F5C842" transform="rotate(-9,20,50)"/>
+          <rect x="55" y="54" width="12" height="4" rx="1" fill="#F5C842" transform="rotate(8,61,56)"/>
+          <rect x="44" y="56" width="8"  height="3" rx="1" fill="#F5C842" transform="rotate(3,48,57)"/>
         </g>
-        <!-- book stack (stacks on battlements, falls to rubble) -->
+        <!-- book stack — height=2 keeps all 6 within viewBox, no clipping flash -->
         <g id="m01-books">
-          <g id="m01-b1" opacity="0"><rect x="29" y="11"   width="22" height="3" rx="1" fill="#E03A2F"/><line x1="31.5" y1="11"   x2="31.5" y2="14"   stroke="#901818" stroke-width="1"/></g>
-          <g id="m01-b2" opacity="0"><rect x="29" y="8"    width="22" height="3" rx="1" fill="#7EDCCA"/><line x1="31.5" y1="8"    x2="31.5" y2="11"   stroke="#3A9A8A" stroke-width="1"/></g>
-          <g id="m01-b3" opacity="0"><rect x="29" y="5"    width="22" height="3" rx="1" fill="#F5C842"/><line x1="31.5" y1="5"    x2="31.5" y2="8"    stroke="#B8941A" stroke-width="1"/></g>
-          <g id="m01-b4" opacity="0"><rect x="29" y="2"    width="22" height="3" rx="1" fill="#E03A2F"/><line x1="31.5" y1="2"    x2="31.5" y2="5"    stroke="#901818" stroke-width="1"/></g>
-          <g id="m01-b5" opacity="0"><rect x="29" y="-1"   width="22" height="3" rx="1" fill="#7EDCCA"/><line x1="31.5" y1="-1"   x2="31.5" y2="2"    stroke="#3A9A8A" stroke-width="1"/></g>
-          <g id="m01-b6" opacity="0"><rect x="29" y="-4"   width="22" height="3" rx="1" fill="#F5C842"/><line x1="31.5" y1="-4"   x2="31.5" y2="-1"   stroke="#B8941A" stroke-width="1"/></g>
+          <g id="m01-b1" opacity="0"><rect x="29" y="12" width="22" height="2" rx="1" fill="#E03A2F"/><line x1="31.5" y1="12" x2="31.5" y2="14" stroke="#901818" stroke-width=".9"/></g>
+          <g id="m01-b2" opacity="0"><rect x="29" y="10" width="22" height="2" rx="1" fill="#7EDCCA"/><line x1="31.5" y1="10" x2="31.5" y2="12" stroke="#3A9A8A" stroke-width=".9"/></g>
+          <g id="m01-b3" opacity="0"><rect x="29" y="8"  width="22" height="2" rx="1" fill="#F5C842"/><line x1="31.5" y1="8"  x2="31.5" y2="10" stroke="#B8941A" stroke-width=".9"/></g>
+          <g id="m01-b4" opacity="0"><rect x="29" y="6"  width="22" height="2" rx="1" fill="#E03A2F"/><line x1="31.5" y1="6"  x2="31.5" y2="8"  stroke="#901818" stroke-width=".9"/></g>
+          <g id="m01-b5" opacity="0"><rect x="29" y="4"  width="22" height="2" rx="1" fill="#7EDCCA"/><line x1="31.5" y1="4"  x2="31.5" y2="6"  stroke="#3A9A8A" stroke-width=".9"/></g>
+          <g id="m01-b6" opacity="0"><rect x="29" y="2"  width="22" height="2" rx="1" fill="#F5C842"/><line x1="31.5" y1="2"  x2="31.5" y2="4"  stroke="#B8941A" stroke-width=".9"/></g>
         </g>
       </svg>`,
       /* Il Ponte — arch bridge, arch behind pylons */
