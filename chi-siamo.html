@@ -861,14 +861,14 @@ function finalizeRocket() {
   rocket.style.transition = 'all 0.4s ease-out';
   if (mobNav) {
     rocket.style.left   = 'auto';
-    rocket.style.right  = '28px';
+    rocket.style.right  = '16px';
   } else {
     rocket.style.right  = 'auto';
     rocket.style.left   = '16px';
+    rocket.style.width  = '40px';
+    rocket.style.height = '40px';
   }
   rocket.style.top    = '12px';
-  rocket.style.width  = '40px';
-  rocket.style.height = '40px';
   rocket.style.transform = 'rotate(0deg)';
 
   flameWrap.classList.remove('active');
@@ -930,7 +930,7 @@ function rocketSwirl(onSwitch, onDone) {
     flameWrap.classList.remove('nav-mode');
   });
 
-  const navX = mobNav ? (W - 68) : 56;
+  const navX = mobNav ? (W - 56) : 56;
   const navY = 67;
 
   const swirlPaths = [
@@ -990,8 +990,7 @@ function rocketSwirl(onSwitch, onDone) {
           rocket.style.left  = '16px';
         }
         rocket.style.top        = '12px';
-        rocket.style.width      = '40px';
-        rocket.style.height     = '40px';
+        if (!mobNav) { rocket.style.width = '40px'; rocket.style.height = '40px'; }
         rocket.style.transform  = 'rotate(0deg)';
         setTimeout(() => {
           flameWrap.classList.remove('active');

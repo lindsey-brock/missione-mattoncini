@@ -2791,7 +2791,7 @@ function buildPaths() {
   const l2cy = line2Rect.top + line2Rect.height / 2;
   if (mobNav) {
     // Mirrored paths for mobile: rocket comes from bottom-LEFT, arcs left↔right, lands top-RIGHT
-    const endX = W - 68; // 80px rocket centre: right edge = W-68+40 = W-28 (28px margin)
+    const endX = W - 56; // 80px rocket centre: right:16px → left=W-96, centre=W-56
     paths = [
       { p0:{x:-100,y:H+100},   p1:{x:W*0.3,y:H*0.8},   p2:{x:W*0.9,y:l1cy+40}, p3:{x:W+100,y:l1cy},    duration:1600 },
       { p0:{x:W+100,y:l1cy},   p1:{x:W*0.7,y:l1cy-30},  p2:{x:W*0.3,y:l1cy+20}, p3:{x:-120,y:l1cy-10}, duration:900  },
@@ -2871,14 +2871,15 @@ function finalizeRocket() {
   rocket.style.transition = 'all 0.4s ease-out';
   if (mobNav) {
     rocket.style.left   = 'auto';
-    rocket.style.right  = '28px';
+    rocket.style.right  = '16px';
+    // Keep width:80px — body-wrap is 80px; shrinking container clips it past viewport
   } else {
     rocket.style.right  = 'auto';
     rocket.style.left   = '16px';
+    rocket.style.width  = '40px';
+    rocket.style.height = '40px';
   }
   rocket.style.top    = '12px';
-  rocket.style.width  = '40px';
-  rocket.style.height = '40px';
   rocket.style.transform = 'rotate(0deg)';
 
   // Hide intro flame and switch to nav-state positioning
@@ -2920,10 +2921,8 @@ window.addEventListener('load', () => {
     animating = false;
     rocket.style.transition = 'none';
     if (mobNav) { rocket.style.left = 'auto'; rocket.style.right = '16px'; }
-    else { rocket.style.right = 'auto'; rocket.style.left = '16px'; }
+    else { rocket.style.right = 'auto'; rocket.style.left = '16px'; rocket.style.width = '40px'; rocket.style.height = '40px'; }
     rocket.style.top    = '12px';
-    rocket.style.width  = '40px';
-    rocket.style.height = '40px';
     rocket.style.transform = 'rotate(0deg)';
     flameWrap.classList.remove('active');
     flameWrap.classList.add('nav-mode');
@@ -3288,7 +3287,7 @@ function rocketSwirl(onSwitch, onDone) {
   // Convert from right-positioning to left-positioning for animation
   if (mobNav) {
     rocket.style.right = 'auto';
-    rocket.style.left  = (W - 28 - 80) + 'px'; // = W-108, centre = W-68
+    rocket.style.left  = (W - 16 - 80) + 'px'; // = W-96, centre = W-56
   } else {
     rocket.style.left   = '16px';
   }
@@ -3304,8 +3303,8 @@ function rocketSwirl(onSwitch, onDone) {
 
   // Two-arc loop: out across screen, back to nav
   // navX/navY = centre of 80×110 rocket at nav position
-  // Desktop: left:16 → centre x = 56; Mobile: right:28 + 80px wide → centre x = W-68
-  const navX = mobNav ? (W - 68) : 56;
+  // Desktop: left:16 → centre x = 56; Mobile: right:16, width:80 → centre x = W-56
+  const navX = mobNav ? (W - 56) : 56;
   const navY = 67;
 
   // Segment 2 p2 is placed directly below p3 so the bezier tangent at t=1
@@ -3375,8 +3374,7 @@ function rocketSwirl(onSwitch, onDone) {
           rocket.style.left  = '16px';
         }
         rocket.style.top        = '12px';
-        rocket.style.width      = '40px';
-        rocket.style.height     = '40px';
+        if (!mobNav) { rocket.style.width = '40px'; rocket.style.height = '40px'; }
         rocket.style.transform  = 'rotate(0deg)';
         setTimeout(() => {
           flameWrap.classList.remove('active');
