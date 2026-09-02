@@ -438,14 +438,15 @@
     .ws-chevron:hover { color: var(--text); border-color: var(--border-mid); }
     .ws-chevron:disabled { opacity: 0.25; cursor: default; }
     .ws-carousel-viewport {
-      flex: 1; overflow: hidden; border-radius: 14px;
+      flex: 1; overflow: hidden;
     }
     .ws-carousel-track {
       display: flex;
+      gap: 14px;
       transition: transform 0.3s ease;
     }
     .ws-full-card {
-      flex: 0 0 100%;
+      flex: 0 0 calc(33.333% - 10px);
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 14px;
@@ -1084,15 +1085,22 @@
       wsUpdateNav();
     }
 
+    const WS_PER_PAGE = 3;
+
     function wsNav(dir) {
-      wsGoTo(wsCurrentIdx + dir);
+      wsGoTo(wsCurrentIdx + dir * WS_PER_PAGE);
     }
 
     function wsGoTo(idx) {
       const total = WORKSHOPS_META.length;
-      wsCurrentIdx = Math.max(0, Math.min(idx, total - 1));
+      const maxIdx = Math.max(0, total - WS_PER_PAGE);
+      wsCurrentIdx = Math.max(0, Math.min(idx, maxIdx));
       const track = document.getElementById('ws-discover-list');
-      track.style.transform = `translateX(-${wsCurrentIdx * 100}%)`;
+      const card = track.querySelector('.ws-full-card');
+      if (card) {
+        const cardW = card.offsetWidth + 14;
+        track.style.transform = `translateX(-${wsCurrentIdx * cardW}px)`;
+      }
       document.querySelectorAll('.ws-dot').forEach((d, i) =>
         d.classList.toggle('active', i === wsCurrentIdx));
       wsUpdateNav();
@@ -1103,7 +1111,7 @@
       const prev = document.getElementById('ws-prev');
       const next = document.getElementById('ws-next');
       if (prev) prev.disabled = wsCurrentIdx === 0;
-      if (next) next.disabled = wsCurrentIdx === total - 1;
+      if (next) next.disabled = wsCurrentIdx >= total - WS_PER_PAGE;
     }
 
     function bookWorkshop(num) {
