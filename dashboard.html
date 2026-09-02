@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="https://js.stripe.com/v3/" async></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -532,27 +533,76 @@
     }
     @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
 
-    /* Booking iframe overlay */
-    #booking-iframe-overlay {
-      display: none;
-      position: fixed; inset: 0; z-index: 1000;
-      background: rgba(0,0,0,0.7);
-      align-items: center; justify-content: center;
-    }
-    #booking-iframe-overlay.open { display: flex; }
-    #booking-iframe-overlay iframe {
-      width: min(540px, 96vw);
-      height: min(720px, 92vh);
-      border: none;
-      border-radius: 16px;
-      background: #0d0d2b;
-    }
-    #booking-iframe-close {
-      position: absolute; top: 16px; right: 20px;
-      background: none; border: none; color: #fff;
-      font-size: 1.6rem; cursor: pointer; opacity: 0.7; line-height: 1;
-    }
-    #booking-iframe-close:hover { opacity: 1; }
+    /* ── BOOKING MODAL (bm-) ── */
+    .bm-overlay { position:fixed;inset:0;background:rgba(13,27,42,0.92);backdrop-filter:blur(6px);z-index:400;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity 0.3s ease; }
+    .bm-overlay.open { opacity:1;pointer-events:auto; }
+    .bm-card { background:#1A2E45;border:1px solid rgba(126,220,202,0.15);border-radius:14px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;padding:36px 32px 32px;position:relative;transform:translateY(20px);transition:transform 0.3s ease;scrollbar-width:thin;scrollbar-color:rgba(126,220,202,0.3) transparent; }
+    .bm-overlay.open .bm-card { transform:translateY(0); }
+    .bm-close { position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.07);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:0.8rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s; }
+    .bm-close:hover { background:rgba(255,255,255,0.16); }
+    .bm-heading { font-weight:800;font-size:clamp(1.3rem,3vw,1.7rem);color:#fff;margin-bottom:4px; }
+    .bm-eb-badge { display:inline-block;background:#E03A2F;color:#fff;font-size:0.52rem;letter-spacing:0.1em;padding:4px 12px;border-radius:4px;margin-bottom:20px; }
+    .bm-section { margin-bottom:22px; }
+    .bm-section-label { font-size:0.58rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-bottom:10px; }
+    .bm-ws-selector { position:relative;margin-bottom:8px; }
+    .bm-ws-trigger { display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;border-radius:6px;border:1px solid rgba(245,200,66,0.2);background:rgba(13,27,42,0.5);cursor:pointer;transition:border-color 0.2s,background 0.2s; }
+    .bm-ws-trigger:hover,.bm-ws-trigger.open { border-color:rgba(245,200,66,0.5);background:rgba(13,27,42,0.7); }
+    .bm-ws-trigger-content { display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:1; }
+    .bm-ws-trigger-right { display:flex;align-items:center;gap:8px;flex-shrink:0; }
+    .bm-ws-chevron { color:var(--muted);font-size:0.75rem;transition:transform 0.2s; }
+    .bm-ws-trigger.open .bm-ws-chevron { transform:rotate(180deg); }
+    .bm-ws-remove { color:var(--muted);font-size:1.1rem;line-height:1;padding:0 2px;transition:color 0.2s; }
+    .bm-ws-remove:hover { color:#E03A2F; }
+    .bm-ws-dropdown { display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:#0f1e2e;border:1px solid rgba(245,200,66,0.2);border-radius:8px;z-index:10;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.5); }
+    .bm-ws-dropdown.open { display:block; }
+    .bm-ws-option { display:flex;align-items:center;justify-content:space-between;padding:11px 14px;cursor:pointer;transition:background 0.15s;position:relative; }
+    .bm-ws-option:hover { background:rgba(245,200,66,0.07); }
+    .bm-ws-option.disabled { opacity:0.35;cursor:default; }
+    .bm-ws-opt-main { display:flex;align-items:center;gap:10px;flex-wrap:wrap; }
+    .bm-ws-full-tag { font-size:0.68rem;font-weight:700;color:#e87060;background:rgba(224,58,47,0.2);padding:1px 6px;border-radius:10px;margin-left:6px; }
+    .bm-ws-low-tag  { font-size:0.68rem;font-weight:700;color:#F5C842;background:rgba(245,200,66,0.18);padding:1px 6px;border-radius:10px;margin-left:6px; }
+    .bm-add-workshop { font-size:0.78rem;color:#7EDCCA;background:none;border:none;cursor:pointer;padding:6px 0;display:flex;align-items:center;gap:6px;transition:color 0.2s;margin-top:4px; }
+    .bm-add-workshop:hover { color:#fff; }
+    .bm-workshop-num   { font-size:0.55rem;color:#F5C842;letter-spacing:0.12em; }
+    .bm-workshop-title { font-size:0.82rem;font-weight:500;color:#fff; }
+    .bm-workshop-date  { font-size:0.72rem;color:var(--muted); }
+    .bm-workshop-price { font-size:0.72rem;color:#F5C842;flex-shrink:0; }
+    .bm-stepper { display:flex;align-items:center;gap:14px; }
+    .bm-step-btn { width:34px;height:34px;border-radius:50%;background:rgba(245,200,66,0.1);border:1px solid rgba(245,200,66,0.25);color:#F5C842;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s;line-height:1; }
+    .bm-step-btn:hover:not(:disabled) { background:rgba(245,200,66,0.22); }
+    .bm-step-btn:disabled { opacity:0.25;cursor:default; }
+    .bm-step-val { font-weight:700;font-size:1.2rem;color:#fff;min-width:28px;text-align:center; }
+    .bm-divider { height:1px;background:rgba(255,255,255,0.07);margin:20px 0; }
+    .bm-summary-row { display:flex;justify-content:space-between;font-size:0.82rem;color:#fff;opacity:0.8;margin-bottom:6px; }
+    .bm-summary-total { display:flex;justify-content:space-between;font-weight:700;font-size:1.1rem;color:#fff;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.1); }
+    .bm-summary-total span:last-child { color:#F5C842; }
+    .bm-strike { text-decoration:line-through;color:var(--muted);font-size:0.75rem;margin-right:4px; }
+    .bm-payment-note { font-size:0.7rem;color:var(--muted);font-style:italic;margin:14px 0 20px; }
+    .bm-cta { display:block;width:100%;font-weight:500;font-size:0.8rem;letter-spacing:0.12em;text-transform:uppercase;color:#0d0d2b;background:#F5C842;padding:14px 28px;border:none;border-radius:6px;cursor:pointer;text-align:center;transition:transform 0.2s,box-shadow 0.2s; }
+    .bm-cta:hover { transform:translateY(-2px);box-shadow:0 8px 28px rgba(245,200,66,0.35); }
+    .bm-cta:disabled { opacity:0.5;cursor:default;transform:none;box-shadow:none; }
+    .bm-step-ind { font-size:0.6rem;letter-spacing:0.18em;color:var(--muted);margin-bottom:18px; }
+    .bm-back { font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);background:none;border:none;cursor:pointer;padding:0;margin-bottom:14px;display:inline-block;transition:color 0.2s; }
+    .bm-back:hover { color:#fff; }
+    .bm-summary-line { font-size:0.78rem;color:#7EDCCA;background:rgba(126,220,202,0.07);border:1px solid rgba(126,220,202,0.18);border-radius:6px;padding:9px 14px;margin-bottom:20px; }
+    .bm-form-group { margin-bottom:14px; }
+    .bm-form-label { display:block;font-size:0.72rem;font-weight:500;color:var(--muted);margin-bottom:5px;letter-spacing:0.03em; }
+    .bm-input { width:100%;background:var(--navy);border:1px solid rgba(126,220,202,0.2);border-radius:4px;color:#fff;font-family:inherit;font-size:0.85rem;padding:10px 12px;outline:none;transition:border-color 0.2s,box-shadow 0.2s; }
+    .bm-input:focus { border-color:#7EDCCA;box-shadow:0 0 0 2px rgba(126,220,202,0.15); }
+    .bm-input::placeholder { color:var(--muted);opacity:0.7; }
+    .bm-input-error { font-size:0.7rem;color:#E03A2F;margin-top:4px;min-height:1em; }
+    .bm-card-wrap { background:var(--navy);border:1px solid rgba(126,220,202,0.2);border-radius:4px;padding:12px 14px;transition:border-color 0.2s,box-shadow 0.2s;margin-bottom:6px; }
+    .bm-card-wrap.StripeElement--focus { border-color:#7EDCCA;box-shadow:0 0 0 2px rgba(126,220,202,0.15); }
+    .bm-stripe-note { display:flex;align-items:center;gap:6px;font-size:0.68rem;color:var(--muted);margin-bottom:20px;margin-top:10px; }
+    .bm-stripe-logo { opacity:0.45;margin-left:4px; }
+    .bm-confirmed-icon { font-size:2.8rem;color:#7EDCCA;text-align:center;display:block;margin:12px 0 16px; }
+    .bm-confirmed-title { font-weight:800;font-size:1.5rem;color:#fff;text-align:center;margin-bottom:10px; }
+    .bm-confirmed-msg { font-size:0.85rem;color:#fff;opacity:0.75;text-align:center;line-height:1.6;margin-bottom:20px; }
+    .bm-confirmed-sessions { background:rgba(13,27,42,0.5);border-radius:6px;padding:12px 16px;margin-bottom:20px; }
+    .bm-confirmed-session { font-size:0.8rem;color:#fff;opacity:0.85;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.05); }
+    .bm-confirmed-session:last-child { border-bottom:none; }
+    .bm-close-link { display:block;text-align:center;font-size:0.8rem;color:var(--muted);background:none;border:none;cursor:pointer;transition:color 0.2s; }
+    .bm-close-link:hover { color:#fff; }
     /* M01 castle burst animation */
     @keyframes m01-book-in {
       0%   { opacity: 0; transform: translateY(-12px); }
@@ -771,10 +821,12 @@
     </div>
   </div>
 
-  <!-- BOOKING IFRAME OVERLAY -->
-  <div id="booking-iframe-overlay" onclick="handleBookingOverlayClick(event)">
-    <button id="booking-iframe-close" onclick="closeBookingOverlay()" aria-label="Chiudi">×</button>
-    <iframe id="booking-iframe" src="" title="Prenota workshop"></iframe>
+  <!-- BOOKING MODAL -->
+  <div id="booking-modal-overlay" class="bm-overlay">
+    <div class="bm-card">
+      <button class="bm-close" onclick="closeBookingModal()">✕</button>
+      <div id="bm-content"></div>
+    </div>
   </div>
 
   <!-- SWITCH MODAL -->
@@ -1605,20 +1657,245 @@
     }
 
     function bookWorkshop(num) {
-      document.getElementById('booking-iframe').src = `index.html?book=${num}`;
-      document.getElementById('booking-iframe-overlay').classList.add('open');
-      document.body.style.overflow = 'hidden';
+      const idx = WORKSHOPS.findIndex(w => w.num === num);
+      if (idx !== -1) openBookingModal(idx);
     }
 
-    function closeBookingOverlay() {
-      document.getElementById('booking-iframe-overlay').classList.remove('open');
-      document.getElementById('booking-iframe').src = '';
+    /* ── BOOKING MODAL DATA & CONSTANTS ── */
+    const SUPABASE_URL_BM    = 'https://pclnvexmbgtcbeujywdh.supabase.co';
+    const EARLY_BIRD_PRICE   = 12;
+    const REGULAR_PRICE      = 15;
+    const PSI_PRICE          = 7;
+    const EARLY_BIRD_CUTOFF  = new Date(2026, 9, 17);
+    function isEarlyBird() { return new Date() < EARLY_BIRD_CUTOFF; }
+    function bmFormatDate(dateStr) {
+      const DAYS_IT = ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
+      const MONTHS  = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
+      const p = dateStr.split('-');
+      const d = new Date(parseInt(p[0]), parseInt(p[1])-1, parseInt(p[2]));
+      return `${DAYS_IT[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+    }
+    const WORKSHOPS = [
+      { num:'01', titleIT:'Costruiamo Forte',      date:'2026-10-17', concept:'Gravità e strutture portanti',    description:'I bambini costruiscono torri e strutture con mattoncini e testano quanto peso reggono. Scopriamo la gravità attraverso il fare.' },
+      { num:'02', titleIT:'Il Ponte',              date:'2026-10-24', concept:'Forze e resistenza',              description:'Costruiamo ponti con mattoncini e materiali diversi. Quale regge di più? Scopriamo tensione e compressione.' },
+      { num:'03', titleIT:"L'Arco Romano",         date:'2026-11-07', concept:'Compressione e architettura',    description:"Costruiamo archi romani con mattoncini. Scopriamo perché i Romani costruivano così e come la pressione tiene l'arco in piedi." },
+      { num:'04', titleIT:'Macchine Veloci',        date:'2026-11-21', concept:'Attrito e velocità',             description:'Costruiamo macchine con LEGO e le lanciamo su rampe. Chi va più veloce e perché?' },
+      { num:'05', titleIT:'Affonda o Galleggia?',  date:'2026-11-28', concept:'Galleggiamento e densità',       description:'Costruiamo barche con diversi materiali e testiamo quante biglie reggono prima di affondare.' },
+      { num:'06', titleIT:'Ingegneri della Natura',date:'2026-12-05', concept:'Biomimetica e strutture naturali',description:'Gli animali sono i migliori ingegneri del mondo. Costruiamo le loro case usando materiali diversi e testiamo la resistenza.' },
+    ];
+    let bmWorkshopAvailability = {};
+    (async () => {
+      try {
+        const res = await fetch(`${SUPABASE_URL_BM}/functions/v1/get-workshop-availability`);
+        if (res.ok) { const { availability } = await res.json(); for (const a of (availability||[])) bmWorkshopAvailability[a.num] = a; }
+      } catch(_) {}
+    })();
+
+    /* ── BOOKING STATE ── */
+    let bookingState = { selections:[0], children:1, psiChildren:0 };
+    let bookingStep  = 1;
+    let bookingFormData = {};
+    let stripeInstance = null, stripeElements = null, stripePaymentEl = null;
+
+    function bmGetPrice() { return isEarlyBird() ? EARLY_BIRD_PRICE : REGULAR_PRICE; }
+    function bmGetTotal() { return bookingState.selections.length * bookingState.children * bmGetPrice() + bookingState.psiChildren * PSI_PRICE; }
+    function bmSummaryLine() {
+      const parts = [`${bookingState.selections.length} workshop`, `${bookingState.children} bambino/a`];
+      if (bookingState.psiChildren > 0) parts.push(`${bookingState.psiChildren} psicomotricità`);
+      return `${parts.join(' · ')} · Totale €${bmGetTotal()}`;
+    }
+
+    function openBookingModal(defaultIdx) {
+      bookingState = { selections:[defaultIdx], children:1, psiChildren:0 };
+      bookingStep = 1; bookingFormData = {};
+      renderBookingModal();
+      document.getElementById('booking-modal-overlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeBookingModal() {
+      document.getElementById('booking-modal-overlay').classList.remove('open');
       document.body.style.overflow = '';
     }
 
-    function handleBookingOverlayClick(e) {
-      if (e.target === document.getElementById('booking-iframe-overlay')) closeBookingOverlay();
+    function renderWsSelectors() {
+      const used = new Set(bookingState.selections);
+      return bookingState.selections.map((selectedIdx, slotIdx) => {
+        const sel = WORKSHOPS[selectedIdx];
+        const canRemove = bookingState.selections.length > 1;
+        const options = WORKSHOPS.map((w, i) => {
+          const taken = used.has(i) && i !== selectedIdx;
+          const avail = bmWorkshopAvailability[w.num];
+          const isFull = avail?.isFull ?? false;
+          const disabled = taken || (isFull && i !== selectedIdx);
+          const spotsTag = avail ? (isFull ? `<span class="bm-ws-full-tag">Esaurito</span>` : (avail.spotsAvailable <= 5 ? `<span class="bm-ws-low-tag">${avail.spotsAvailable} rimasti</span>` : '')) : '';
+          return `<div class="bm-ws-option${disabled?' disabled':''}" onclick="${disabled?'':` selectWsSlot(${slotIdx},${i})`}">
+            <div class="bm-ws-opt-main"><span class="bm-workshop-num">M${w.num}</span><span class="bm-workshop-title">${w.titleIT}</span><span class="bm-workshop-date">${bmFormatDate(w.date)}</span>${spotsTag}</div>
+          </div>`;
+        }).join('');
+        return `<div class="bm-ws-selector" id="bm-slot-${slotIdx}">
+          <div class="bm-ws-trigger" onclick="toggleBmDrop(${slotIdx})">
+            <div class="bm-ws-trigger-content"><span class="bm-workshop-num">M${sel.num}</span><span class="bm-workshop-title">${sel.titleIT}</span><span class="bm-workshop-date">${bmFormatDate(sel.date)}</span></div>
+            <div class="bm-ws-trigger-right">${canRemove?`<span class="bm-ws-remove" onclick="event.stopPropagation();removeBmSlot(${slotIdx})">×</span>`:''}<span class="bm-ws-chevron">▾</span></div>
+          </div>
+          <div class="bm-ws-dropdown" id="bm-drop-${slotIdx}">${options}</div>
+        </div>`;
+      }).join('');
     }
+
+    function toggleBmDrop(slotIdx) {
+      document.querySelectorAll('.bm-ws-dropdown.open').forEach(d=>d.classList.remove('open'));
+      document.querySelectorAll('.bm-ws-trigger.open').forEach(t=>t.classList.remove('open'));
+      document.getElementById(`bm-drop-${slotIdx}`).classList.toggle('open');
+      document.querySelector(`#bm-slot-${slotIdx} .bm-ws-trigger`).classList.toggle('open');
+    }
+    function selectWsSlot(slotIdx, wsIdx) { bookingState.selections[slotIdx] = wsIdx; renderBookingModal(); }
+    function removeBmSlot(slotIdx) { bookingState.selections.splice(slotIdx, 1); renderBookingModal(); }
+    function addBmSlot() {
+      const used = new Set(bookingState.selections);
+      const next = WORKSHOPS.findIndex((_,i) => !used.has(i));
+      if (next === -1) return;
+      bookingState.selections.push(next); renderBookingModal();
+    }
+    function adjustBmChildren(d) { bookingState.children = Math.max(1, bookingState.children+d); renderBookingModal(); }
+
+    function renderBmStep1() {
+      const eb = isEarlyBird(), price = bmGetPrice();
+      const wsTotal = bookingState.selections.length * bookingState.children * price;
+      const total = wsTotal + bookingState.psiChildren * PSI_PRICE;
+      const strike = eb ? `<s class="bm-strike">€${bookingState.selections.length * bookingState.children * REGULAR_PRICE}</s> ` : '';
+      return `${eb?`<div class="bm-eb-badge">🚀 Early bird — €${EARLY_BIRD_PRICE} a bambino fino al 17 ottobre 2026</div>`:''}
+        <div class="bm-section"><div class="bm-section-label">Scegli i workshop</div>${renderWsSelectors()}
+          ${bookingState.selections.length < WORKSHOPS.length ? `<button class="bm-add-workshop" onclick="addBmSlot()">＋ Aggiungi un altro workshop</button>` : ''}
+        </div>
+        <div class="bm-section"><div class="bm-section-label">Bambini (5–10 anni)</div>
+          <div class="bm-stepper">
+            <button class="bm-step-btn" onclick="adjustBmChildren(-1)"${bookingState.children<=1?' disabled':''}>−</button>
+            <span class="bm-step-val">${bookingState.children}</span>
+            <button class="bm-step-btn" onclick="adjustBmChildren(1)">+</button>
+          </div>
+        </div>
+        <div class="bm-divider"></div>
+        <div class="bm-summary-row"><span>${bookingState.selections.length} workshop × ${bookingState.children} bambino/i</span><span>${strike}€${wsTotal}</span></div>
+        <div class="bm-summary-total"><span>Totale</span><span>€${total}</span></div>
+        <p class="bm-payment-note">Pagamento anticipato richiesto. Nessun rimborso in caso di assenza. Massimo 15 bambini per sessione.</p>
+        <button class="bm-cta" onclick="bmGoNext()">Continua →</button>`;
+    }
+
+    function renderBmStep2() {
+      const f = bookingFormData;
+      return `<button class="bm-back" onclick="bmGoBack()">← Torna</button>
+        <div class="bm-summary-line">${bmSummaryLine()}</div>
+        <div class="bm-section">
+          <div class="bm-form-group"><label class="bm-form-label">Nome del bambino/a</label><input class="bm-input" type="text" id="bm-nome-bambino" placeholder="Es. Sofia" value="${f.nomeBambino||''}"><div class="bm-input-error" id="err-nome-bambino"></div></div>
+          <div class="bm-form-group"><label class="bm-form-label">Età del bambino/a</label><input class="bm-input" type="number" id="bm-eta" placeholder="5–10" min="2" max="10" value="${f.eta||''}"><div class="bm-input-error" id="err-eta"></div></div>
+          <div class="bm-form-group"><label class="bm-form-label">Nome del genitore / tutore</label><input class="bm-input" type="text" id="bm-nome-genitore" placeholder="Es. Marco Rossi" value="${f.nomeGenitore||''}"><div class="bm-input-error" id="err-nome-genitore"></div></div>
+          <div class="bm-form-group"><label class="bm-form-label">Email</label><input class="bm-input" type="email" id="bm-email" placeholder="marco@esempio.it" value="${f.email||''}"><div class="bm-input-error" id="err-email"></div></div>
+          <div class="bm-form-group"><label class="bm-form-label">WhatsApp o telefono</label><input class="bm-input" type="tel" id="bm-telefono" placeholder="+39 333 123 4567" value="${f.telefono||''}"><div class="bm-input-error" id="err-telefono"></div></div>
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-top:4px"><input type="checkbox" id="bm-newsletter" style="margin-top:3px;accent-color:#7EDCCA" ${f.newsletterOptIn?'checked':''}><span style="font-size:0.82rem;color:var(--muted);line-height:1.4">Voglio ricevere aggiornamenti sulle prossime missioni</span></label>
+        </div>
+        <button class="bm-cta" onclick="bmValidateStep2()">Continua al pagamento →</button>`;
+    }
+
+    function renderBmStep3() {
+      return `<button class="bm-back" onclick="bmGoBack()">← Torna</button>
+        <div class="bm-summary-line">${bmSummaryLine()}</div>
+        <div class="bm-section"><div class="bm-section-label">Dati di pagamento</div>
+          <div class="bm-card-wrap" id="bm-card-element"></div>
+          <div class="bm-input-error" id="bm-card-error"></div>
+        </div>
+        <div class="bm-stripe-note">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Pagamento sicuro tramite Stripe
+          <svg class="bm-stripe-logo" width="38" height="16" viewBox="0 0 60 25" fill="currentColor"><text y="19" font-family="'Helvetica Neue',Arial,sans-serif" font-size="18" font-weight="700" letter-spacing="-0.5">stripe</text></svg>
+        </div>
+        <button class="bm-cta" id="bm-pay-btn" onclick="bmPay()">Paga €${bmGetTotal()} →</button>`;
+    }
+
+    function renderBmConfirmed() {
+      const sessions = [...bookingState.selections].sort().map(i => {
+        const w = WORKSHOPS[i];
+        return `<div class="bm-confirmed-session">M${w.num} · ${w.titleIT} — ${bmFormatDate(w.date)}</div>`;
+      }).join('');
+      return `<span class="bm-confirmed-icon">✓</span>
+        <div class="bm-confirmed-title">Prenotazione confermata!</div>
+        <p class="bm-confirmed-msg">Ti invieremo una conferma via email e su WhatsApp. A presto!</p>
+        <div class="bm-confirmed-sessions">${sessions}</div>
+        <button class="bm-close-link" onclick="closeBookingModal()">Chiudi</button>`;
+    }
+
+    function renderBookingModal() {
+      const confirmed = bookingStep === 'confirmed';
+      document.getElementById('bm-content').innerHTML =
+        (!confirmed ? `<h2 class="bm-heading">Prenota il tuo posto</h2><div class="bm-step-ind">${bookingStep} / 3</div>` : '')
+        + (bookingStep===1 ? renderBmStep1() : bookingStep===2 ? renderBmStep2() : bookingStep===3 ? renderBmStep3() : renderBmConfirmed());
+      if (bookingStep===1) {
+        setTimeout(() => {
+          document.getElementById('bm-content').addEventListener('click', e => {
+            if (!e.target.closest('.bm-ws-selector')) {
+              document.querySelectorAll('.bm-ws-dropdown.open').forEach(d=>d.classList.remove('open'));
+              document.querySelectorAll('.bm-ws-trigger.open').forEach(t=>t.classList.remove('open'));
+            }
+          });
+        }, 0);
+      }
+      if (bookingStep===3) mountStripeCard();
+    }
+
+    function bmGoNext() { bookingStep = 2; renderBookingModal(); }
+    function bmGoBack() { bookingStep = Math.max(1, bookingStep-1); renderBookingModal(); }
+
+    function bmValidateStep2() {
+      const defs = [
+        { id:'bm-nome-bambino', key:'nomeBambino', errId:'err-nome-bambino', msg:'Inserisci il nome del bambino/a' },
+        { id:'bm-eta',          key:'eta',          errId:'err-eta',          msg:"Inserisci un'età tra 2 e 10 anni", check: v => parseInt(v)>=2 && parseInt(v)<=10 },
+        { id:'bm-nome-genitore',key:'nomeGenitore', errId:'err-nome-genitore',msg:'Inserisci il nome del genitore/tutore' },
+        { id:'bm-email',        key:'email',        errId:'err-email',        msg:"Inserisci un'email valida", check: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) },
+        { id:'bm-telefono',     key:'telefono',     errId:'err-telefono',     msg:'Inserisci un numero di telefono' },
+      ];
+      let ok = true;
+      defs.forEach(({ id, key, errId, msg, check }) => {
+        const el = document.getElementById(id), err = document.getElementById(errId);
+        const val = el.value.trim();
+        const invalid = !val || (check && !check(val));
+        err.textContent = invalid ? msg : '';
+        el.style.borderColor = invalid ? '#E03A2F' : '';
+        if (invalid) { ok = false; } else { bookingFormData[key] = val; }
+      });
+      if (ok) { bookingFormData.newsletterOptIn = document.getElementById('bm-newsletter')?.checked ?? false; bookingStep = 3; renderBookingModal(); }
+    }
+
+    function mountStripeCard() {
+      if (!window.Stripe) { console.warn('Stripe.js not loaded yet'); return; }
+      if (!stripeInstance) stripeInstance = Stripe('pk_live_51ThECpH5xM63HUdBhTs99fOyZfnYFr5WmGewSGHC0AJbozzEbZ8F58aBn1CjJ6H7C66rIJcN2VE0jiOXkFbiwhgw00QQZ4c6q9');
+      if (stripePaymentEl) { try { stripePaymentEl.unmount(); } catch(_) {} stripePaymentEl = null; }
+      stripeElements = stripeInstance.elements({ locale:'it', mode:'payment', amount:bmGetTotal()*100, currency:'eur', appearance:{ theme:'night', variables:{ colorPrimary:'#7EDCCA', colorBackground:'#1A2E45', colorText:'#F8F6F0', colorDanger:'#E03A2F', borderRadius:'4px', fontFamily:'"DM Sans",sans-serif' } } });
+      stripePaymentEl = stripeElements.create('payment', { layout:'tabs' });
+      stripePaymentEl.mount('#bm-card-element');
+      stripePaymentEl.on('change', ({ error }) => { const el = document.getElementById('bm-card-error'); if (el) el.textContent = error ? error.message : ''; });
+    }
+
+    async function bmPay() {
+      const btn = document.getElementById('bm-pay-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Elaborazione…'; }
+      const { error: submitError } = await stripeElements.submit();
+      if (submitError) { const errEl = document.getElementById('bm-card-error'); if (errEl) errEl.textContent = submitError.message; if (btn) { btn.disabled=false; btn.textContent=`Paga €${bmGetTotal()} →`; } return; }
+      let clientSecret;
+      try {
+        const res = await fetch(`${SUPABASE_URL_BM}/functions/v1/create-payment-intent`, {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ amountCents:bmGetTotal()*100, workshops:bookingState.selections.map(i=>WORKSHOPS[i].num), nomeBambino:bookingFormData.nomeBambino, nomeGenitore:bookingFormData.nomeGenitore, email:bookingFormData.email, telefono:bookingFormData.telefono, bambiniCount:bookingState.children, newsletterOptIn:bookingFormData.newsletterOptIn }),
+        });
+        const data = await res.json();
+        if (!res.ok || !data.clientSecret) throw new Error(data.error || 'Errore del server');
+        clientSecret = data.clientSecret;
+      } catch(err) { const errEl = document.getElementById('bm-card-error'); if (errEl) errEl.textContent = err.message||'Errore di connessione. Riprova.'; if (btn) { btn.disabled=false; btn.textContent=`Paga €${bmGetTotal()} →`; } return; }
+      const { error: confirmError } = await stripeInstance.confirmPayment({ elements:stripeElements, clientSecret, confirmParams:{ return_url:window.location.href }, redirect:'if_required' });
+      if (confirmError) { const errEl = document.getElementById('bm-card-error'); if (errEl) errEl.textContent = confirmError.message||'Pagamento non riuscito.'; if (btn) { btn.disabled=false; btn.textContent=`Paga €${bmGetTotal()} →`; } return; }
+      bookingStep = 'confirmed'; renderBookingModal();
+    }
+
+    document.getElementById('booking-modal-overlay').addEventListener('click', e => { if (e.target === document.getElementById('booking-modal-overlay')) closeBookingModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeBookingModal(); closeModal(); } });
 
     function renderBookingCard(b) {
       const amount  = (b.amount_cents / 100).toFixed(2);
