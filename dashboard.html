@@ -581,8 +581,9 @@
       from { transform: translateX(88px); }
       to   { transform: translateX(-18px); }
     }
-    .ws-full-card:hover #m02-car1 { animation: m02-drive-right 2.4s linear infinite; }
-    .ws-full-card:hover #m02-car2 { animation: m02-drive-left  3.0s linear 0.7s infinite; }
+    #m02-car1, #m02-car2 { opacity: 0; }
+    .ws-full-card:hover #m02-car1 { opacity: 1; animation: m02-drive-right 2.4s linear infinite; }
+    .ws-full-card:hover #m02-car2 { opacity: 1; animation: m02-drive-left  3.0s linear 0.7s infinite; }
   </style>
 </head>
 <body>
