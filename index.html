@@ -424,7 +424,7 @@
   .drawer-wordmark-name {
     font-family: 'Syne', sans-serif;
     font-weight: 800;
-    font-size: 1rem;
+    font-size: 1.4rem;
     letter-spacing: 0.06em;
     color: var(--white);
     line-height: 1.2;
@@ -444,6 +444,9 @@
     opacity: 0.25;
     margin: 20px 0 28px;
     margin-left: 80px;
+  }
+  @media (max-width: 768px) {
+    .drawer-divider { display: none; }
   }
 
   /* Nav items */
@@ -2036,7 +2039,7 @@
     position: fixed;
     bottom: 28px;
     right: 28px;
-    z-index: 200;
+    z-index: 115; /* below drawer (120) so it doesn't float over mobile overlay */
     pointer-events: none;
   }
   .wa-blurb.ready { pointer-events: auto; }
