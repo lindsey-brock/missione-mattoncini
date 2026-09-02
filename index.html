@@ -969,10 +969,6 @@
   .ws-card-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(245,200,66,0.35); }
 
   /* ── MOBILE HAMBURGER MORPH ── */
-  .rocket-body-wrap {
-    transition: opacity 0.3s ease, transform 0.35s ease;
-    transform-origin: center 60%;
-  }
   .mob-ham-bars {
     position: absolute;
     top: 50%; left: 50%;
@@ -1023,6 +1019,11 @@
     #side-drawer.open { transform: translateX(0); }
     /* Mobile auth block visible */
     .drawer-mob-auth { display: flex !important; }
+    /* Rocket body unfold transition — mobile only */
+    .rocket-body-wrap {
+      transition: opacity 0.3s ease, transform 0.35s ease;
+      transform-origin: center 60%;
+    }
   }
 
   /* Drawer mobile auth block */
