@@ -158,39 +158,60 @@
       border-radius: 14px;
       overflow: hidden;
     }
-    .account-card-head {
-      padding: 18px 18px 14px;
+
+    /* Hero row: avatar + name/email + Esci */
+    .account-hero {
+      padding: 18px 18px 16px;
       border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      display: flex; align-items: center; gap: 12px;
     }
-    .account-card-title { font-size: 0.88rem; font-weight: 700; }
-    .account-edit-btn {
-      font-family: inherit; font-size: 0.72rem; font-weight: 600;
-      color: var(--aqua); background: var(--aqua-bg);
-      border: 1px solid rgba(126,220,202,0.2); border-radius: 6px;
-      padding: 5px 11px; cursor: pointer; transition: opacity 0.15s;
+    .avatar-wrap {
+      position: relative; flex-shrink: 0;
+      width: 48px; height: 48px; border-radius: 50%;
+      cursor: pointer; overflow: hidden;
+      background: var(--surface2); border: 2px solid var(--border-mid);
+      transition: border-color 0.15s;
     }
-    .account-edit-btn:hover { opacity: 0.8; }
-    .account-save-btn {
-      font-family: inherit; font-size: 0.72rem; font-weight: 700;
-      color: #0d0d2b; background: var(--yellow);
-      border: none; border-radius: 6px;
-      padding: 5px 11px; cursor: pointer; transition: opacity 0.15s;
+    .avatar-wrap:hover { border-color: var(--aqua); }
+    .avatar-wrap:hover .avatar-overlay { opacity: 1; }
+    .avatar-img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
     }
-    .account-save-btn:hover { opacity: 0.85; }
-    .account-cancel-btn {
+    .avatar-placeholder {
+      width: 100%; height: 100%; display: flex; align-items: center;
+      justify-content: center; font-size: 1.3rem; color: var(--muted);
+    }
+    .avatar-overlay {
+      position: absolute; inset: 0; background: rgba(0,0,0,0.55);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; color: #fff; opacity: 0; transition: opacity 0.15s;
+      font-weight: 700;
+    }
+    .account-hero-info { flex: 1; min-width: 0; }
+    .account-hero-name {
+      font-size: 0.9rem; font-weight: 700;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .account-hero-email {
+      font-size: 0.72rem; color: var(--muted); margin-top: 1px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .signout-btn {
       font-family: inherit; font-size: 0.72rem; font-weight: 600;
       color: var(--muted); background: none;
-      border: 1px solid var(--border-mid); border-radius: 6px;
-      padding: 5px 11px; cursor: pointer; transition: color 0.15s;
+      border: 1px solid var(--border); border-radius: 6px;
+      padding: 5px 10px; cursor: pointer; transition: color 0.15s, border-color 0.15s;
+      white-space: nowrap; flex-shrink: 0;
     }
-    .account-cancel-btn:hover { color: var(--text); }
+    .signout-btn:hover { color: var(--text); border-color: var(--border-mid); }
+
+    /* Fields body */
     .account-card-body { padding: 16px 18px; }
     .account-field { margin-bottom: 14px; }
     .account-field:last-child { margin-bottom: 0; }
     .account-field-label {
-      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.06em;
-      text-transform: uppercase; color: var(--muted); margin-bottom: 5px;
+      font-size: 0.65rem; font-weight: 600; letter-spacing: 0.07em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
     }
     .account-field-val { font-size: 0.88rem; color: var(--text); }
     .account-field-val.muted { color: var(--muted); font-style: italic; }
@@ -202,12 +223,42 @@
     }
     .account-field-input::placeholder { color: var(--muted); }
     .account-field-input:focus { border-color: var(--aqua); }
-    .account-field-input[readonly] { opacity: 0.55; cursor: default; }
+    .account-field-input[readonly] { opacity: 0.5; cursor: default; }
+
+    /* Footer action strip */
+    .account-card-foot {
+      padding: 12px 18px;
+      border-top: 1px solid var(--border);
+    }
+    .account-edit-btn {
+      font-family: inherit; font-size: 0.78rem; font-weight: 600;
+      color: var(--aqua); background: var(--aqua-bg);
+      border: 1px solid rgba(126,220,202,0.2); border-radius: 7px;
+      padding: 8px 14px; cursor: pointer; transition: opacity 0.15s;
+      width: 100%;
+    }
+    .account-edit-btn:hover { opacity: 0.8; }
+    .account-save-btn {
+      font-family: inherit; font-size: 0.78rem; font-weight: 700;
+      color: #0d0d2b; background: var(--yellow);
+      border: none; border-radius: 7px;
+      padding: 8px 14px; cursor: pointer; transition: opacity 0.15s;
+      flex: 1;
+    }
+    .account-save-btn:hover { opacity: 0.85; }
+    .account-cancel-btn {
+      font-family: inherit; font-size: 0.78rem; font-weight: 600;
+      color: var(--muted); background: none;
+      border: 1px solid var(--border-mid); border-radius: 7px;
+      padding: 8px 14px; cursor: pointer; transition: color 0.15s; flex: 1;
+    }
+    .account-cancel-btn:hover { color: var(--text); }
+    .account-foot-btns { display: flex; gap: 8px; }
 
     /* kids list */
     .kids-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
     .kid-row {
-      display: grid; grid-template-columns: 1fr 60px 22px; gap: 6px; align-items: center;
+      display: grid; grid-template-columns: 1fr 56px 22px; gap: 6px; align-items: center;
     }
     .kid-row-view {
       display: flex; align-items: center; gap: 8px;
@@ -233,14 +284,8 @@
     }
     .add-kid-btn:hover { opacity: 0.7; }
 
-    .signout-btn {
-      font-family: inherit; font-size: 0.75rem; font-weight: 600;
-      color: var(--muted); background: none;
-      border: 1px solid var(--border); border-radius: 8px;
-      padding: 8px 14px; cursor: pointer; transition: color 0.15s, border-color 0.15s;
-      width: 100%; margin-top: 12px;
-    }
-    .signout-btn:hover { color: var(--text); border-color: var(--border-mid); }
+    /* avatar upload spinner */
+    .avatar-uploading { opacity: 0.5; pointer-events: none; }
 
     /* ── DASH MAIN (right) ── */
     .dash-main { min-width: 0; }
@@ -255,7 +300,7 @@
       text-transform: uppercase; color: var(--muted); margin: 28px 0 14px;
     }
 
-    @media (max-width: 680px) {
+    @media (max-width: 600px) {
       .dash-layout { grid-template-columns: 1fr; padding-top: 24px; }
       .account-panel { position: static; }
     }
@@ -511,17 +556,29 @@
       <!-- LEFT: account panel -->
       <div class="account-panel">
         <div class="account-card">
-          <div class="account-card-head">
-            <div class="account-card-title">Il mio profilo</div>
-            <div id="account-head-actions">
-              <button class="account-edit-btn" onclick="startEditProfile()">Modifica</button>
+          <!-- Hero: avatar + name + email + sign out -->
+          <div class="account-hero">
+            <div class="avatar-wrap" id="avatar-wrap" onclick="triggerAvatarUpload()" title="Cambia foto">
+              <div class="avatar-placeholder" id="avatar-placeholder">👤</div>
+              <img class="avatar-img" id="avatar-img" src="" alt="" style="display:none">
+              <div class="avatar-overlay">✎</div>
             </div>
+            <div class="account-hero-info">
+              <div class="account-hero-name" id="account-hero-name">—</div>
+              <div class="account-hero-email" id="account-hero-email"></div>
+            </div>
+            <button class="signout-btn" onclick="doSignout()">Esci</button>
           </div>
+          <input type="file" id="avatar-file-input" accept="image/*" style="display:none" onchange="uploadAvatar(this)">
+          <!-- Profile fields -->
           <div class="account-card-body" id="account-card-body">
             <!-- rendered by renderProfileView() -->
           </div>
+          <!-- Footer actions -->
+          <div class="account-card-foot" id="account-card-foot">
+            <button class="account-edit-btn" onclick="startEditProfile()">Modifica profilo →</button>
+          </div>
         </div>
-        <button class="signout-btn" onclick="doSignout()">Esci →</button>
       </div>
 
       <!-- RIGHT: bookings + workshops -->
@@ -651,16 +708,31 @@
       localStorage.setItem(profileKey(), JSON.stringify(data));
     }
 
-    function renderProfileView() {
+    function renderHero() {
       const p = loadProfile();
-      const email = currentUser.email;
       const firstName = p.firstName || '';
       const lastName  = p.lastName  || '';
-      const kids      = p.kids || [];
+      const fullName  = (firstName || lastName) ? `${firstName} ${lastName}`.trim() : '—';
+      document.getElementById('account-hero-name').textContent  = fullName;
+      document.getElementById('account-hero-email').textContent = currentUser.email;
+      // Avatar
+      const avatarUrl = currentUser.user_metadata?.avatar_url || p.avatarUrl || '';
+      const imgEl = document.getElementById('avatar-img');
+      const phEl  = document.getElementById('avatar-placeholder');
+      if (avatarUrl) {
+        imgEl.src = avatarUrl; imgEl.style.display = 'block'; phEl.style.display = 'none';
+      } else {
+        imgEl.style.display = 'none'; phEl.style.display = 'flex';
+      }
+    }
 
-      const nameVal = (firstName || lastName)
-        ? escHtml(`${firstName} ${lastName}`.trim())
-        : '<span class="muted">Non impostato</span>';
+    function renderProfileView() {
+      const p    = loadProfile();
+      const kids = p.kids || [];
+
+      const nameVal = (p.firstName || p.lastName)
+        ? escHtml(`${p.firstName || ''} ${p.lastName || ''}`.trim())
+        : '<span class="account-field-val muted">Non impostato</span>';
 
       const kidsHtml = kids.length
         ? kids.map(k => `<div class="kid-row-view">
@@ -669,14 +741,10 @@
           </div>`).join('')
         : '<span class="account-field-val muted">Nessun bambino aggiunto</span>';
 
-      document.getElementById('account-head-actions').innerHTML =
-        `<button class="account-edit-btn" onclick="startEditProfile()">Modifica</button>`;
+      document.getElementById('account-card-foot').innerHTML =
+        `<button class="account-edit-btn" onclick="startEditProfile()">Modifica profilo →</button>`;
 
       document.getElementById('account-card-body').innerHTML = `
-        <div class="account-field">
-          <div class="account-field-label">Email</div>
-          <div class="account-field-val">${escHtml(email)}</div>
-        </div>
         <div class="account-field">
           <div class="account-field-label">Nome</div>
           <div class="account-field-val">${nameVal}</div>
@@ -686,23 +754,21 @@
           <div class="kids-list">${kidsHtml}</div>
         </div>
       `;
+
+      renderHero();
     }
 
     function startEditProfile() {
-      const p = loadProfile();
+      const p    = loadProfile();
       const kids = p.kids && p.kids.length ? p.kids : [{ name: '', age: '' }];
 
-      document.getElementById('account-head-actions').innerHTML = `
-        <div style="display:flex;gap:6px">
+      document.getElementById('account-card-foot').innerHTML = `
+        <div class="account-foot-btns">
           <button class="account-cancel-btn" onclick="renderProfileView()">Annulla</button>
           <button class="account-save-btn" onclick="saveProfileForm()">Salva</button>
         </div>`;
 
       document.getElementById('account-card-body').innerHTML = `
-        <div class="account-field">
-          <div class="account-field-label">Email</div>
-          <input class="account-field-input" type="email" value="${escHtml(currentUser.email)}" readonly>
-        </div>
         <div class="account-field">
           <div class="account-field-label">Nome</div>
           <input class="account-field-input" id="pf-first" type="text" placeholder="Nome" value="${escHtml(p.firstName || '')}">
@@ -738,8 +804,8 @@
     }
 
     function saveProfileForm() {
-      const firstName = (document.getElementById('pf-first').value || '').trim();
-      const lastName  = (document.getElementById('pf-last').value  || '').trim();
+      const firstName  = (document.getElementById('pf-first').value || '').trim();
+      const lastName   = (document.getElementById('pf-last').value  || '').trim();
       const nameInputs = document.querySelectorAll('[data-kid-name]');
       const ageInputs  = document.querySelectorAll('[data-kid-age]');
       const kids = [];
@@ -748,8 +814,43 @@
         const age  = ageInputs[i]?.value.trim() || '';
         if (name || age) kids.push({ name, age });
       });
-      saveProfile({ firstName, lastName, kids });
+      const existing = loadProfile();
+      saveProfile({ ...existing, firstName, lastName, kids });
       renderProfileView();
+    }
+
+    /* ── AVATAR UPLOAD ── */
+    function triggerAvatarUpload() {
+      document.getElementById('avatar-file-input').click();
+    }
+
+    async function uploadAvatar(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const wrap = document.getElementById('avatar-wrap');
+      wrap.classList.add('avatar-uploading');
+
+      try {
+        const ext  = file.name.split('.').pop().toLowerCase() || 'jpg';
+        const path = `${currentUser.id}/avatar.${ext}`;
+        const { error: upErr } = await sb.storage.from('avatars').upload(path, file, {
+          upsert: true, contentType: file.type
+        });
+        if (upErr) throw upErr;
+
+        const { data } = sb.storage.from('avatars').getPublicUrl(path);
+        const url = data.publicUrl + '?v=' + Date.now();
+
+        await sb.auth.updateUser({ data: { avatar_url: url } });
+        currentUser.user_metadata = { ...(currentUser.user_metadata || {}), avatar_url: url };
+
+        renderHero();
+      } catch (err) {
+        alert('Errore caricamento foto: ' + err.message);
+      } finally {
+        wrap.classList.remove('avatar-uploading');
+        input.value = '';
+      }
     }
 
     function switchTab(tab) {
