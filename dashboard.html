@@ -843,12 +843,12 @@
       try {
         const ext  = file.name.split('.').pop().toLowerCase() || 'jpg';
         const path = `${currentUser.id}/avatar.${ext}`;
-        const { error: upErr } = await sb.storage.from('avatars').upload(path, file, {
+        const { error: upErr } = await sb.storage.from('Avatare').upload(path, file, {
           upsert: true, contentType: file.type
         });
         if (upErr) throw upErr;
 
-        const { data } = sb.storage.from('avatars').getPublicUrl(path);
+        const { data } = sb.storage.from('Avatare').getPublicUrl(path);
         const url = data.publicUrl + '?v=' + Date.now();
 
         await sb.auth.updateUser({ data: { avatar_url: url } });
