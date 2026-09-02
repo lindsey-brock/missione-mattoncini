@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="20 10 60 90">
-  <!-- Rocket body -->
-  <rect x="38" y="28" width="24" height="38" rx="12" fill="#F5C842"/>
-  <!-- Nose cone -->
-  <path d="M38 38 Q50 14 62 38Z" fill="#F5C842"/>
-  <!-- Highlight on nose -->
-  <path d="M42 36 Q50 18 55 33" stroke="#FFE080" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.6"/>
-  <!-- Window -->
-  <circle cx="50" cy="48" r="7" fill="#1A2E45"/>
-  <circle cx="50" cy="48" r="5.5" fill="#0D1B2A"/>
-  <circle cx="48" cy="46" r="1.8" fill="#7EDCCA" opacity="0.8"/>
-  <!-- Buttons -->
-  <circle cx="44" cy="60" r="2" fill="#E03A2F" opacity="0.9"/>
-  <circle cx="50" cy="60" r="2" fill="#E03A2F" opacity="0.9"/>
-  <circle cx="56" cy="60" r="2" fill="#E03A2F" opacity="0.9"/>
-  <!-- Left fin -->
-  <path d="M38 54 L26 72 L38 68Z" fill="#E03A2F"/>
-  <!-- Right fin -->
-  <path d="M62 54 L74 72 L62 68Z" fill="#E03A2F"/>
-  <!-- Nozzle -->
-  <path d="M42 66 Q50 71 58 66 L56 74 Q50 78 44 74Z" fill="#1A2E45"/>
-  <!-- Flame -->
-  <path d="M44 74 Q41 86 50 97 Q59 86 56 74 Q52 81 50 83 Q48 81 44 74Z" fill="#F5C842"/>
-  <path d="M46.5 76 Q45 85 50 93 Q55 85 53.5 76 Q51.5 82 50 83 Q48.5 82 46.5 76Z" fill="#FFE080"/>
-  <path d="M48.5 79 Q48 84 50 89 Q52 84 51.5 79 Q50.8 82 50 83 Q49.2 82 48.5 79Z" fill="#FFF5CC"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- dark badge background -->
+  <rect x="0" y="0" width="100" height="100" rx="22" fill="#0D1B2A"/>
+  <!-- outer glow rim -->
+  <rect x="0" y="0" width="100" height="100" rx="22" fill="none" stroke="#7EDCCA" stroke-width="4" opacity="0.35"/>
+
+  <!-- rocket body -->
+  <rect x="36" y="26" width="28" height="40" rx="14" fill="#F5C842" stroke="#0D1B2A" stroke-width="2"/>
+  <!-- nose cone -->
+  <path d="M36 38 Q50 10 64 38Z" fill="#F5C842" stroke="#0D1B2A" stroke-width="2" stroke-linejoin="round"/>
+  <!-- nose highlight -->
+  <path d="M43 34 Q50 15 56 30" stroke="#FFE080" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.7"/>
+  <!-- window -->
+  <circle cx="50" cy="48" r="8" fill="#1A2E45" stroke="#0D1B2A" stroke-width="1.5"/>
+  <circle cx="50" cy="48" r="6" fill="#0a1420"/>
+  <circle cx="47.5" cy="45.5" r="2.2" fill="#7EDCCA" opacity="0.85"/>
+  <!-- left fin -->
+  <path d="M36 52 L22 72 L36 68Z" fill="#E03A2F" stroke="#0D1B2A" stroke-width="1.5" stroke-linejoin="round"/>
+  <!-- right fin -->
+  <path d="M64 52 L78 72 L64 68Z" fill="#E03A2F" stroke="#0D1B2A" stroke-width="1.5" stroke-linejoin="round"/>
+  <!-- nozzle -->
+  <path d="M40 66 Q50 72 60 66 L58 76 Q50 80 42 76Z" fill="#1A2E45" stroke="#0D1B2A" stroke-width="1.5"/>
+  <!-- flame outer -->
+  <path d="M43 76 Q40 90 50 100 Q60 90 57 76 Q53 84 50 86 Q47 84 43 76Z" fill="#F5C842"/>
+  <!-- flame mid -->
+  <path d="M46 78 Q44 88 50 97 Q56 88 54 78 Q52 84 50 86 Q48 84 46 78Z" fill="#FFE080"/>
+  <!-- flame core -->
+  <path d="M48 81 Q47.5 86 50 92 Q52.5 86 52 81 Q51 84 50 85 Q49 84 48 81Z" fill="#FFF5CC"/>
 </svg>
