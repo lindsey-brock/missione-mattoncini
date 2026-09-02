@@ -572,6 +572,17 @@
     }
     .ws-full-card:hover #m01-rubble { animation: m01-rubble-in 0.3s ease 3.35s forwards; }
     .ws-full-card:hover #m01-books  { animation: m01-books-fall 0.5s cubic-bezier(.22,.68,0,1.3) 3.3s forwards; }
+    /* M02 bridge cars */
+    @keyframes m02-drive-right {
+      from { transform: translateX(-18px); }
+      to   { transform: translateX(88px); }
+    }
+    @keyframes m02-drive-left {
+      from { transform: translateX(88px); }
+      to   { transform: translateX(-18px); }
+    }
+    .ws-full-card:hover #m02-car1 { animation: m02-drive-right 2.4s linear infinite; }
+    .ws-full-card:hover #m02-car2 { animation: m02-drive-left  3.0s linear 0.7s infinite; }
   </style>
 </head>
 <body>
@@ -812,10 +823,9 @@
       '02': `<svg viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
         <!-- arch in background -->
         <path d="M6 50 Q6 14 40 10 Q74 14 74 50" stroke="#7EDCCA" stroke-width="4" fill="none" stroke-linecap="butt" opacity=".45"/>
-        <!-- pylon bases (darker) -->
+        <!-- pylon bases (darker) — drawn first so cars pass in front -->
         <rect x="14" y="38" width="8" height="16" rx="1" fill="#4AADA0"/>
         <rect x="58" y="38" width="8" height="16" rx="1" fill="#4AADA0"/>
-        <!-- pylon base brick lines -->
         <line x1="14" y1="43" x2="22" y2="43" stroke="#3A8D82" stroke-width=".8"/>
         <line x1="14" y1="49" x2="22" y2="49" stroke="#3A8D82" stroke-width=".8"/>
         <line x1="18" y1="38" x2="18" y2="43" stroke="#3A8D82" stroke-width=".8"/>
@@ -826,19 +836,36 @@
         <line x1="62" y1="38" x2="62" y2="43" stroke="#3A8D82" stroke-width=".8"/>
         <line x1="60" y1="43" x2="60" y2="49" stroke="#3A8D82" stroke-width=".8"/>
         <line x1="64" y1="43" x2="64" y2="49" stroke="#3A8D82" stroke-width=".8"/>
-        <!-- pylons upper (normal color) -->
+        <!-- deck -->
+        <rect x="4" y="44" width="72" height="5" rx="2" fill="#7EDCCA"/>
+        <!-- cars on the deck (drawn after deck, before upper pylons/hangers) -->
+        <g id="m02-car1">
+          <!-- yellow car going right -->
+          <rect x="0" y="38" width="13" height="5"  rx="1.5" fill="#F5C842"/>
+          <rect x="7" y="36" width="5"  height="4"  rx="1"   fill="#3AAFA0"/>
+          <circle cx="2.5" cy="44" r="2.2" fill="#1A2E45"/>
+          <circle cx="10"  cy="44" r="2.2" fill="#1A2E45"/>
+          <circle cx="2.5" cy="44" r="1"   fill="#5BBFAD" opacity=".5"/>
+          <circle cx="10"  cy="44" r="1"   fill="#5BBFAD" opacity=".5"/>
+        </g>
+        <g id="m02-car2">
+          <!-- red car going left (windshield on left side) -->
+          <rect x="0" y="38" width="13" height="5"  rx="1.5" fill="#E03A2F"/>
+          <rect x="1" y="36" width="5"  height="4"  rx="1"   fill="#3AAFA0"/>
+          <circle cx="2.5" cy="44" r="2.2" fill="#1A2E45"/>
+          <circle cx="10"  cy="44" r="2.2" fill="#1A2E45"/>
+          <circle cx="2.5" cy="44" r="1"   fill="#5BBFAD" opacity=".5"/>
+          <circle cx="10"  cy="44" r="1"   fill="#5BBFAD" opacity=".5"/>
+        </g>
+        <!-- pylons upper + caps + hangers drawn last so they layer over cars -->
         <rect x="14" y="16" width="8" height="24" rx="1" fill="#7EDCCA"/>
         <rect x="58" y="16" width="8" height="24" rx="1" fill="#7EDCCA"/>
-        <!-- pylon caps -->
         <rect x="12" y="12" width="12" height="6" rx="2" fill="#F5C842"/>
         <rect x="56" y="12" width="12" height="6" rx="2" fill="#F5C842"/>
-        <!-- hangers -->
         <line x1="26" y1="20" x2="26" y2="46" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
         <line x1="35" y1="13" x2="35" y2="46" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
         <line x1="45" y1="13" x2="45" y2="46" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
         <line x1="54" y1="20" x2="54" y2="46" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
-        <!-- deck -->
-        <rect x="4" y="44" width="72" height="5" rx="2" fill="#7EDCCA"/>
       </svg>`,
       /* L'Arco Romano — filled voussoir arch */
       '03': `<svg viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
