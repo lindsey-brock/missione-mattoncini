@@ -604,7 +604,7 @@
     #m05-waves { overflow: visible; }
     .ws-full-card:hover #m05-boat       { animation: m05-bob 2s ease-in-out infinite; }
     .ws-full-card:hover #m05-wave1      { animation: m05-wave-scroll 2s linear infinite; }
-    .ws-full-card:hover #m05-wave2      { animation: m05-wave-scroll 2s linear 1s infinite; }
+    .ws-full-card:hover #m05-wave2      { animation: m05-wave-scroll 2s linear infinite; }
 
     /* M04 spinning wheels + car rumble */
     @keyframes m04-spin    { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -1071,9 +1071,9 @@
           <g id="m05-wave1">
             <path d="M0 56 Q5 50 10 56 Q15 62 20 56 Q25 50 30 56 Q35 62 40 56 Q45 50 50 56 Q55 62 60 56 Q65 50 70 56 Q75 62 80 56 Q85 50 90 56 Q95 62 100 56 Q105 50 110 56 Q115 62 120 56" stroke="#7EDCCA" stroke-width="2.5" stroke-linecap="round" fill="none"/>
           </g>
-          <!-- wave 2 — offset by 20px horizontally and 3px vertically for depth -->
+          <!-- wave 2 — pre-shifted 20px left in path, 3px lower for depth -->
           <g id="m05-wave2">
-            <path d="M0 59 Q5 53 10 59 Q15 65 20 59 Q25 53 30 59 Q35 65 40 59 Q45 53 50 59 Q55 65 60 59 Q65 53 70 59 Q75 65 80 59 Q85 53 90 59 Q95 65 100 59 Q105 53 110 59 Q115 65 120 59" stroke="#4AADA0" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".7"/>
+            <path d="M-20 59 Q-15 53 -10 59 Q-5 65 0 59 Q5 53 10 59 Q15 65 20 59 Q25 53 30 59 Q35 65 40 59 Q45 53 50 59 Q55 65 60 59 Q65 53 70 59 Q75 65 80 59 Q85 53 90 59 Q95 65 100 59" stroke="#4AADA0" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".7"/>
           </g>
         </g>
       </svg>`,
