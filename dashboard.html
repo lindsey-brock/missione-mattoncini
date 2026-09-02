@@ -585,11 +585,11 @@
     .ws-full-card:hover #m02-car1 { opacity: 1; animation: m02-drive-right 2.4s linear infinite; }
     .ws-full-card:hover #m02-car2 { opacity: 1; animation: m02-drive-left  3.0s linear 0.7s infinite backwards; }
     /* M03 Roman soldiers march in */
-    @keyframes m03-march-left  { from { transform: translateX(-18px); } to { transform: translateX(20px); } }
-    @keyframes m03-march-right { from { transform: translateX(80px);  } to { transform: translateX(50px); } }
+    @keyframes m03-march-left  { from { transform: translateX(-18px); opacity: 0; } 15% { opacity: 1; } to { transform: translateX(20px); opacity: 1; } }
+    @keyframes m03-march-right { from { transform: translateX(80px);  opacity: 0; } 15% { opacity: 1; } to { transform: translateX(50px); opacity: 1; } }
     #m03-sol1, #m03-sol2 { opacity: 0; }
-    .ws-full-card:hover #m03-sol1 { opacity: 1; animation: m03-march-left  0.55s ease-out 0.1s forwards; }
-    .ws-full-card:hover #m03-sol2 { opacity: 1; animation: m03-march-right 0.55s ease-out 0.3s forwards; }
+    .ws-full-card:hover #m03-sol1 { animation: m03-march-left  0.55s ease-out 0.1s both; }
+    .ws-full-card:hover #m03-sol2 { animation: m03-march-right 0.55s ease-out 0.3s both; }
     /* M05 floating boat + scrolling waves */
     @keyframes m05-bob {
       0%,100% { transform: translateY(0) rotate(0deg); }
