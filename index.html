@@ -50,11 +50,11 @@
   .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
   .star {
     position: absolute;
-    /* 4-pointed star via clip-path */
+    /* 4-pointed star via clip-path — desktop only; mobile uses border-radius:50% (GPU-composited) */
     clip-path: polygon(50% 0%, 57% 43%, 100% 50%, 57% 57%, 50% 100%, 43% 57%, 0% 50%, 43% 43%);
     background: var(--white);
     opacity: 0;
-    transform: scale(0.6);
+    will-change: opacity, transform;
     animation: twinkle var(--duration) ease-in-out infinite var(--delay);
   }
   .star-large {
@@ -64,6 +64,11 @@
   @keyframes twinkle {
     0%, 100% { opacity: 0;                    transform: scale(0.6); }
     50%       { opacity: var(--max-opacity);   transform: scale(1.2); }
+  }
+  /* Mobile: simpler stars so GPU can composite them */
+  @media (max-width: 768px) {
+    .star { clip-path: none; border-radius: 50%; }
+    .star-large { filter: none; }
   }
 
   /* ── HERO ── */
@@ -2707,20 +2712,25 @@
 ════════════════════════════════════════ */
 const starsEl = document.getElementById('stars');
 
-// Small 4-pointed stars — fast twinkle, white
-for (let i = 0; i < 200; i++) {
+// Fewer stars on mobile to stay GPU-composited
+const isMob = window.innerWidth <= 768;
+const smallCount = isMob ? 80 : 200;
+const largeCount = isMob ? 15 : 40;
+
+// Small stars — fast twinkle
+for (let i = 0; i < smallCount; i++) {
   const s = document.createElement('div');
   s.className = 'star';
-  const sz = Math.random() * 3 + 3; // 3–6px
+  const sz = Math.random() * 3 + 3;
   s.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--duration:${Math.random()*1.5+1.5}s;--delay:${Math.random()*6}s;--max-opacity:${Math.random()*0.55+0.3}`;
   starsEl.appendChild(s);
 }
 
-// Large 4-pointed stars — slow twinkle, warm gold glow
-for (let i = 0; i < 40; i++) {
+// Large stars — slow twinkle, warm glow
+for (let i = 0; i < largeCount; i++) {
   const s = document.createElement('div');
   s.className = 'star star-large';
-  const sz = Math.random() * 4 + 5; // 5–9px
+  const sz = Math.random() * 4 + 5;
   s.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--duration:${Math.random()*4+4}s;--delay:${Math.random()*8}s;--max-opacity:${Math.random()*0.3+0.2}`;
   starsEl.appendChild(s);
 }
@@ -2835,11 +2845,8 @@ function animate(ts) {
   const tang = bezierTangent(path.p0, path.p1, path.p2, path.p3, Math.min(et+0.01,1));
   const angle = Math.atan2(tang.y, tang.x);
 
-  rocket.style.left      = (pos.x - 40) + 'px';
-  rocket.style.top       = (pos.y - 55) + 'px';
-  rocket.style.bottom    = 'auto';
-  rocket.style.right     = 'auto';
-  rocket.style.transform = `rotate(${angle + Math.PI/2}rad)`;
+  // Use transform:translate instead of left/top to avoid reflow every frame
+  rocket.style.transform = `translate(${pos.x - 40}px, ${pos.y - 55}px) rotate(${angle + Math.PI/2}rad)`;
 
   if (Math.random() > 0.3) {
     for (let i = 0; i < 3; i++) addParticle(pos.x, pos.y, angle + Math.PI + (Math.random()-0.5)*0.5);
@@ -2876,7 +2883,17 @@ function triggerMobHam() {
 
 function finalizeRocket() {
   const mobNav = window.innerWidth <= 768;
-  // Settle rocket into nav position (top-left desktop, top-right mobile)
+  // Switch from transform:translate (intro) to left/top (nav) — snap first, then ease in
+  rocket.style.transition = 'none';
+  // Compute where the last frame left the rocket and set left/top to match before clearing translate
+  const lastTransform = rocket.style.transform; // e.g. translate(Xpx, Ypx) rotate(...)
+  const tlMatch = lastTransform.match(/translate\(([^,]+),\s*([^)]+)\)/);
+  if (tlMatch) {
+    rocket.style.left = tlMatch[1];
+    rocket.style.top  = tlMatch[2];
+    rocket.style.transform = '';
+  }
+  void rocket.offsetWidth; // flush
   rocket.style.transition = 'all 0.4s ease-out';
   if (mobNav) {
     rocket.style.left   = 'auto';
@@ -2961,6 +2978,11 @@ window.addEventListener('load', () => {
       setTimeout(showNWPopup, 300);
     }
   } else {
+    // Reset rocket to top-left origin so transform:translate coords are correct
+    rocket.style.bottom = 'auto';
+    rocket.style.right  = 'auto';
+    rocket.style.left   = '0px';
+    rocket.style.top    = '0px';
     requestAnimationFrame(animate);
   }
 });
