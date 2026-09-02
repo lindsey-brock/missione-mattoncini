@@ -1616,10 +1616,45 @@
         availability    = {};
         for (const a of (availData.availability || [])) availability[a.num] = a;
 
+        // Auto-populate profile from bookings if profile is still empty
+        autoPopulateProfileFromBookings();
+
         renderBookings();
       } catch (err) {
         area.innerHTML = `<div class="state-box"><div class="state-icon">⚠️</div><div class="state-title">Errore di connessione</div><p>${err.message}</p></div>`;
       }
+    }
+
+    function autoPopulateProfileFromBookings() {
+      if (!currentBookings.length) return;
+      const p = loadProfile();
+      // Only fill fields that haven't been set yet
+      const needsName = !p.firstName && !p.lastName;
+      const needsKids = !p.kids || !p.kids.length;
+      if (!needsName && !needsKids) return;
+
+      // Collect unique kids across all bookings
+      const kidMap = {};
+      for (const b of currentBookings) {
+        const name = (b.nome_bambino || '').trim();
+        const age  = b.eta ? String(b.eta) : '';
+        if (name) kidMap[name] = age || kidMap[name] || '';
+      }
+      const kids = Object.entries(kidMap).map(([name, age]) => ({ name, age }));
+
+      // Parent name from first booking
+      const rawParent = (currentBookings[0].nome_genitore || '').trim();
+      const parts     = rawParent.split(/\s+/);
+      const firstName = parts[0] || '';
+      const lastName  = parts.slice(1).join(' ') || '';
+
+      const updated = {
+        ...p,
+        ...(needsName && rawParent ? { firstName, lastName } : {}),
+        ...(needsKids && kids.length ? { kids } : {}),
+      };
+      saveProfile(updated);
+      renderProfileView();
     }
 
     function renderBookings() {
