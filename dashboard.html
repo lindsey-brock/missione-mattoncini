@@ -762,12 +762,17 @@
         <!-- deck -->
         <rect x="4" y="44" width="72" height="5" rx="2" fill="#7EDCCA"/>
       </svg>`,
-      /* L'Arco Romano — roman arch with bricks */
+      /* L'Arco Romano — filled voussoir arch */
       '03': `<svg viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- outer pillars -->
+        <defs>
+          <!-- clip to the arch ring only -->
+          <clipPath id="ac03">
+            <path d="M6 38 Q6 10 40 10 Q74 10 74 38 L62 38 Q62 22 40 22 Q18 22 18 38 Z"/>
+          </clipPath>
+        </defs>
+        <!-- outer pillars with bricks -->
         <rect x="6"  y="30" width="12" height="26" fill="#7EDCCA" rx="1"/>
         <rect x="62" y="30" width="12" height="26" fill="#7EDCCA" rx="1"/>
-        <!-- brick lines left pillar -->
         <line x1="6"  y1="36" x2="18" y2="36" stroke="#5BBFAD" stroke-width=".8"/>
         <line x1="6"  y1="42" x2="18" y2="42" stroke="#5BBFAD" stroke-width=".8"/>
         <line x1="6"  y1="48" x2="18" y2="48" stroke="#5BBFAD" stroke-width=".8"/>
@@ -777,7 +782,6 @@
         <line x1="12" y1="42" x2="12" y2="48" stroke="#5BBFAD" stroke-width=".8"/>
         <line x1="9"  y1="48" x2="9"  y2="54" stroke="#5BBFAD" stroke-width=".8"/>
         <line x1="15" y1="48" x2="15" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
-        <!-- brick lines right pillar -->
         <line x1="62" y1="36" x2="74" y2="36" stroke="#5BBFAD" stroke-width=".8"/>
         <line x1="62" y1="42" x2="74" y2="42" stroke="#5BBFAD" stroke-width=".8"/>
         <line x1="62" y1="48" x2="74" y2="48" stroke="#5BBFAD" stroke-width=".8"/>
@@ -787,12 +791,26 @@
         <line x1="68" y1="42" x2="68" y2="48" stroke="#5BBFAD" stroke-width=".8"/>
         <line x1="65" y1="48" x2="65" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
         <line x1="71" y1="48" x2="71" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
-        <!-- outer arch -->
-        <path d="M6 38 Q6 10 40 10 Q74 10 74 38" stroke="#7EDCCA" stroke-width="5" fill="none" stroke-linecap="butt"/>
-        <!-- inner arch -->
-        <path d="M18 56 L18 38 Q18 22 40 22 Q62 22 62 38 L62 56" stroke="#F5C842" stroke-width="3.5" fill="none" stroke-linejoin="round"/>
-        <!-- keystone -->
-        <rect x="36" y="7" width="8" height="8" rx="1" fill="#E03A2F"/>
+        <!-- arch ring base fill — aqua for odd voussoirs -->
+        <path d="M6 38 Q6 10 40 10 Q74 10 74 38 L62 38 Q62 22 40 22 Q18 22 18 38 Z" fill="#7EDCCA"/>
+        <!-- voussoir wedge fills + joint lines, clipped to arch ring -->
+        <!-- all lines radiate from springing centre (40,56) -->
+        <!-- joints at θ=150°,120°,100°,80°,60°,30° -->
+        <g clip-path="url(#ac03)">
+          <!-- S2 yellow: 150°→120° -->
+          <polygon points="40,56 -12,26 10,4" fill="#F5C842"/>
+          <!-- keystone red: 100°→80° -->
+          <polygon points="40,56 30,0 50,0" fill="#E03A2F"/>
+          <!-- S6 yellow: 60°→30° -->
+          <polygon points="40,56 70,4 92,26" fill="#F5C842"/>
+          <!-- joint lines -->
+          <line x1="40" y1="56" x2="-12" y2="26" stroke="#3AAFA0" stroke-width="1.5"/>
+          <line x1="40" y1="56" x2="10"  y2="4"  stroke="#3AAFA0" stroke-width="1.5"/>
+          <line x1="40" y1="56" x2="30"  y2="0"  stroke="#3AAFA0" stroke-width="1.5"/>
+          <line x1="40" y1="56" x2="50"  y2="0"  stroke="#3AAFA0" stroke-width="1.5"/>
+          <line x1="40" y1="56" x2="70"  y2="4"  stroke="#3AAFA0" stroke-width="1.5"/>
+          <line x1="40" y1="56" x2="92"  y2="26" stroke="#3AAFA0" stroke-width="1.5"/>
+        </g>
         <!-- ground -->
         <rect x="4" y="56" width="72" height="6" rx="2" fill="#7EDCCA"/>
       </svg>`,
