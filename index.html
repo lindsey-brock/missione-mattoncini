@@ -1640,6 +1640,13 @@
     color: var(--aqua);
     white-space: nowrap;
   }
+  .nw-popup-svg {
+    width: 80px;
+    height: 64px;
+    flex-shrink: 0;
+    opacity: 0.9;
+  }
+  .nw-popup-svg svg { width: 100%; height: 100%; }
   .nw-popup-right {
     display: flex;
     align-items: center;
@@ -1671,6 +1678,11 @@
       transform: none !important;
       color: #fff !important;
     }
+    /* Align popup text with button left edge */
+    .nw-popup { padding-left: 20px !important; padding-right: 20px !important; }
+    .nw-popup-left { margin-left: 0 !important; }
+    /* Hide illustration on mobile — not enough room */
+    .nw-popup-svg { display: none !important; }
   }
 
   /* ── BOOKING MODAL ── */
@@ -2674,6 +2686,7 @@
       </div>
     </div>
   </div>
+  <div class="nw-popup-svg" id="nwPopupSvg"></div>
   <div class="nw-popup-right">
     <button class="nw-cta" id="nwPopupCta">Prenota il tuo posto →</button>
   </div>
@@ -3518,6 +3531,7 @@ function renderNWPopup() {
   document.getElementById('nwPopupDate').textContent  = formatDate(w.date);
   document.getElementById('nwPopupAge').textContent   = w.age;
   document.getElementById('nwPopupCta').onclick = () => openBookingModal(detectNextWorkshop());
+  document.getElementById('nwPopupSvg').innerHTML = WS_SVG[w.num] || '';
 }
 
 function showNWPopup() {
