@@ -70,9 +70,11 @@
     .star-large { filter: none; }
 
     /* Left-align hero text to match button edge */
-    .hero { align-items: flex-start; padding-left: 24px; padding-right: 24px; }
+    .hero { align-items: flex-start; padding-left: 24px; padding-right: 24px; height: auto; min-height: 100vh; padding-bottom: 48px; }
     .title-block { text-align: left; }
     .cta-wrap { align-self: stretch; }
+    /* Pillar cards scroll below the fold on mobile */
+    .hero-pillars { padding-top: 40px; }
 
     /* WhatsApp behind the entire popup strip */
     .wa-blurb { z-index: 85 !important; }
