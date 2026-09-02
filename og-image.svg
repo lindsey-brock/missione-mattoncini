@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <radialGradient id="glow" cx="80%" cy="30%" r="50%">
+      <stop offset="0%" stop-color="#7EDCCA" stop-opacity="0.09"/>
+      <stop offset="100%" stop-color="#0D1B2A" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- background -->
+  <rect width="1200" height="630" fill="#0D1B2A"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- stars -->
+  <circle cx="80"  cy="60"  r="2"   fill="#F8F6F0" opacity="0.5"/>
+  <circle cx="200" cy="110" r="1.5" fill="#F8F6F0" opacity="0.32"/>
+  <circle cx="460" cy="40"  r="2"   fill="#F8F6F0" opacity="0.42"/>
+  <circle cx="640" cy="170" r="1.5" fill="#F8F6F0" opacity="0.28"/>
+  <circle cx="820" cy="90"  r="2"   fill="#F8F6F0" opacity="0.38"/>
+  <circle cx="980" cy="165" r="1.5" fill="#F8F6F0" opacity="0.32"/>
+  <circle cx="140" cy="200" r="1.2" fill="#F8F6F0" opacity="0.28"/>
+  <circle cx="330" cy="155" r="1"   fill="#F8F6F0" opacity="0.22"/>
+  <circle cx="510" cy="280" r="1.5" fill="#F8F6F0" opacity="0.25"/>
+  <circle cx="760" cy="260" r="1.2" fill="#F8F6F0" opacity="0.22"/>
+  <circle cx="900" cy="380" r="1"   fill="#F8F6F0" opacity="0.18"/>
+  <circle cx="90"  cy="380" r="1.2" fill="#F8F6F0" opacity="0.2"/>
+  <circle cx="300" cy="480" r="1"   fill="#F8F6F0" opacity="0.16"/>
+  <!-- 4-pointed stars -->
+  <path d="M80 60 l2 5 l5 2 l-5 2 l-2 5 l-2-5 l-5-2 l5-2Z"   fill="#F8F6F0" opacity="0.5"/>
+  <path d="M460 40 l2 4 l4 2 l-4 2 l-2 4 l-2-4 l-4-2 l4-2Z"  fill="#F8F6F0" opacity="0.42"/>
+  <path d="M820 90 l2 5 l5 2 l-5 2 l-2 5 l-2-5 l-5-2 l5-2Z"  fill="#F8F6F0" opacity="0.38"/>
+
+  <!-- rocket (upper-right corner, 130×130) -->
+  <!-- body -->
+  <rect x="1002" y="54"  width="31" height="42" rx="15" fill="#F5C842"/>
+  <path d="M1002 66 Q1017 40 1033 66Z" fill="#F5C842"/>
+  <path d="M1006 63 Q1017 43 1023 58" stroke="#FFF5CC" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.65"/>
+  <circle cx="1017" cy="80" r="8"   fill="#1A2E45"/>
+  <circle cx="1017" cy="80" r="6.5" fill="#0D1B2A"/>
+  <circle cx="1015" cy="77" r="2"   fill="#7EDCCA" opacity="0.85"/>
+  <circle cx="1010" cy="90" r="2.5" fill="#E03A2F" opacity="0.9"/>
+  <circle cx="1017" cy="90" r="2.5" fill="#E03A2F" opacity="0.9"/>
+  <circle cx="1024" cy="90" r="2.5" fill="#E03A2F" opacity="0.9"/>
+  <path d="M1002 84 L988 104 L1002 99Z"  fill="#E03A2F"/>
+  <path d="M1033 84 L1047 104 L1033 99Z" fill="#E03A2F"/>
+  <path d="M1005 96 Q1017 102 1030 96 L1028 106 Q1017 111 1007 106Z" fill="#1A2E45"/>
+  <path d="M1007 106 Q1004 118 1017 129 Q1030 118 1027 106 Q1023 114 1017 116 Q1011 114 1007 106Z" fill="#F5C842"/>
+  <path d="M1010 108 Q1008 117 1017 126 Q1026 117 1024 108 Q1021 115 1017 116 Q1013 115 1010 108Z" fill="#FFE080"/>
+  <path d="M1013 111 Q1012 117 1017 122 Q1022 117 1021 111 Q1019 115 1017 116 Q1015 115 1013 111Z" fill="#FFF5CC"/>
+
+  <!-- brand name -->
+  <text x="60" y="320"
+    font-family="'Syne', 'Arial Black', sans-serif"
+    font-weight="800"
+    font-size="180"
+    fill="#F8F6F0"
+    letter-spacing="-4">MISSIONE</text>
+  <text x="60" y="490"
+    font-family="'Syne', 'Arial Black', sans-serif"
+    font-weight="800"
+    font-size="180"
+    fill="#F5C842"
+    letter-spacing="-4">MATTONCINI</text>
+
+  <!-- tagline -->
+  <text x="62" y="548"
+    font-family="'DM Sans', Arial, sans-serif"
+    font-weight="300"
+    font-size="28"
+    fill="#7EDCCA"
+    letter-spacing="2">Costruiamo. Esploriamo. Impariamo.</text>
+
+  <!-- bottom stripe -->
+  <rect x="0" y="622" width="720" height="8" fill="#E03A2F"/>
+  <rect x="720" y="622" width="480" height="8" fill="#F5C842"/>
+</svg>
