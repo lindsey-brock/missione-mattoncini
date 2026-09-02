@@ -915,29 +915,9 @@
         <line x1="68" y1="42" x2="68" y2="48" stroke="#5BBFAD" stroke-width=".8"/>
         <line x1="65" y1="48" x2="65" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
         <line x1="71" y1="48" x2="71" y2="54" stroke="#5BBFAD" stroke-width=".8"/>
-        <!-- Roman soldiers (march in on hover, feet at y=56) -->
-        <g id="m03-sol1" transform="translate(0,38)">
-          <!-- cape -->
-          <polygon points="5,5 0,18 10,18" fill="#5B3A8F"/>
-          <!-- armor -->
-          <rect x="2" y="8" width="6" height="5" rx=".5" fill="#8B5E2A"/>
-          <circle cx="5" cy="10.5" r="1.5" fill="#6B4A1A"/>
-          <!-- head -->
-          <circle cx="5" cy="4" r="3" fill="#F0A07A"/>
-          <!-- helmet -->
-          <rect x="2" y="1.5" width="6" height="3" rx="1" fill="#707070"/>
-          <!-- plume -->
-          <rect x="4.5" y="0" width="1.5" height="2.5" rx=".5" fill="#E03A2F"/>
-          <!-- tunic -->
-          <rect x="2" y="13" width="6" height="3" rx=".5" fill="#F5F5F5"/>
-          <line x1="2" y1="14.5" x2="8" y2="14.5" stroke="#E03A2F" stroke-width=".6"/>
-          <!-- legs -->
-          <rect x="2.5" y="16" width="2" height="2" rx=".3" fill="#F0A07A"/>
-          <rect x="5.5" y="16" width="2" height="2" rx=".3" fill="#F0A07A"/>
-        </g>
-        <g id="m03-sol2" transform="translate(0,38)">
-          <!-- mirrored soldier (faces left) -->
-          <g transform="translate(10,0) scale(-1,1)">
+        <!-- Roman soldiers: outer g = CSS x-animation, inner g = static y-position -->
+        <g id="m03-sol1">
+          <g transform="translate(0,38)">
             <polygon points="5,5 0,18 10,18" fill="#5B3A8F"/>
             <rect x="2" y="8" width="6" height="5" rx=".5" fill="#8B5E2A"/>
             <circle cx="5" cy="10.5" r="1.5" fill="#6B4A1A"/>
@@ -948,6 +928,22 @@
             <line x1="2" y1="14.5" x2="8" y2="14.5" stroke="#E03A2F" stroke-width=".6"/>
             <rect x="2.5" y="16" width="2" height="2" rx=".3" fill="#F0A07A"/>
             <rect x="5.5" y="16" width="2" height="2" rx=".3" fill="#F0A07A"/>
+          </g>
+        </g>
+        <g id="m03-sol2">
+          <g transform="translate(0,38)">
+            <g transform="translate(10,0) scale(-1,1)">
+              <polygon points="5,5 0,18 10,18" fill="#5B3A8F"/>
+              <rect x="2" y="8" width="6" height="5" rx=".5" fill="#8B5E2A"/>
+              <circle cx="5" cy="10.5" r="1.5" fill="#6B4A1A"/>
+              <circle cx="5" cy="4" r="3" fill="#F0A07A"/>
+              <rect x="2" y="1.5" width="6" height="3" rx="1" fill="#707070"/>
+              <rect x="4.5" y="0" width="1.5" height="2.5" rx=".5" fill="#E03A2F"/>
+              <rect x="2" y="13" width="6" height="3" rx=".5" fill="#F5F5F5"/>
+              <line x1="2" y1="14.5" x2="8" y2="14.5" stroke="#E03A2F" stroke-width=".6"/>
+              <rect x="2.5" y="16" width="2" height="2" rx=".3" fill="#F0A07A"/>
+              <rect x="5.5" y="16" width="2" height="2" rx=".3" fill="#F0A07A"/>
+            </g>
           </g>
         </g>
         <!-- ground -->
