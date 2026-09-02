@@ -991,11 +991,12 @@
     100% { transform: scaleX(1) translateX(0); opacity: 1; }
   }
 
+  /* Hamburger bars — mobile/tablet only; never shown on desktop */
   .mob-ham-bars {
     position: absolute;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    display: flex;
+    display: none; /* hidden by default; enabled only in mobile media query */
     flex-direction: column;
     gap: 5px;
     opacity: 0;
@@ -1007,29 +1008,7 @@
     background: #F5C842;
     border-radius: 2px;
     transform-origin: left center;
-    transition: transform 0.3s ease, opacity 0.3s ease;
   }
-  /* Rocket folds away via keyframe, bars unfold in staggered */
-  .rocket-container.mob-ham .rocket-body-wrap {
-    animation: rocketFold 0.32s cubic-bezier(0.4,0,1,1) forwards;
-  }
-  .rocket-container.mob-ham .mob-ham-bars {
-    opacity: 1;
-    pointer-events: auto;
-  }
-  .rocket-container.mob-ham .mob-ham-bars span:nth-child(1) {
-    animation: barUnfold1 0.28s cubic-bezier(0.34,1.56,0.64,1) 0.22s both;
-  }
-  .rocket-container.mob-ham .mob-ham-bars span:nth-child(2) {
-    animation: barUnfold2 0.28s cubic-bezier(0.34,1.56,0.64,1) 0.30s both;
-  }
-  .rocket-container.mob-ham .mob-ham-bars span:nth-child(3) {
-    animation: barUnfold3 0.28s cubic-bezier(0.34,1.56,0.64,1) 0.38s both;
-  }
-  /* X state when drawer is open — overrides bar animations */
-  .rocket-container.mob-ham.mob-open .mob-ham-bars span:nth-child(1) { animation: none; transform: translateY(7.5px) rotate(45deg); }
-  .rocket-container.mob-ham.mob-open .mob-ham-bars span:nth-child(2) { animation: none; opacity: 0; transform: scaleX(0); }
-  .rocket-container.mob-ham.mob-open .mob-ham-bars span:nth-child(3) { animation: none; transform: translateY(-7.5px) rotate(-45deg); }
 
   /* ── MOBILE / TABLET FULL-SCREEN NAV DRAWER ── */
   @media (max-width: 768px) {
@@ -1047,6 +1026,31 @@
     #side-drawer.open { transform: translateX(0); }
     /* Mobile auth block visible */
     .drawer-mob-auth { display: flex !important; }
+
+    /* Hamburger bars — mobile only */
+    .mob-ham-bars { display: flex; }
+    .rocket-body-wrap { transition: opacity 0.3s, transform 0.3s; }
+    .rocket-container.mob-ham .rocket-body-wrap {
+      animation: rocketFold 0.32s cubic-bezier(0.4,0,1,1) forwards;
+    }
+    .rocket-container.mob-ham .mob-ham-bars {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .rocket-container.mob-ham .mob-ham-bars span:nth-child(1) {
+      animation: barUnfold1 0.28s cubic-bezier(0.34,1.56,0.64,1) 0.22s both;
+    }
+    .rocket-container.mob-ham .mob-ham-bars span:nth-child(2) {
+      animation: barUnfold2 0.28s cubic-bezier(0.34,1.56,0.64,1) 0.30s both;
+    }
+    .rocket-container.mob-ham .mob-ham-bars span:nth-child(3) {
+      animation: barUnfold3 0.28s cubic-bezier(0.34,1.56,0.64,1) 0.38s both;
+    }
+    .rocket-container.mob-ham.mob-open .mob-ham-bars span:nth-child(1) { animation: none; transform: translateY(7.5px) rotate(45deg); }
+    .rocket-container.mob-ham.mob-open .mob-ham-bars span:nth-child(2) { animation: none; opacity: 0; transform: scaleX(0); }
+    .rocket-container.mob-ham.mob-open .mob-ham-bars span:nth-child(3) { animation: none; transform: translateY(-7.5px) rotate(-45deg); }
+    .drawer-divider { display: none; }
+    .drawer-head { margin-top: 32px; }
   }
 
   /* Drawer mobile auth block */
@@ -2544,6 +2548,11 @@
       <a href="dashboard.html" class="drawer-mob-auth-link" id="drawerMobSignin">
         <span class="drawer-mob-helmet">
           <svg viewBox="0 0 72 76" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <clipPath id="drawerVisorClip">
+                <ellipse cx="33" cy="38" rx="19" ry="16"/>
+              </clipPath>
+            </defs>
             <circle cx="34" cy="33" r="28" fill="#BEE8E2" stroke="#0d1440" stroke-width="3.5"/>
             <rect x="27" y="7" width="5" height="7" rx="1.5" fill="#E03A2F" stroke="#0d1440" stroke-width="1.8"/>
             <rect x="34" y="6" width="5" height="7" rx="1.5" fill="#E03A2F" stroke="#0d1440" stroke-width="1.8"/>
@@ -2557,7 +2566,7 @@
               <path d="M43 34 l.8 2 l2 .8 l-2 .8 l-.8 2 l-.8-2 l-2-.8 l2-.8Z" fill="#EDE9DC"/>
               <path d="M37 44 l.7 1.8 l1.8.7 l-1.8.7 l-.7 1.8 l-.7-1.8 l-1.8-.7 l1.8-.7Z" fill="#EDE9DC"/>
             </g>
-            <image id="drawerMobAvatarSVG" href="" x="13" y="21" width="40" height="34" preserveAspectRatio="xMidYMid slice" style="display:none"/>
+            <image id="drawerMobAvatarSVG" href="" x="14" y="22" width="38" height="32" preserveAspectRatio="xMidYMid slice" clip-path="url(#drawerVisorClip)" style="display:none"/>
             <line x1="45" y1="24" x2="51" y2="33" stroke="rgba(0,0,0,0.25)" stroke-width="1.8" stroke-linecap="round"/>
             <line x1="47" y1="30" x2="52" y2="40" stroke="rgba(0,0,0,0.25)" stroke-width="1.8" stroke-linecap="round"/>
             <path d="M17 28 Q22 22 31 25" stroke="rgba(255,255,255,0.2)" stroke-width="2" stroke-linecap="round" fill="none"/>
@@ -2986,7 +2995,8 @@ function enableRocketNav() {
     const label     = document.getElementById('navLabel');
     const avatarEl  = document.getElementById('navAvatarSVG');
     const astronaut = document.getElementById('navAstronaut');
-    const firstName = (user.user_metadata?.full_name || user.email || '').split(/[\s@]/)[0];
+    const displayName = user.user_metadata?.name || user.user_metadata?.full_name || '';
+    const firstName = displayName ? displayName.split(/\s/)[0] : 'Astronauta';
     if (label) label.textContent = `Benvenuto, ${firstName}!`;
     const drawerLabel = document.getElementById('drawerMobLabel');
     if (drawerLabel) drawerLabel.textContent = `Benvenuto, ${firstName}!`;
