@@ -754,6 +754,14 @@
           <label class="form-label" for="signup-password">Scegli una password</label>
           <input class="form-input" id="signup-password" type="password" placeholder="minimo 6 caratteri" autocomplete="new-password">
         </div>
+        <div class="form-group">
+          <label class="form-label" for="signup-confirm">Conferma password</label>
+          <input class="form-input" id="signup-confirm" type="password" placeholder="ripeti la password" autocomplete="new-password">
+        </div>
+        <div class="form-group">
+          <label class="form-label" id="captcha-label">Verifica: <span id="captcha-q"></span> = ?</label>
+          <input class="form-input" id="captcha-answer" type="number" placeholder="la tua risposta" autocomplete="off">
+        </div>
         <div class="form-error" id="signup-error"></div>
         <button class="auth-btn" id="signup-btn" onclick="doSignup()">Crea account →</button>
         <div id="signup-success" style="display:none" class="auth-success">
@@ -1254,7 +1262,7 @@
           document.getElementById('login-email').value = urlEmail;
           document.getElementById('signup-email').value = urlEmail;
         }
-        if (wantSignup) switchTab('signup');
+        if (wantSignup) { switchTab('signup'); initCaptcha(); }
       }
 
       // Listen for auth changes (e.g. after email confirmation redirect)
@@ -1494,16 +1502,32 @@
       showDashboard();
     }
 
+    /* ── CAPTCHA ── */
+    let _captchaAnswer = 0;
+    function initCaptcha() {
+      const a = Math.floor(Math.random() * 10) + 1;
+      const b = Math.floor(Math.random() * 10) + 1;
+      _captchaAnswer = a + b;
+      document.getElementById('captcha-q').textContent = a + ' + ' + b;
+      document.getElementById('captcha-answer').value = '';
+    }
+    // init when tab becomes visible
+    document.getElementById('tab-signup').addEventListener('click', initCaptcha);
+
     /* ── SIGNUP ── */
     async function doSignup() {
       const email    = document.getElementById('signup-email').value.trim();
       const password = document.getElementById('signup-password').value;
+      const confirm  = document.getElementById('signup-confirm').value;
+      const captcha  = parseInt(document.getElementById('captcha-answer').value, 10);
       const errEl    = document.getElementById('signup-error');
       const btn      = document.getElementById('signup-btn');
       errEl.textContent = '';
 
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { errEl.textContent = 'Inserisci un\'email valida.'; return; }
       if (!password || password.length < 6) { errEl.textContent = 'La password deve avere almeno 6 caratteri.'; return; }
+      if (password !== confirm) { errEl.textContent = 'Le password non corrispondono.'; return; }
+      if (isNaN(captcha) || captcha !== _captchaAnswer) { errEl.textContent = 'Risposta errata. Riprova.'; initCaptcha(); return; }
 
       btn.disabled = true; btn.textContent = 'Creazione…';
       const { error } = await sb.auth.signUp({
