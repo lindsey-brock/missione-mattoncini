@@ -671,72 +671,118 @@
     const WS_SVG = {
       /* Costruiamo Forte — castle */
       '01': `<svg viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="8"  y="32" width="12" height="26" rx="2" fill="#1A2E45"/>
-        <rect x="60" y="32" width="12" height="26" rx="2" fill="#1A2E45"/>
-        <rect x="20" y="40" width="40" height="18" rx="2" fill="#1A2E45"/>
-        <rect x="8"  y="24" width="4"  height="10" rx="1" fill="#7EDCCA"/>
-        <rect x="16" y="24" width="4"  height="10" rx="1" fill="#7EDCCA"/>
-        <rect x="60" y="24" width="4"  height="10" rx="1" fill="#7EDCCA"/>
-        <rect x="68" y="24" width="4"  height="10" rx="1" fill="#7EDCCA"/>
-        <rect x="28" y="20" width="24" height="22" rx="2" fill="#F5C842"/>
-        <rect x="34" y="10" width="12" height="14" rx="2" fill="#F5C842"/>
-        <rect x="34" y="8"  width="4"  height="8"  rx="1" fill="#E03A2F"/>
-        <rect x="42" y="8"  width="4"  height="8"  rx="1" fill="#E03A2F"/>
-        <rect x="36" y="44" width="8"  height="14" rx="1" fill="#7EDCCA"/>
-        <rect x="6"  y="58" width="68" height="4"  rx="2" fill="#1A2E45"/>
+        <!-- side towers -->
+        <rect x="6"  y="30" width="14" height="28" rx="2" fill="#7EDCCA"/>
+        <rect x="60" y="30" width="14" height="28" rx="2" fill="#7EDCCA"/>
+        <!-- battlements side towers -->
+        <rect x="6"  y="22" width="4" height="10" rx="1" fill="#7EDCCA"/>
+        <rect x="12" y="22" width="4" height="10" rx="1" fill="#7EDCCA"/>
+        <rect x="60" y="22" width="4" height="10" rx="1" fill="#7EDCCA"/>
+        <rect x="66" y="22" width="4" height="10" rx="1" fill="#7EDCCA"/>
+        <!-- curtain wall -->
+        <rect x="20" y="42" width="40" height="16" rx="2" fill="#7EDCCA"/>
+        <!-- main keep -->
+        <rect x="28" y="22" width="24" height="22" rx="2" fill="#F5C842"/>
+        <!-- keep battlements -->
+        <rect x="28" y="14" width="6" height="10" rx="1" fill="#F5C842"/>
+        <rect x="37" y="14" width="6" height="10" rx="1" fill="#F5C842"/>
+        <rect x="46" y="14" width="6" height="10" rx="1" fill="#F5C842"/>
+        <!-- keep door -->
+        <rect x="35" y="34" width="10" height="10" rx="2" fill="#E03A2F"/>
+        <!-- ground -->
+        <rect x="4" y="58" width="72" height="4" rx="2" fill="#7EDCCA"/>
       </svg>`,
       /* Il Ponte — suspension bridge */
       '02': `<svg viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="8"  y="20" width="6" height="38" rx="2" fill="#1A2E45"/>
-        <rect x="66" y="20" width="6" height="38" rx="2" fill="#1A2E45"/>
-        <path d="M11 20 Q40 4 69 20" stroke="#7EDCCA" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-        <line x1="24" y1="17" x2="24" y2="46" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
-        <line x1="36" y1="10" x2="36" y2="46" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
-        <line x1="44" y1="10" x2="44" y2="46" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
-        <line x1="56" y1="17" x2="56" y2="46" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
-        <rect x="4"  y="44" width="72" height="5" rx="2" fill="#7EDCCA"/>
-        <rect x="4"  y="49" width="72" height="5" rx="2" fill="#1A2E45"/>
+        <!-- pylons -->
+        <rect x="16" y="18" width="6" height="36" rx="2" fill="#7EDCCA"/>
+        <rect x="58" y="18" width="6" height="36" rx="2" fill="#7EDCCA"/>
+        <!-- pylon caps -->
+        <rect x="14" y="14" width="10" height="6" rx="2" fill="#F5C842"/>
+        <rect x="56" y="14" width="10" height="6" rx="2" fill="#F5C842"/>
+        <!-- main cables -->
+        <path d="M4 24 Q19 14 40 10 Q61 14 76 24" stroke="#7EDCCA" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- hangers -->
+        <line x1="26" y1="17" x2="26" y2="46" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="35" y1="12" x2="35" y2="46" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="45" y1="12" x2="45" y2="46" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="54" y1="17" x2="54" y2="46" stroke="#F5C842" stroke-width="1.8" stroke-linecap="round"/>
+        <!-- deck -->
+        <rect x="4" y="44" width="72" height="5" rx="2" fill="#7EDCCA"/>
       </svg>`,
       /* L'Arco Romano — roman arch */
       '03': `<svg viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="6"  y="26" width="12" height="32" rx="2" fill="#7EDCCA"/>
-        <rect x="62" y="26" width="12" height="32" rx="2" fill="#7EDCCA"/>
-        <path d="M18 56 L18 36 Q40 12 62 36 L62 56" fill="#1A2E45" stroke="#7EDCCA" stroke-width="2.5" stroke-linejoin="round"/>
-        <path d="M26 56 L26 40 Q40 22 54 40 L54 56" fill="#F5C842" stroke="#F5C842" stroke-width="1.5" stroke-linejoin="round"/>
-        <rect x="32" y="42" width="16" height="16" rx="1" fill="#1A2E45"/>
-        <rect x="4"  y="56" width="72" height="6"  rx="2" fill="#7EDCCA"/>
+        <!-- outer pillars -->
+        <rect x="6"  y="30" width="12" height="28" rx="2" fill="#7EDCCA"/>
+        <rect x="62" y="30" width="12" height="28" rx="2" fill="#7EDCCA"/>
+        <!-- outer arch -->
+        <path d="M6 38 Q6 10 40 10 Q74 10 74 38" stroke="#7EDCCA" stroke-width="5" fill="none" stroke-linecap="butt"/>
+        <!-- inner arch -->
+        <path d="M18 56 L18 38 Q18 22 40 22 Q62 22 62 38 L62 56" stroke="#F5C842" stroke-width="3.5" fill="none" stroke-linejoin="round"/>
+        <!-- keystone -->
+        <rect x="36" y="8" width="8" height="8" rx="1" fill="#E03A2F"/>
+        <!-- ground -->
+        <rect x="4" y="56" width="72" height="6" rx="2" fill="#7EDCCA"/>
       </svg>`,
       /* Macchine Veloci — race car */
       '04': `<svg viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="8"  y="34" width="54" height="16" rx="5" fill="#7EDCCA"/>
-        <rect x="18" y="24" width="30" height="14" rx="4" fill="#F5C842"/>
-        <rect x="40" y="22" width="16" height="10" rx="3" fill="#F5C842"/>
-        <rect x="40" y="22" width="16" height="4"  rx="2" fill="#1A2E45"/>
-        <circle cx="22" cy="50" r="8" fill="#1A2E45" stroke="#F5C842" stroke-width="2.5"/>
-        <circle cx="22" cy="50" r="3.5" fill="#F5C842"/>
-        <circle cx="56" cy="50" r="8" fill="#1A2E45" stroke="#F5C842" stroke-width="2.5"/>
-        <circle cx="56" cy="50" r="3.5" fill="#F5C842"/>
-        <rect x="60" y="32" width="12" height="5" rx="2" fill="#E03A2F"/>
-        <path d="M4 38 L12 32" stroke="#E03A2F" stroke-width="2.5" stroke-linecap="round"/>
-        <path d="M2 44 L10 39" stroke="#E03A2F" stroke-width="1.8" stroke-linecap="round"/>
+        <!-- speed lines -->
+        <line x1="2"  y1="34" x2="14" y2="34" stroke="#E03A2F" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="2"  y1="40" x2="10" y2="40" stroke="#E03A2F" stroke-width="2"   stroke-linecap="round"/>
+        <line x1="2"  y1="46" x2="12" y2="46" stroke="#E03A2F" stroke-width="1.5" stroke-linecap="round"/>
+        <!-- car body -->
+        <rect x="12" y="34" width="56" height="16" rx="5" fill="#7EDCCA"/>
+        <!-- cabin -->
+        <rect x="22" y="22" width="30" height="14" rx="4" fill="#F5C842"/>
+        <!-- windshield -->
+        <rect x="38" y="23" width="12" height="10" rx="3" fill="#7EDCCA" opacity=".5"/>
+        <!-- spoiler -->
+        <rect x="64" y="28" width="8"  height="4"  rx="2" fill="#E03A2F"/>
+        <rect x="68" y="28" width="3"  height="8"  rx="1" fill="#E03A2F"/>
+        <!-- wheels -->
+        <circle cx="26" cy="50" r="8" fill="#F5C842"/>
+        <circle cx="26" cy="50" r="3.5" fill="#0d1440"/>
+        <circle cx="58" cy="50" r="8" fill="#F5C842"/>
+        <circle cx="58" cy="50" r="3.5" fill="#0d1440"/>
       </svg>`,
       /* Affonda o Galleggia? — boat on waves */
       '05': `<svg viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M16 42 L14 28 L50 28 L56 42 Z" fill="#F5C842"/>
-        <path d="M28 28 L34 12 L46 28 Z" fill="#E03A2F"/>
-        <rect x="33" y="12" width="2.5" height="16" fill="#1A2E45"/>
-        <rect x="14" y="40" width="44" height="5" rx="2" fill="#F5C842"/>
-        <path d="M4  50 Q14 44 24 50 Q34 56 44 50 Q54 44 64 50 Q74 56 78 50" stroke="#7EDCCA" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-        <path d="M4  58 Q14 52 24 58 Q34 64 44 58 Q54 52 64 58 Q74 64 78 58" stroke="#7EDCCA" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+        <!-- boat hull — proper hull shape -->
+        <path d="M14 28 L14 44 Q14 50 20 52 L40 54 L60 52 Q66 50 66 44 L66 28 Z" fill="#F5C842"/>
+        <!-- hull stripe -->
+        <rect x="14" y="40" width="52" height="4" fill="#E03A2F"/>
+        <!-- mast -->
+        <rect x="39" y="10" width="3"  height="20" rx="1" fill="#7EDCCA"/>
+        <!-- sail -->
+        <path d="M42 12 L58 28 L42 28 Z" fill="#7EDCCA"/>
+        <path d="M39 12 L23 28 L39 28 Z" fill="#7EDCCA" opacity=".6"/>
+        <!-- waves -->
+        <path d="M4  56 Q14 50 24 56 Q34 62 44 56 Q54 50 64 56 Q74 62 78 56" stroke="#7EDCCA" stroke-width="2.5" stroke-linecap="round" fill="none"/>
       </svg>`,
-      /* Ingegneri della Natura — tree/leaf */
+      /* Ingegneri della Natura — bee + honeycomb */
       '06': `<svg viewBox="0 0 80 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="36" y="38" width="8" height="20" rx="3" fill="#7EDCCA"/>
-        <circle cx="40" cy="26" r="18" fill="#1A2E45"/>
-        <path d="M40 8 Q58 20 52 38 Q40 44 28 38 Q22 20 40 8Z" fill="#7EDCCA"/>
-        <path d="M40 12 Q54 22 48 36 Q40 40 32 36 Q26 22 40 12Z" fill="#F5C842"/>
-        <path d="M40 18 Q50 26 46 34 Q40 36 34 34 Q30 26 40 18Z" fill="#7EDCCA"/>
-        <rect x="30" y="46" width="20" height="4" rx="2" fill="#7EDCCA"/>
+        <!-- honeycomb hexagons (flat-top) -->
+        <!-- row 1: 2 hexagons -->
+        <polygon points="24,6 30,6 33,11 30,16 24,16 21,11" fill="none" stroke="#F5C842" stroke-width="2"/>
+        <polygon points="35,6 41,6 44,11 41,16 35,16 32,11" fill="#F5C842" opacity=".3" stroke="#F5C842" stroke-width="2"/>
+        <polygon points="46,6 52,6 55,11 52,16 46,16 43,11" fill="none" stroke="#F5C842" stroke-width="2"/>
+        <!-- row 2: 2 hexagons -->
+        <polygon points="29,16 35,16 38,21 35,26 29,26 26,21" fill="#F5C842" opacity=".3" stroke="#F5C842" stroke-width="2"/>
+        <polygon points="40,16 46,16 49,21 46,26 40,26 37,21" fill="none" stroke="#F5C842" stroke-width="2"/>
+        <!-- bee body -->
+        <ellipse cx="56" cy="44" rx="10" ry="7" fill="#F5C842"/>
+        <!-- stripes -->
+        <rect x="48" y="41" width="4" height="6" rx="1" fill="#0d1440" opacity=".7"/>
+        <rect x="54" y="41" width="4" height="6" rx="1" fill="#0d1440" opacity=".7"/>
+        <!-- bee head -->
+        <circle cx="65" cy="43" r="5" fill="#F5C842"/>
+        <!-- eyes -->
+        <circle cx="66" cy="41" r="1.2" fill="#0d1440"/>
+        <!-- stinger -->
+        <path d="M46 44 L42 44" stroke="#F5C842" stroke-width="2" stroke-linecap="round"/>
+        <!-- wings -->
+        <ellipse cx="54" cy="36" rx="7" ry="4" fill="#7EDCCA" opacity=".7" transform="rotate(-20 54 36)"/>
+        <ellipse cx="60" cy="35" rx="7" ry="4" fill="#7EDCCA" opacity=".7" transform="rotate(15 60 35)"/>
       </svg>`,
     };
 
