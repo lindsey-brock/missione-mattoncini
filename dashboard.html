@@ -286,6 +286,14 @@
 
     /* avatar upload spinner */
     .avatar-uploading { opacity: 0.5; pointer-events: none; }
+    .avatar-wrap.drag-over {
+      border-color: var(--aqua);
+      background: rgba(126,220,202,0.15);
+    }
+    .avatar-wrap.drag-over .avatar-overlay {
+      opacity: 1;
+      content: '↓';
+    }
 
     /* ── DASH MAIN (right) ── */
     .dash-main { min-width: 0; }
@@ -561,7 +569,7 @@
             <div class="avatar-wrap" id="avatar-wrap" onclick="triggerAvatarUpload()" title="Cambia foto">
               <div class="avatar-placeholder" id="avatar-placeholder">👤</div>
               <img class="avatar-img" id="avatar-img" src="" alt="" style="display:none">
-              <div class="avatar-overlay">✎</div>
+              <div class="avatar-overlay" id="avatar-overlay">✎</div>
             </div>
             <div class="account-hero-info">
               <div class="account-hero-name" id="account-hero-name">—</div>
@@ -694,6 +702,7 @@
       document.getElementById('auth-section').style.display = 'none';
       document.getElementById('dash-section').style.display = 'block';
       renderProfileView();
+      initAvatarDrop();
       loadBookings();
     }
 
@@ -824,9 +833,10 @@
       document.getElementById('avatar-file-input').click();
     }
 
-    async function uploadAvatar(input) {
-      const file = input.files[0];
-      if (!file) return;
+    async function uploadAvatarFile(file) {
+      if (!file || !file.type.startsWith('image/')) {
+        alert('Seleziona un file immagine.'); return;
+      }
       const wrap = document.getElementById('avatar-wrap');
       wrap.classList.add('avatar-uploading');
 
@@ -849,9 +859,39 @@
         alert('Errore caricamento foto: ' + err.message);
       } finally {
         wrap.classList.remove('avatar-uploading');
-        input.value = '';
       }
     }
+
+    function uploadAvatar(input) {
+      if (input.files[0]) uploadAvatarFile(input.files[0]);
+      input.value = '';
+    }
+
+    function initAvatarDrop() {
+      const wrap = document.getElementById('avatar-wrap');
+
+      const overlay = document.getElementById('avatar-overlay');
+
+      wrap.addEventListener('dragover', e => {
+        e.preventDefault();
+        wrap.classList.add('drag-over');
+        overlay.textContent = '↓';
+      });
+      wrap.addEventListener('dragleave', e => {
+        if (!wrap.contains(e.relatedTarget)) {
+          wrap.classList.remove('drag-over');
+          overlay.textContent = '✎';
+        }
+      });
+      wrap.addEventListener('drop', e => {
+        e.preventDefault();
+        wrap.classList.remove('drag-over');
+        overlay.textContent = '✎';
+        const file = e.dataTransfer.files[0];
+        if (file) uploadAvatarFile(file);
+      });
+    }
+
 
     function switchTab(tab) {
       const isLogin = tab === 'login';
