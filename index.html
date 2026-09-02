@@ -2195,39 +2195,64 @@
 <!-- ROCKET (repositioned by JS, then becomes nav trigger) -->
 <a href="dashboard.html" class="nav-signin" id="navSignin">
   <span class="nav-helmet">
-    <svg viewBox="0 0 52 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 72 76" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <clipPath id="visor-clip">
-          <ellipse cx="26" cy="26" rx="13" ry="13"/>
+          <ellipse cx="33" cy="38" rx="20" ry="17"/>
         </clipPath>
       </defs>
-      <!-- outer helmet dome -->
-      <ellipse cx="26" cy="24" rx="22" ry="22" fill="#1A2E45"/>
-      <ellipse cx="26" cy="24" rx="22" ry="22" fill="none" stroke="#7EDCCA" stroke-width="1.8" stroke-opacity="0.5"/>
-      <!-- highlight rim top -->
-      <path d="M10 13 Q26 4 42 13" stroke="rgba(255,255,255,0.12)" stroke-width="2" stroke-linecap="round" fill="none"/>
-      <!-- visor dark background -->
-      <ellipse cx="26" cy="26" rx="13" ry="13" fill="#060e1a"/>
-      <!-- visor content (avatar or silhouette) clipped inside -->
-      <image id="navAvatarSVG" href="" x="13" y="13" width="26" height="26" clip-path="url(#visor-clip)" preserveAspectRatio="xMidYMid slice" style="display:none"/>
-      <!-- silhouette (logged out) -->
-      <g id="navAstronaut" clip-path="url(#visor-clip)">
-        <circle cx="26" cy="22" r="5.5" fill="rgba(126,220,202,0.3)"/>
-        <ellipse cx="26" cy="34" rx="8" ry="5" fill="rgba(126,220,202,0.2)"/>
-      </g>
-      <!-- visor tint overlay -->
-      <ellipse cx="26" cy="26" rx="13" ry="13" fill="rgba(126,220,202,0.07)"/>
-      <ellipse cx="26" cy="26" rx="13" ry="13" fill="none" stroke="#7EDCCA" stroke-width="1" stroke-opacity="0.3"/>
-      <!-- glare -->
-      <path d="M17 19 Q20 15 25 17" stroke="rgba(255,255,255,0.22)" stroke-width="1.4" stroke-linecap="round" fill="none"/>
-      <!-- neck ring -->
-      <rect x="16" y="44" width="20" height="5" rx="2.5" fill="#0F1F30" stroke="#7EDCCA" stroke-width="1" stroke-opacity="0.4"/>
-      <!-- shoulder flanges -->
-      <rect x="4"  y="47" width="13" height="4" rx="2" fill="#0F1F30" stroke="#7EDCCA" stroke-width="0.8" stroke-opacity="0.3"/>
-      <rect x="35" y="47" width="13" height="4" rx="2" fill="#0F1F30" stroke="#7EDCCA" stroke-width="0.8" stroke-opacity="0.3"/>
+
+      <!-- helmet dome -->
+      <circle cx="34" cy="33" r="28" fill="#BEE8E2" stroke="#0d1440" stroke-width="3.5"/>
+
+      <!-- red top accent strips -->
+      <rect x="27" y="7"  width="5" height="7" rx="1.5" fill="#E03A2F" stroke="#0d1440" stroke-width="1.8"/>
+      <rect x="34" y="6"  width="5" height="7" rx="1.5" fill="#E03A2F" stroke="#0d1440" stroke-width="1.8"/>
+
       <!-- antenna -->
-      <rect x="38" y="7" width="2.5" height="8" rx="1.25" fill="#7EDCCA" opacity="0.6"/>
-      <circle cx="39.25" cy="6" r="2" fill="#F5C842"/>
+      <line x1="56" y1="20" x2="63" y2="7" stroke="#EDE9DC" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="63" cy="6" r="4.5" fill="#EDE9DC" stroke="#0d1440" stroke-width="1.8"/>
+
+      <!-- left side clip -->
+      <rect x="4"  y="29" width="7" height="13" rx="2.5" fill="#E03A2F" stroke="#0d1440" stroke-width="1.8"/>
+      <!-- right side clip -->
+      <rect x="61" y="29" width="7" height="13" rx="2.5" fill="#E03A2F" stroke="#0d1440" stroke-width="1.8"/>
+
+      <!-- visor dark background -->
+      <ellipse cx="33" cy="38" rx="20" ry="17" fill="#0d1b2e" stroke="#0d1440" stroke-width="2.5"/>
+
+      <!-- logged-out: stars + moon -->
+      <g id="navAstronaut">
+        <!-- crescent moon -->
+        <path d="M29 34 a9 9 0 1 0 0 13 a7 7 0 1 1 0-13Z" fill="#EDE9DC"/>
+        <!-- stars -->
+        <path d="M36 26 l1 2.5 l2.5 1 l-2.5 1 l-1 2.5 l-1-2.5 l-2.5-1 l2.5-1Z" fill="#EDE9DC"/>
+        <path d="M43 34 l.8 2 l2 .8 l-2 .8 l-.8 2 l-.8-2 l-2-.8 l2-.8Z" fill="#EDE9DC"/>
+        <path d="M37 44 l.7 1.8 l1.8.7 l-1.8.7 l-.7 1.8 l-.7-1.8 l-1.8-.7 l1.8-.7Z" fill="#EDE9DC"/>
+        <path d="M44 44 l.6 1.5 l1.5.6 l-1.5.6 l-.6 1.5 l-.6-1.5 l-1.5-.6 l1.5-.6Z" fill="#EDE9DC"/>
+      </g>
+
+      <!-- logged-in: avatar image fills visor -->
+      <image id="navAvatarSVG" href="" x="13" y="21" width="40" height="34"
+             clip-path="url(#visor-clip)" preserveAspectRatio="xMidYMid slice" style="display:none"/>
+
+      <!-- visor right-side glare lines -->
+      <line x1="45" y1="24" x2="51" y2="33" stroke="rgba(0,0,0,0.25)" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="47" y1="30" x2="52" y2="40" stroke="rgba(0,0,0,0.25)" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="46" y1="37" x2="51" y2="46" stroke="rgba(0,0,0,0.25)" stroke-width="1.8" stroke-linecap="round"/>
+      <!-- visor highlight -->
+      <path d="M17 28 Q22 22 31 25" stroke="rgba(255,255,255,0.2)" stroke-width="2" stroke-linecap="round" fill="none"/>
+
+      <!-- collar -->
+      <rect x="14" y="57" width="40" height="10" rx="3.5" fill="#BEE8E2" stroke="#0d1440" stroke-width="2.5"/>
+      <!-- collar stripes -->
+      <line x1="21" y1="59" x2="21" y2="65" stroke="#0d1440" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="27" y1="59" x2="27" y2="65" stroke="#0d1440" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="33" y1="59" x2="33" y2="65" stroke="#0d1440" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="39" y1="59" x2="39" y2="65" stroke="#0d1440" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="45" y1="59" x2="45" y2="65" stroke="#0d1440" stroke-width="1.8" stroke-linecap="round"/>
+      <!-- bottom-left red clip -->
+      <rect x="14" y="54" width="6" height="7" rx="1.5" fill="#E03A2F" stroke="#0d1440" stroke-width="1.8"/>
     </svg>
   </span>
   <span class="nav-label" id="navLabel">Accedi</span>
