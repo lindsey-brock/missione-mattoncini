@@ -68,6 +68,20 @@
   /* Mobile: drop expensive drop-shadow filter on large stars */
   @media (max-width: 768px) {
     .star-large { filter: none; }
+
+    /* Left-align hero text to match button edge */
+    .hero { align-items: flex-start; padding-left: 24px; padding-right: 24px; }
+    .title-block { text-align: left; }
+    .cta-wrap { align-self: stretch; }
+
+    /* Center the red tab so text isn't cut off */
+    .nw-popup-eb-tab { left: 50%; transform: translateX(-50%); }
+
+    /* Move close X to top-right of popup */
+    .nw-popup-close { left: auto; right: 12px; top: 12px; transform: none; }
+
+    /* WhatsApp behind the popup */
+    .wa-blurb { z-index: 85; }
   }
 
   /* ── HERO ── */
