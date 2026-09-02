@@ -202,6 +202,17 @@
   }
   .nav-signin:hover .nav-label { color: #f8f6f0; }
 
+  /* Top nav bar — always visible, sits behind the rocket */
+  .top-nav-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 64px;
+    background: var(--midnight);
+    border-bottom: 1px solid rgba(126,220,202,0.08);
+    z-index: 140;
+    pointer-events: none;
+  }
+
   .rocket-container {
     position: fixed;
     z-index: 150;
@@ -2494,6 +2505,9 @@
 </div><!-- /.hero-pillars-wrap -->
 
 </div><!-- /#view-home -->
+
+<!-- Fixed top nav bar background -->
+<div class="top-nav-bar"></div>
 
 <!-- ROCKET (repositioned by JS, then becomes nav trigger) -->
 <a href="dashboard.html" class="nav-signin" id="navSignin">
