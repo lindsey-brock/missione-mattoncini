@@ -70,11 +70,9 @@
     .star-large { filter: none; }
 
     /* Left-align hero text to match button edge */
-    .hero { align-items: flex-start; padding-left: 24px; padding-right: 24px; height: auto; min-height: 100vh; padding-bottom: 48px; }
+    .hero { align-items: flex-start; padding-left: 24px; padding-right: 24px; }
     .title-block { text-align: left; }
     .cta-wrap { align-self: stretch; }
-    /* Pillar cards scroll below the fold on mobile */
-    .hero-pillars { padding-top: 40px; }
 
     /* WhatsApp behind the entire popup strip */
     .wa-blurb { z-index: 85 !important; }
@@ -2249,6 +2247,15 @@
   .nw-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(245,200,66,0.35); }
 
   /* ── PILLARS — live inside hero ── */
+  .hero-pillars-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 32px 32px 48px;
+    background: var(--midnight);
+    position: relative;
+    z-index: 1;
+  }
   .hero-pillars {
     width: 100%;
     max-width: 1200px;
@@ -2257,15 +2264,11 @@
     gap: 14px;
     flex-shrink: 0;
     z-index: 2;
-    padding-top: 24px;
   }
   @media (max-width: 768px) {
-    .hero-pillars {
-      grid-template-columns: 1fr;
-    }
-    .pillar-card {
-      height: 180px;
-    }
+    .hero-pillars-wrap { padding: 24px 20px 48px; }
+    .hero-pillars { grid-template-columns: 1fr; }
+    .pillar-card { height: 200px; }
   }
   .pillar-card {
     position: relative;
@@ -2423,7 +2426,7 @@
 <!-- VIEW: HOME -->
 <div id="view-home" class="page-view">
 
-<!-- HERO — title + cards all in one viewport -->
+<!-- HERO — title only, full viewport -->
 <div class="hero">
   <div class="title-block">
     <span class="title-line line1" id="line1">Missione</span>
@@ -2433,8 +2436,10 @@
       <button class="cta-btn" onclick="goToWorkshops()">Scopri i Workshop →</button>
     </div>
   </div>
+</div>
 
-  <!-- 4-card pillars row -->
+<!-- PILLARS — scroll into view below hero -->
+<div class="hero-pillars-wrap">
   <div class="hero-pillars">
 
     <div class="pillar-card">
@@ -2482,7 +2487,7 @@
     </div>
 
   </div>
-</div>
+</div><!-- /.hero-pillars-wrap -->
 
 </div><!-- /#view-home -->
 
