@@ -441,22 +441,17 @@
     flex-shrink: 0;
   }
   .drawer-wordmark {
-    display: none; /* shown only on mobile via media query */
-  }
-  @media (max-width: 768px) {
-    .drawer-wordmark {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      margin-left: auto;
-      text-align: right;
-      padding-right: 20px;
-    }
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-left: auto;
+    text-align: right;
+    padding-right: 20px;
   }
   .drawer-wordmark-name {
     font-family: 'Syne', sans-serif;
     font-weight: 800;
-    font-size: 1.4rem;
+    font-size: 1rem;
     letter-spacing: 0.06em;
     color: var(--white);
     line-height: 1.2;
