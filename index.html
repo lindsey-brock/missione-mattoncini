@@ -661,6 +661,36 @@
     display: flex;
     justify-content: center;
   }
+  /* Mobile: corner close button replaces bottom one */
+  .drawer-close-corner {
+    display: none;
+  }
+  @media (max-width: 768px) {
+    .drawer-close-wrap { display: none; }
+    .drawer-close-corner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 2px;
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--brick);
+      border: 2px solid rgba(255,255,255,0.15);
+      color: var(--white);
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(224,58,47,0.4);
+      transition: background 0.2s, transform 0.15s;
+      z-index: 10;
+    }
+    .drawer-close-corner:hover { background: #c42e24; transform: scale(1.06); }
+    .drawer-close-corner:active { transform: scale(0.96); }
+  }
   .drawer-close-btn {
     width: 56px;
     height: 56px;
@@ -2764,6 +2794,12 @@
         <span class="drawer-mob-auth-label" id="drawerMobLabel">Accedi</span>
       </a>
     </div>
+
+    <!-- Mobile corner close button -->
+    <button class="drawer-close-corner" onclick="closeDrawer()">
+      <span class="drawer-close-x">✕</span>
+      <span class="drawer-close-label">Chiudi</span>
+    </button>
 
     <!-- Header -->
     <div class="drawer-head">
