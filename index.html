@@ -3065,14 +3065,15 @@ function finalizeRocket() {
   if (mobNav) {
     rocket.style.left   = 'auto';
     rocket.style.right  = '16px';
+    rocket.style.top    = '4px'; // centres 80px rocket in 88px strip
     // Keep width:80px — body-wrap is 80px; shrinking container clips it past viewport
   } else {
     rocket.style.right  = 'auto';
     rocket.style.left   = '16px';
     rocket.style.width  = '40px';
     rocket.style.height = '40px';
+    rocket.style.top    = '12px';
   }
-  rocket.style.top    = '12px';
   rocket.style.transform = 'rotate(0deg)';
 
   // Hide intro flame and switch to nav-state positioning
@@ -3120,9 +3121,8 @@ window.addEventListener('load', () => {
     animating = false;
     rocket.classList.add('rocket-ready');
     rocket.style.transition = 'none';
-    if (mobNav) { rocket.style.left = 'auto'; rocket.style.right = '16px'; }
-    else { rocket.style.right = 'auto'; rocket.style.left = '16px'; rocket.style.width = '40px'; rocket.style.height = '40px'; }
-    rocket.style.top    = '12px';
+    if (mobNav) { rocket.style.left = 'auto'; rocket.style.right = '16px'; rocket.style.top = '4px'; }
+    else { rocket.style.right = 'auto'; rocket.style.left = '16px'; rocket.style.width = '40px'; rocket.style.height = '40px'; rocket.style.top = '12px'; }
     rocket.style.transform = 'rotate(0deg)';
     flameWrap.classList.remove('active');
     flameWrap.classList.add('nav-mode');
