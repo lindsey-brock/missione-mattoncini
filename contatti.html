@@ -269,7 +269,10 @@ body.unlocked { overflow: auto; height: auto; }
   body.unlocked {
     padding-top: calc(88px + env(safe-area-inset-top, 0px));
   }
-  .hero { padding-top: 116px; }
+  .hero {
+    height: calc(100vh - 88px - env(safe-area-inset-top, 0px));
+    padding-top: 28px;
+  }
   .drawer-close-wrap { display: none; }
   .drawer-close-corner {
     display: flex;
