@@ -676,8 +676,8 @@
       position: fixed;
       top: 4px;
       right: 16px;
-      width: 80px;
-      height: 80px;
+      width: 52px;
+      height: 52px;
       border-radius: 50%;
       background: var(--brick);
       border: 2px solid rgba(255,255,255,0.15);
@@ -690,8 +690,6 @@
     }
     .drawer-close-corner:hover { background: #c42e24; transform: scale(1.06); }
     .drawer-close-corner:active { transform: scale(0.96); }
-    /* Hide rocket when drawer open so CHIUDI takes its place */
-    #side-drawer.open ~ #rocket { opacity: 0; pointer-events: none; }
   }
   .drawer-close-btn {
     width: 56px;
@@ -3310,6 +3308,9 @@ function openDrawer() {
   if (window.innerWidth > 768) {
     rocket.classList.add('rumbling');
     flameWrap.classList.add('active');
+  } else {
+    rocket.style.opacity = '0';
+    rocket.style.pointerEvents = 'none';
   }
   rocket.classList.add('mob-open');
   // Open drawer + overlay
@@ -3324,6 +3325,10 @@ function closeDrawer() {
   flameWrap.classList.remove('active');
   drawerEl.classList.remove('open');
   overlayEl.classList.remove('open');
+  if (window.innerWidth <= 768) {
+    rocket.style.opacity = '';
+    rocket.style.pointerEvents = '';
+  }
 }
 
 function toggleDrawer() {
