@@ -121,6 +121,43 @@
     }
     .pillar-overlay-label { font-size: 1rem !important; }
     .pillar-overlay-desc  { font-size: 0.78rem !important; line-height: 1.45 !important; }
+
+    /* Carousel controls */
+    .carousel-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 14px 24px 0;
+    }
+    .carousel-chev {
+      background: none;
+      border: none;
+      color: var(--white);
+      font-size: 1.6rem;
+      line-height: 1;
+      padding: 4px 10px;
+      cursor: pointer;
+      opacity: 0.5;
+      transition: opacity 0.2s;
+    }
+    .carousel-chev:not([disabled]):hover { opacity: 1; }
+    .carousel-chev[disabled] { opacity: 0.2; pointer-events: none; }
+    .carousel-dots {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+    }
+    .carousel-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      transition: background 0.25s, transform 0.25s;
+    }
+    .carousel-dot.active {
+      background: var(--gold);
+      transform: scale(1.4);
+    }
   }
 
   /* ── HERO ── */
@@ -2306,6 +2343,7 @@
     display: flex;
     justify-content: center;
   }
+  .carousel-controls { display: none; }
   .hero-pillars {
     width: 100%;
     max-width: 1200px;
@@ -2532,6 +2570,18 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- Carousel controls (mobile only) -->
+  <div class="carousel-controls" id="carouselControls">
+    <button class="carousel-chev carousel-chev-prev" id="chevPrev" aria-label="Precedente">‹</button>
+    <div class="carousel-dots" id="carouselDots">
+      <span class="carousel-dot active"></span>
+      <span class="carousel-dot"></span>
+      <span class="carousel-dot"></span>
+      <span class="carousel-dot"></span>
+    </div>
+    <button class="carousel-chev carousel-chev-next" id="chevNext" aria-label="Successivo">›</button>
   </div>
   </div><!-- /.hero-pillars-wrap -->
 </div><!-- /.hero -->
@@ -3774,6 +3824,38 @@ function renderWorkshopCards() {
 renderNWPopup();
 renderWorkshopCards();
 fetchAvailability();
+
+// Carousel controls (mobile only)
+(function() {
+  const track = document.querySelector('.hero-pillars');
+  const dots = document.querySelectorAll('.carousel-dot');
+  const prevBtn = document.getElementById('chevPrev');
+  const nextBtn = document.getElementById('chevNext');
+  if (!track || !dots.length) return;
+
+  function getCardWidth() {
+    const card = track.querySelector('.pillar-card');
+    if (!card) return track.offsetWidth;
+    return card.offsetWidth + 14; // card + gap
+  }
+
+  function updateControls() {
+    const cardW = getCardWidth();
+    const idx = Math.round(track.scrollLeft / cardW);
+    dots.forEach(function(d, i) { d.classList.toggle('active', i === idx); });
+    if (prevBtn) prevBtn.disabled = idx === 0;
+    if (nextBtn) nextBtn.disabled = idx >= dots.length - 1;
+  }
+
+  track.addEventListener('scroll', updateControls, { passive: true });
+  if (prevBtn) prevBtn.addEventListener('click', function() {
+    track.scrollBy({ left: -getCardWidth(), behavior: 'smooth' });
+  });
+  if (nextBtn) nextBtn.addEventListener('click', function() {
+    track.scrollBy({ left: getCardWidth(), behavior: 'smooth' });
+  });
+  updateControls();
+})();
 
 /* ════════════════════════════════════════
    BOOKING MODAL
