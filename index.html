@@ -492,7 +492,7 @@
     top: 0;
     left: 0;
     width: 320px;
-    height: 100vh;
+    height: 100dvh;
     background: var(--navy);
     z-index: 120; /* below rocket (150) so rocket stays on top */
     transform: translateX(-320px);
@@ -3349,6 +3349,7 @@ function navigateWithRocket(url) {
   closeDrawer();
   animating = false;
 
+  rocket.style.opacity    = '0';
   rocket.style.transition = 'none';
   rocket.style.bottom     = 'auto';
   rocket.style.right      = 'auto';
@@ -3358,6 +3359,7 @@ function navigateWithRocket(url) {
   rocket.style.height     = '110px';
 
   requestAnimationFrame(() => {
+    rocket.style.opacity = '';
     flameWrap.classList.add('active');
     flameWrap.classList.remove('nav-mode');
   });

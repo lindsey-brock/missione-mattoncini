@@ -213,7 +213,7 @@ body.unlocked { overflow: auto; height: auto; }
 /* ── SIDE DRAWER ── */
 #side-drawer {
   position: fixed; top: 0; left: 0;
-  width: 320px; height: 100vh;
+  width: 320px; height: 100dvh;
   background: var(--navy);
   z-index: 120;
   transform: translateX(-320px);
@@ -1258,13 +1258,17 @@ function navigateWithRocket(url) {
   closeDrawer();
   animating = false;
 
+  rocket.style.opacity    = '0';
   rocket.style.transition = 'none';
   rocket.style.bottom     = 'auto';
   rocket.style.right      = 'auto';
+  rocket.style.left       = (56 - 40) + 'px';
+  rocket.style.top        = (67 - 55) + 'px';
   rocket.style.width      = '80px';
   rocket.style.height     = '110px';
 
   requestAnimationFrame(() => {
+    rocket.style.opacity = '';
     flameWrap.classList.add('active');
     flameWrap.classList.remove('nav-mode');
   });
