@@ -717,6 +717,22 @@
   @keyframes cL2 { 0%{opacity:0;transform:translateX(0)} 15%{opacity:0.7} 100%{opacity:0.7;transform:translateX(320px)} }
   @keyframes cR2 { 0%{opacity:0;transform:translateX(0)} 15%{opacity:0.7} 100%{opacity:0.7;transform:translateX(-290px)} }
 
+  /* Mobile cloud overrides — smaller, flanking the CTA button */
+  @keyframes cL-mob  { 0%{opacity:0;transform:scale(0.45) translateX(0)} 15%{opacity:1} 100%{opacity:1;transform:scale(0.45) translateX(560px)} }
+  @keyframes cR-mob  { 0%{opacity:0;transform:scale(0.45) translateX(0)} 15%{opacity:1} 100%{opacity:1;transform:scale(0.45) translateX(-520px)} }
+  @keyframes cL2-mob { 0%{opacity:0;transform:scale(0.38) translateX(0)} 15%{opacity:0.6} 100%{opacity:0.6;transform:scale(0.38) translateX(620px)} }
+  @keyframes cR2-mob { 0%{opacity:0;transform:scale(0.38) translateX(0)} 15%{opacity:0.6} 100%{opacity:0.6;transform:scale(0.38) translateX(-580px)} }
+  @media (max-width: 768px) {
+    .cloud-1 { left: -390px; top: 50%; transform-origin: left center; }
+    .cloud-2 { right: -360px; top: 47%; transform-origin: right center; }
+    .cloud-3 { left: -300px; top: 56%; transform-origin: left center; }
+    .cloud-4 { right: -270px; top: 53%; transform-origin: right center; }
+    .cloud-1.show { animation: cL-mob  1.1s cubic-bezier(.25,.46,.45,.94) forwards; }
+    .cloud-2.show { animation: cR-mob  1.1s cubic-bezier(.25,.46,.45,.94) forwards; }
+    .cloud-3.show { animation: cL2-mob 1s   cubic-bezier(.25,.46,.45,.94) forwards; }
+    .cloud-4.show { animation: cR2-mob 1s   cubic-bezier(.25,.46,.45,.94) forwards; }
+  }
+
   /* ── PAGE VIEWS ── */
   .page-view {
     position: fixed;
