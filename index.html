@@ -69,8 +69,10 @@
   @media (max-width: 768px) {
     .star-large { filter: none; }
 
-    /* Left-align hero text to match button edge */
-    .hero { align-items: flex-start; padding-left: 24px; padding-right: 24px; height: auto; min-height: 100svh; justify-content: flex-start; padding-top: 80px; padding-bottom: 48px; }
+    /* Left-align hero text to match button edge; expand to push cards below fold */
+    .hero { align-items: flex-start; padding-left: 24px; padding-right: 24px; height: auto; min-height: 100svh; justify-content: flex-start; padding-top: 100px; padding-bottom: 48px; }
+    /* Title block fills first viewport so cards start below fold */
+    .title-block { min-height: calc(100svh - 180px); display: flex; flex-direction: column; justify-content: center; }
     .title-block { text-align: left; }
     .cta-wrap { align-self: stretch; }
 
@@ -209,7 +211,7 @@
       display: block;
       position: fixed;
       top: 0; left: 0; right: 0;
-      height: 64px;
+      height: 88px;
       background: var(--midnight);
       border-bottom: 1px solid rgba(126,220,202,0.08);
       z-index: 2;
@@ -3043,11 +3045,12 @@ window.addEventListener('load', () => {
     }
   } else {
     // Reset rocket to top-left origin so transform:translate coords are correct
+    rocket.style.opacity = '0';
     rocket.style.bottom = 'auto';
     rocket.style.right  = 'auto';
     rocket.style.left   = '0px';
     rocket.style.top    = '0px';
-    requestAnimationFrame(animate);
+    requestAnimationFrame(() => { rocket.style.opacity = '1'; animate(); });
   }
 });
 window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
