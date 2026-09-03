@@ -202,15 +202,19 @@
   }
   .nav-signin:hover .nav-label { color: #f8f6f0; }
 
-  /* Top nav bar — always visible, sits behind the rocket */
-  .top-nav-bar {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    height: 64px;
-    background: var(--midnight);
-    border-bottom: 1px solid rgba(126,220,202,0.08);
-    z-index: 2;
-    pointer-events: none;
+  /* Top nav bar — mobile only, sits behind the rocket */
+  .top-nav-bar { display: none; }
+  @media (max-width: 768px) {
+    .top-nav-bar {
+      display: block;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 64px;
+      background: var(--midnight);
+      border-bottom: 1px solid rgba(126,220,202,0.08);
+      z-index: 2;
+      pointer-events: none;
+    }
   }
 
   .rocket-container {
@@ -1655,13 +1659,7 @@
     color: var(--aqua);
     white-space: nowrap;
   }
-  .nw-popup-svg {
-    width: 80px;
-    height: 64px;
-    flex-shrink: 0;
-    opacity: 0.9;
-  }
-  .nw-popup-svg svg { width: 100%; height: 100%; }
+  .nw-popup-svg { display: none; }
   .nw-popup-right {
     display: flex;
     align-items: center;
@@ -1696,8 +1694,6 @@
     /* Align popup text with button left edge */
     .nw-popup { padding-left: 20px !important; padding-right: 20px !important; }
     .nw-popup-left { margin-left: 0 !important; }
-    /* Hide illustration on mobile — not enough room */
-    .nw-popup-svg { display: none !important; }
   }
 
   /* ── BOOKING MODAL ── */
