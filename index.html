@@ -69,10 +69,8 @@
   @media (max-width: 768px) {
     .star-large { filter: none; }
 
-    /* Left-align hero text to match button edge; expand to push cards below fold */
-    .hero { align-items: flex-start; padding-left: 24px; padding-right: 24px; height: auto; min-height: 100svh; justify-content: flex-start; padding-top: 100px; padding-bottom: 48px; }
-    /* Title block fills first viewport so cards start below fold */
-    .title-block { min-height: calc(100svh - 180px); display: flex; flex-direction: column; justify-content: center; }
+    /* Left-align hero text to match button edge */
+    .hero { align-items: flex-start; padding-left: 24px; padding-right: 24px; height: auto; justify-content: flex-start; padding-top: 100px; padding-bottom: 48px; }
     .title-block { text-align: left; }
     .cta-wrap { align-self: stretch; }
 
@@ -2275,9 +2273,9 @@
     z-index: 2;
   }
   @media (max-width: 768px) {
-    .hero-pillars-wrap { padding: 24px 0 0; }
-    .hero-pillars { grid-template-columns: 1fr; }
-    .pillar-card { height: 200px; }
+    .hero-pillars-wrap { padding: 32px 0 0; }
+    .hero-pillars { grid-template-columns: 1fr; gap: 12px; }
+    .pillar-card { height: 160px; }
   }
   .pillar-card {
     position: relative;
