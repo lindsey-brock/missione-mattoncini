@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Missione Mattoncini</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
@@ -304,7 +304,8 @@
       display: block;
       position: fixed;
       top: 0; left: 0; right: 0;
-      height: 88px;
+      height: calc(88px + env(safe-area-inset-top, 0px));
+      padding-top: env(safe-area-inset-top, 0px);
       background: var(--midnight);
       border-bottom: 1px solid rgba(126,220,202,0.08);
       z-index: 55;
