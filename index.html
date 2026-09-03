@@ -72,7 +72,13 @@
     /* Left-align hero text to match button edge */
     .hero { align-items: flex-start; padding-left: 24px; padding-right: 24px; }
     /* Break carousel out of hero's horizontal padding so it's full-width */
-    .hero-pillars-wrap { width: 100vw; margin-left: -24px; flex-shrink: 0; }
+    .hero-pillars-wrap {
+      width: 100vw;
+      margin-left: -24px;
+      flex-shrink: 0;
+      flex-direction: column !important;
+      align-items: stretch !important;
+    }
     .title-block { text-align: left; }
     .cta-wrap { align-self: stretch; }
 
