@@ -97,13 +97,13 @@
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
       gap: 14px;
-      padding: 0 24px 16px;
+      padding: 0 20px 16px;
       scrollbar-width: none;
     }
     .hero-pillars::-webkit-scrollbar { display: none; }
     .pillar-card {
       flex: 0 0 82vw;
-      height: auto !important;
+      height: 320px !important;
       scroll-snap-align: center;
       display: flex;
       flex-direction: column;
@@ -112,7 +112,7 @@
     }
     .pillar-img {
       position: relative !important;
-      height: 160px;
+      height: 180px;
       flex-shrink: 0;
     }
     /* Description panel — always visible on mobile */
@@ -123,9 +123,9 @@
       justify-content: flex-start !important;
       align-items: flex-start !important;
       text-align: left !important;
-      padding: 12px 16px !important;
+      padding: 12px 72px 12px 16px !important;
       gap: 4px !important;
-      min-height: 70px;
+      flex: 1;
     }
     .pillar-overlay-label { font-size: 0.95rem !important; }
     .pillar-overlay-desc  { font-size: 0.74rem !important; line-height: 1.4 !important; }
