@@ -320,6 +320,21 @@ body.unlocked { overflow: auto; height: auto; }
 }
 
 /* ── MOBILE / TABLET FULL-SCREEN NAV DRAWER ── */
+/* Top nav strip — mobile only */
+.top-nav-bar { display: none; }
+@media (max-width: 768px) {
+  .top-nav-bar {
+    display: block;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 88px;
+    background: var(--midnight);
+    border-bottom: 1px solid rgba(126,220,202,0.08);
+    z-index: 2;
+    pointer-events: none;
+  }
+}
+
 @media (max-width: 768px) {
   .nav-signin { display: none !important; }
   #hover-badges { display: none !important; }
@@ -533,6 +548,8 @@ body.unlocked { overflow: auto; height: auto; }
     <div class="tagline" id="tagline">La pedagogia dietro <em>Missione Mattoncini.</em></div>
   </div>
 </div>
+
+<div class="top-nav-bar"></div>
 
 <!-- ROCKET -->
 <div class="rocket-container" id="rocket">
@@ -858,13 +875,14 @@ function finalizeRocket() {
   if (mobNav) {
     rocket.style.left   = 'auto';
     rocket.style.right  = '16px';
+    rocket.style.top    = '4px';
   } else {
     rocket.style.right  = 'auto';
     rocket.style.left   = '16px';
     rocket.style.width  = '40px';
     rocket.style.height = '40px';
+    rocket.style.top    = '12px';
   }
-  rocket.style.top    = '12px';
   rocket.style.transform = 'rotate(0deg)';
 
   flameWrap.classList.remove('active');
@@ -981,11 +999,12 @@ function rocketSwirl(onSwitch, onDone) {
         if (mobNav) {
           rocket.style.left  = 'auto';
           rocket.style.right = '16px';
+          rocket.style.top   = '4px';
         } else {
           rocket.style.right = 'auto';
           rocket.style.left  = '16px';
+          rocket.style.top   = '12px';
         }
-        rocket.style.top        = '12px';
         if (!mobNav) { rocket.style.width = '40px'; rocket.style.height = '40px'; }
         rocket.style.transform  = 'rotate(0deg)';
         setTimeout(() => {
