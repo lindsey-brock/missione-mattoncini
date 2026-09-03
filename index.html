@@ -70,8 +70,9 @@
     .star-large { filter: none; }
 
     /* Left-align hero text to match button edge */
-    .hero { align-items: flex-start; padding-left: 24px; padding-right: 24px; padding-bottom: 0; gap: 12px; }
-    .hero-pillars-wrap { margin-top: -4px; }
+    .hero { align-items: flex-start; padding-left: 24px; padding-right: 24px; }
+    /* Break carousel out of hero's horizontal padding so it's full-width */
+    .hero-pillars-wrap { width: 100vw; margin-left: -24px; flex-shrink: 0; }
     .title-block { text-align: left; }
     .cta-wrap { align-self: stretch; }
 
@@ -130,6 +131,11 @@
       justify-content: center;
       gap: 16px;
       padding: 14px 24px 0;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .carousel-controls.visible {
+      opacity: 1;
     }
     .carousel-chev {
       background: none;
@@ -3072,9 +3078,15 @@ function finalizeRocket() {
   setTimeout(() => document.getElementById('ctaWrap').classList.add('visible'), 1000);
   // Stagger pillar cards in after CTA appears
   setTimeout(() => {
-    document.querySelectorAll('.pillar-card').forEach((card, i) => {
+    const cards = document.querySelectorAll('.pillar-card');
+    cards.forEach((card, i) => {
       setTimeout(() => card.classList.add('in-view'), i * 150);
     });
+    // Show carousel controls after last card animates in
+    setTimeout(() => {
+      const ctrl = document.getElementById('carouselControls');
+      if (ctrl) ctrl.classList.add('visible');
+    }, cards.length * 150 + 200);
   }, 1100);
   setTimeout(() => {
     sessionStorage.setItem(INTRO_PLAYED_KEY, '1');
@@ -3115,6 +3127,8 @@ window.addEventListener('load', () => {
     document.getElementById('tagline').classList.add('visible');
     document.getElementById('ctaWrap').classList.add('visible');
     document.querySelectorAll('.pillar-card').forEach(c => c.classList.add('in-view'));
+    const ctrl = document.getElementById('carouselControls');
+    if (ctrl) ctrl.classList.add('visible');
     ['c1','c2','c3','c4'].forEach(id => document.getElementById(id).classList.add('show'));
     document.body.classList.add('unlocked');
     enableRocketNav();
