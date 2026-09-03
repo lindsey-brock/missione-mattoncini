@@ -1035,7 +1035,7 @@
   }
   @media (max-width: 680px) {
     .ws-cards-grid { grid-template-columns: 1fr; }
-    #workshops { padding: 60px 24px 80px 24px; }
+    #workshops { padding: calc(88px + env(safe-area-inset-top, 0px) + 40px) 24px 80px 24px; }
     .nw-banner { flex-direction: column; align-items: flex-start; }
     .nw-banner-actions { align-items: flex-start; }
     .nw-banner-desc { white-space: normal; }
