@@ -70,7 +70,7 @@
     .star-large { filter: none; }
 
     /* Left-align hero text to match button edge */
-    .hero { align-items: flex-start; padding-left: 24px; padding-right: 24px; height: auto; justify-content: flex-start; padding-top: 100px; padding-bottom: 48px; }
+    .hero { align-items: flex-start; padding-left: 24px; padding-right: 24px; }
     .title-block { text-align: left; }
     .cta-wrap { align-self: stretch; }
 
@@ -226,7 +226,9 @@
     width: 80px;
     height: 120px;
     transform-origin: center center;
+    visibility: hidden;
   }
+  .rocket-container.rocket-ready { visibility: visible; }
   .rocket-container.nav-ready {
     pointer-events: auto;
     cursor: pointer;
@@ -626,10 +628,6 @@
     inset: 0;
     overflow: hidden;
     z-index: 1;
-  }
-  #view-home {
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
   }
   #view-workshops {
     overflow-y: auto;
@@ -2273,9 +2271,6 @@
     z-index: 2;
   }
   @media (max-width: 768px) {
-    .hero-pillars-wrap { padding: 32px 0 0; }
-    .hero-pillars { grid-template-columns: 1fr; gap: 12px; }
-    .pillar-card { height: 160px; }
   }
   .pillar-card {
     position: relative;
@@ -3009,6 +3004,7 @@ window.addEventListener('load', () => {
     // Skip intro — place rocket at nav position immediately
     const mobNav = window.innerWidth <= 768;
     animating = false;
+    rocket.classList.add('rocket-ready');
     rocket.style.transition = 'none';
     if (mobNav) { rocket.style.left = 'auto'; rocket.style.right = '16px'; }
     else { rocket.style.right = 'auto'; rocket.style.left = '16px'; rocket.style.width = '40px'; rocket.style.height = '40px'; }
@@ -3043,12 +3039,12 @@ window.addEventListener('load', () => {
     }
   } else {
     // Reset rocket to top-left origin so transform:translate coords are correct
-    rocket.style.opacity = '0';
     rocket.style.bottom = 'auto';
     rocket.style.right  = 'auto';
     rocket.style.left   = '0px';
     rocket.style.top    = '0px';
-    requestAnimationFrame(() => { rocket.style.opacity = '1'; animate(); });
+    rocket.classList.add('rocket-ready');
+    requestAnimationFrame(animate);
   }
 });
 window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
