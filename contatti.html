@@ -367,6 +367,11 @@ body.unlocked { overflow: auto; height: auto; }
     border-bottom: 1px solid rgba(126,220,202,0.08);
     z-index: 55;
     pointer-events: none;
+    transform: translateY(-100%);
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .top-nav-bar.nav-ready {
+    transform: translateY(0);
   }
 }
 
@@ -1046,7 +1051,10 @@ function finalizeRocket() {
     document.querySelector('.hero').appendChild(ind);
     requestAnimationFrame(() => ind.classList.add('visible'));
     initParallaxAndIO();
-    if (mobNav) setTimeout(triggerMobHam, 350);
+    if (mobNav) {
+      document.querySelector('.top-nav-bar').classList.add('nav-ready');
+      setTimeout(triggerMobHam, 350);
+    }
   }, 1200);
 
   canvas.style.transition = 'opacity 1s';
@@ -1157,7 +1165,10 @@ function rocketSwirl(onSwitch, onDone) {
           flameWrap.classList.add('nav-mode');
           canvas.style.transition = 'opacity 1s';
           canvas.style.opacity    = '0';
-          if (mobNav) setTimeout(triggerMobHam, 300);
+          if (mobNav) {
+            document.querySelector('.top-nav-bar').classList.add('nav-ready');
+            setTimeout(triggerMobHam, 300);
+          }
           onDone();
         }, 420);
         return;
@@ -1176,6 +1187,7 @@ window.addEventListener('load', () => {
     document.getElementById('tagline').classList.add('visible');
     document.body.classList.add('unlocked');
     enableRocketNav();
+    if (window.innerWidth <= 768) document.querySelector('.top-nav-bar').classList.add('nav-ready');
     const ind = document.createElement('div');
     ind.className = 'scroll-indicator';
     ind.id = 'scrollIndicator';

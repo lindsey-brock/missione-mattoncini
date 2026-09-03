@@ -310,6 +310,11 @@
       border-bottom: 1px solid rgba(126,220,202,0.08);
       z-index: 55;
       pointer-events: none;
+      transform: translateY(-100%);
+      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .top-nav-bar.nav-ready {
+      transform: translateY(0);
     }
   }
 
@@ -2278,8 +2283,11 @@
     right: 28px;
     z-index: 115; /* below drawer (120) so it doesn't float over mobile overlay */
     pointer-events: none;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
   }
-  .wa-blurb.ready { pointer-events: auto; }
+  .wa-blurb.ready { pointer-events: auto; opacity: 1; transform: translateY(0); }
   .wa-btn {
     position: relative;
     display: flex;
@@ -3154,7 +3162,10 @@ function finalizeRocket() {
     document.body.classList.add('unlocked');
     enableRocketNav();
     document.getElementById('waBlurb').classList.add('ready');
-    if (mobNav) setTimeout(triggerMobHam, 350);
+    if (mobNav) {
+      document.querySelector('.top-nav-bar').classList.add('nav-ready');
+      setTimeout(triggerMobHam, 350);
+    }
     setTimeout(showNWPopup, 600);
   }, 1200);
 
@@ -3193,6 +3204,7 @@ window.addEventListener('load', () => {
     document.body.classList.add('unlocked');
     enableRocketNav();
     document.getElementById('waBlurb').classList.add('ready');
+    if (mobNav) document.querySelector('.top-nav-bar').classList.add('nav-ready');
     if (goWorkshops) {
       // Show workshops immediately (no home flash), then play the swirl on top
       currentView = 'workshops';
