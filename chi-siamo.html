@@ -350,6 +350,9 @@ body.unlocked { overflow: auto; height: auto; }
 /* Top nav strip — mobile only */
 .top-nav-bar { display: none; }
 @media (max-width: 768px) {
+  body.unlocked {
+    padding-top: calc(88px + env(safe-area-inset-top, 0px));
+  }
   .top-nav-bar {
     display: block;
     position: fixed;
