@@ -76,6 +76,51 @@
 
     /* WhatsApp behind the entire popup strip */
     .wa-blurb { z-index: 85 !important; }
+
+    /* ── PILLAR CAROUSEL (mobile only) ── */
+    .hero-pillars-wrap {
+      width: 100%;
+      overflow: visible;
+    }
+    .hero-pillars {
+      display: flex !important;
+      grid-template-columns: none !important;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      gap: 14px;
+      padding: 0 24px 16px;
+      scrollbar-width: none;
+    }
+    .hero-pillars::-webkit-scrollbar { display: none; }
+    .pillar-card {
+      flex: 0 0 82vw;
+      height: auto !important;
+      scroll-snap-align: center;
+      display: flex;
+      flex-direction: column;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .pillar-img {
+      position: relative !important;
+      height: 200px;
+      flex-shrink: 0;
+    }
+    /* Description panel — always visible on mobile */
+    .pillar-overlay {
+      position: static !important;
+      opacity: 1 !important;
+      border-radius: 0 !important;
+      justify-content: flex-start !important;
+      align-items: flex-start !important;
+      text-align: left !important;
+      padding: 16px !important;
+      gap: 6px !important;
+      min-height: 90px;
+    }
+    .pillar-overlay-label { font-size: 1rem !important; }
+    .pillar-overlay-desc  { font-size: 0.78rem !important; line-height: 1.45 !important; }
   }
 
   /* ── HERO ── */
