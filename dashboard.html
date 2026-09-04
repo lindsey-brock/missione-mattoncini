@@ -561,11 +561,11 @@
 
     /* ── MOBILE CAROUSEL ── */
     @media (max-width: 600px) {
-      .ws-carousel-outer { gap: 0; }
+      .ws-carousel-outer { gap: 0; overflow: hidden; }
       .ws-chevron { display: none; }
       .ws-carousel-viewport {
+        overflow: visible;
         overflow-x: scroll;
-        overflow-y: hidden;
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
