@@ -3975,7 +3975,7 @@ function openBookingModal(defaultIdx) {
   bookingState.children    = 1;
   bookingState.psiChildren = 0;
   bookingStep     = 1;
-  bookingFormData = {};
+  bookingFormData = { newsletterOptIn: true };
   renderBookingModal();
   document.getElementById('booking-modal-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -4057,7 +4057,7 @@ function addBmSlot() {
 
 /* ── BOOKING STEP STATE ── */
 let bookingStep    = 1;
-let bookingFormData = {};
+let bookingFormData = { newsletterOptIn: true };
 let stripeInstance  = null;
 let stripeElements  = null; // elements group — recreated per step-3 visit so amount stays current
 let stripePaymentEl = null; // the Payment Element
