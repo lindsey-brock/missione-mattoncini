@@ -1316,23 +1316,46 @@
       document.getElementById('auth-section').style.display = 'block';
       document.getElementById('dash-section').style.display = 'none';
     }
-    function showDashboard() {
+    async function showDashboard() {
       document.getElementById('auth-section').style.display = 'none';
       document.getElementById('dash-section').style.display = 'block';
+      await fetchProfile();
       renderProfileView();
       initAvatarDrop();
       loadBookings();
     }
 
-    /* ── PROFILE (localStorage) ── */
-    function profileKey() { return `mm_profile_${currentUser.id}`; }
+    /* ── PROFILE (Supabase profiles table) ── */
+    let _profileCache = {};
 
-    function loadProfile() {
-      try { return JSON.parse(localStorage.getItem(profileKey())) || {}; } catch { return {}; }
+    function loadProfile() { return _profileCache; }
+
+    async function fetchProfile() {
+      const { data, error } = await sb
+        .from('profiles')
+        .select('first_name, last_name, kids, avatar_url')
+        .eq('id', currentUser.id)
+        .maybeSingle();
+      if (data) {
+        _profileCache = {
+          firstName: data.first_name || '',
+          lastName:  data.last_name  || '',
+          kids:      Array.isArray(data.kids) ? data.kids : [],
+          avatarUrl: data.avatar_url || '',
+        };
+      }
     }
 
-    function saveProfile(data) {
-      localStorage.setItem(profileKey(), JSON.stringify(data));
+    async function saveProfile(data) {
+      _profileCache = data;
+      await sb.from('profiles').upsert({
+        id:         currentUser.id,
+        first_name: data.firstName || null,
+        last_name:  data.lastName  || null,
+        kids:       data.kids      || [],
+        avatar_url: data.avatarUrl || null,
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'id' });
     }
 
     function renderHero() {
@@ -1430,7 +1453,10 @@
       document.getElementById('pf-kids-list').appendChild(row);
     }
 
-    function saveProfileForm() {
+    async function saveProfileForm() {
+      const btn = document.querySelector('.account-save-btn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Salvataggio…'; }
+
       const firstName  = (document.getElementById('pf-first').value || '').trim();
       const lastName   = (document.getElementById('pf-last').value  || '').trim();
       const nameInputs = document.querySelectorAll('[data-kid-name]');
@@ -1442,7 +1468,7 @@
         if (name || age) kids.push({ name, age });
       });
       const existing = loadProfile();
-      saveProfile({ ...existing, firstName, lastName, kids });
+      await saveProfile({ ...existing, firstName, lastName, kids });
       renderProfileView();
     }
 
@@ -1640,7 +1666,7 @@
       }
     }
 
-    function autoPopulateProfileFromBookings() {
+    async function autoPopulateProfileFromBookings() {
       if (!currentBookings.length) return;
       const p = loadProfile();
       // Only fill fields that haven't been set yet
@@ -1668,7 +1694,7 @@
         ...(needsName && rawParent ? { firstName, lastName } : {}),
         ...(needsKids && kids.length ? { kids } : {}),
       };
-      saveProfile(updated);
+      await saveProfile(updated);
       renderProfileView();
     }
 
