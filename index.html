@@ -3256,8 +3256,7 @@ function enableRocketNav() {
 /* ── HELMET AUTH STATE ── */
 (async () => {
   try {
-    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjbG52ZXhtYmd0Y2JldWp5d2RoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2NDc2NDAsImV4cCI6MjA5ODIyMzY0MH0.8m5ITVPEkw8ZFBzJD8TK0DsqPVSwKEzHeOLsgl_uKxE';
-    const sb = supabase.createClient('https://pclnvexmbgtcbeujywdh.supabase.co', SUPABASE_ANON);
+    const sb = typeof sbClient !== 'undefined' ? sbClient : supabase.createClient('https://pclnvexmbgtcbeujywdh.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjbG52ZXhtYmd0Y2JldWp5d2RoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2NDc2NDAsImV4cCI6MjA5ODIyMzY0MH0.8m5ITVPEkw8ZFBzJD8TK0DsqPVSwKEzHeOLsgl_uKxE');
     const { data: { user } } = await sb.auth.getUser();
     if (!user) return;
     const label     = document.getElementById('navLabel');
@@ -3415,7 +3414,9 @@ function navigateWithRocket(url) {
 /* ════════════════════════════════════════
    WORKSHOP AVAILABILITY
 ════════════════════════════════════════ */
-const SUPABASE_URL = 'https://pclnvexmbgtcbeujywdh.supabase.co';
+const SUPABASE_URL  = 'https://pclnvexmbgtcbeujywdh.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjbG52ZXhtYmd0Y2JldWp5d2RoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2NDc2NDAsImV4cCI6MjA5ODIyMzY0MH0.8m5ITVPEkw8ZFBzJD8TK0DsqPVSwKEzHeOLsgl_uKxE';
+const sbClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 let workshopAvailability = {}; // num -> { spotsAvailable, isFull }
 
 async function fetchAvailability() {
@@ -4329,6 +4330,30 @@ async function bmPay() {
     if (btn) { btn.disabled = false; btn.textContent = `Paga €${bmGetTotal()} →`; }
     return;
   }
+
+  // After successful payment, upsert profile from booking data (if logged in)
+  try {
+    const { data: { user: payUser } } = await sbClient.auth.getUser();
+    if (payUser) {
+      const parts = (bookingFormData.nomeGenitore || '').trim().split(/\s+/);
+      const firstName = parts[0] || null;
+      const lastName  = parts.slice(1).join(' ') || null;
+      const rawPhone  = (bookingFormData.telefono || '').trim();
+      // Normalise to E.164 if not already (prepend +39 if starts with 3)
+      const phone = rawPhone
+        ? rawPhone.startsWith('+') ? rawPhone : '+39' + rawPhone.replace(/\s/g, '')
+        : null;
+      // Only fill fields that aren't already set
+      const { data: existing } = await sbClient.from('profiles').select('first_name,last_name,phone').eq('id', payUser.id).maybeSingle();
+      await sbClient.from('profiles').upsert({
+        id:         payUser.id,
+        first_name: existing?.first_name || firstName,
+        last_name:  existing?.last_name  || lastName,
+        phone:      existing?.phone      || phone,
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'id' });
+    }
+  } catch (_) {}
 
   bookingStep = 'confirmed';
   renderBookingModal();
