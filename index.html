@@ -3253,18 +3253,21 @@ function enableRocketNav() {
   document.getElementById('navSignin').classList.add('visible');
 }
 
+const SUPABASE_URL  = 'https://pclnvexmbgtcbeujywdh.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjbG52ZXhtYmd0Y2JldWp5d2RoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2NDc2NDAsImV4cCI6MjA5ODIyMzY0MH0.8m5ITVPEkw8ZFBzJD8TK0DsqPVSwKEzHeOLsgl_uKxE';
+const sbClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
 /* ── HELMET AUTH STATE ── */
 (async () => {
   try {
-    const sb = typeof sbClient !== 'undefined' ? sbClient : supabase.createClient('https://pclnvexmbgtcbeujywdh.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjbG52ZXhtYmd0Y2JldWp5d2RoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2NDc2NDAsImV4cCI6MjA5ODIyMzY0MH0.8m5ITVPEkw8ZFBzJD8TK0DsqPVSwKEzHeOLsgl_uKxE');
-    const { data: { user } } = await sb.auth.getUser();
+    const { data: { user } } = await sbClient.auth.getUser();
     if (!user) return;
     const label     = document.getElementById('navLabel');
     const avatarEl  = document.getElementById('navAvatarSVG');
     const astronaut = document.getElementById('navAstronaut');
     let firstName = '';
     try {
-      const { data: prof } = await sb.from('profiles').select('first_name').eq('id', user.id).maybeSingle();
+      const { data: prof } = await sbClient.from('profiles').select('first_name').eq('id', user.id).maybeSingle();
       firstName = prof?.first_name || '';
     } catch {}
     if (!firstName) {
@@ -3414,9 +3417,6 @@ function navigateWithRocket(url) {
 /* ════════════════════════════════════════
    WORKSHOP AVAILABILITY
 ════════════════════════════════════════ */
-const SUPABASE_URL  = 'https://pclnvexmbgtcbeujywdh.supabase.co';
-const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjbG52ZXhtYmd0Y2JldWp5d2RoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2NDc2NDAsImV4cCI6MjA5ODIyMzY0MH0.8m5ITVPEkw8ZFBzJD8TK0DsqPVSwKEzHeOLsgl_uKxE';
-const sbClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 let workshopAvailability = {}; // num -> { spotsAvailable, isFull }
 
 async function fetchAvailability() {
