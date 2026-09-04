@@ -569,23 +569,24 @@
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
-        padding: 12px 16px;
+        padding: 12px 0;
       }
       .ws-carousel-viewport::-webkit-scrollbar { display: none; }
       .ws-carousel-track {
         transition: none;
         transform: none !important;
         gap: 10px;
+        padding: 0 20px;
       }
       .ws-full-card {
-        flex: 0 0 68vw;
+        flex: 0 0 78vw;
         min-height: 0;
-        aspect-ratio: 1 / 1.05;
-        scroll-snap-align: center;
+        aspect-ratio: 1 / 1.1;
+        scroll-snap-align: start;
         padding: 14px 14px 12px;
       }
       .ws-full-illustration { flex: 1; display: flex; align-items: center; justify-content: center; }
-      .ws-full-illustration svg { max-height: 90px; }
+      .ws-full-illustration svg { max-height: 100px; }
     }
 
     /* ── BOOKING MODAL (bm-) ── */
