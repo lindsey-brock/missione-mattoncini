@@ -559,6 +559,35 @@
     }
     @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
 
+    /* ── MOBILE CAROUSEL ── */
+    @media (max-width: 600px) {
+      .ws-carousel-outer { gap: 0; }
+      .ws-chevron { display: none; }
+      .ws-carousel-viewport {
+        overflow-x: scroll;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding: 12px 16px;
+      }
+      .ws-carousel-viewport::-webkit-scrollbar { display: none; }
+      .ws-carousel-track {
+        transition: none;
+        transform: none !important;
+        gap: 10px;
+      }
+      .ws-full-card {
+        flex: 0 0 68vw;
+        min-height: 0;
+        aspect-ratio: 1 / 1.05;
+        scroll-snap-align: center;
+        padding: 14px 14px 12px;
+      }
+      .ws-full-illustration { flex: 1; display: flex; align-items: center; justify-content: center; }
+      .ws-full-illustration svg { max-height: 90px; }
+    }
+
     /* ── BOOKING MODAL (bm-) ── */
     .bm-overlay { position:fixed;inset:0;background:rgba(13,27,42,0.92);backdrop-filter:blur(6px);z-index:400;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity 0.3s ease; }
     .bm-overlay.open { opacity:1;pointer-events:auto; }
