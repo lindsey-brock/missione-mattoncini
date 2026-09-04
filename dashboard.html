@@ -106,6 +106,23 @@
     .form-input.readonly { opacity: 0.6; cursor: default; }
     .pw-wrap { position: relative; }
     .pw-wrap .form-input { padding-right: 44px; }
+
+    /* Phone field */
+    .phone-wrap { display: flex; gap: 8px; }
+    .phone-country {
+      flex-shrink: 0; width: 110px;
+      background: var(--surface2); border: 1px solid var(--border-mid);
+      border-radius: 8px; color: var(--text); font-family: inherit;
+      font-size: 0.9rem; padding: 11px 10px; outline: none;
+      transition: border-color 0.15s; cursor: pointer;
+      appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A9BB0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 8px center;
+      padding-right: 26px;
+    }
+    .phone-country:focus { border-color: var(--aqua); }
+    .phone-country option { background: #1A2E45; }
+    .phone-number { flex: 1; }
     .pw-toggle {
       position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
       background: none; border: none; cursor: pointer; padding: 4px;
@@ -796,6 +813,28 @@
           </div>
         </div>
         <div class="form-group">
+          <label class="form-label" for="signup-phone-number">Numero di telefono <span style="color:var(--muted);font-weight:400;text-transform:none">(opzionale · per aggiornamenti WhatsApp)</span></label>
+          <div class="phone-wrap">
+            <select class="phone-country" id="signup-phone-cc">
+              <option value="+39">🇮🇹 +39</option>
+              <option value="+41">🇨🇭 +41</option>
+              <option value="+33">🇫🇷 +33</option>
+              <option value="+49">🇩🇪 +49</option>
+              <option value="+34">🇪🇸 +34</option>
+              <option value="+44">🇬🇧 +44</option>
+              <option value="+1">🇺🇸 +1</option>
+              <option value="+351">🇵🇹 +351</option>
+              <option value="+32">🇧🇪 +32</option>
+              <option value="+31">🇳🇱 +31</option>
+              <option value="+43">🇦🇹 +43</option>
+              <option value="+55">🇧🇷 +55</option>
+              <option value="+54">🇦🇷 +54</option>
+              <option value="+52">🇲🇽 +52</option>
+            </select>
+            <input class="form-input phone-number" id="signup-phone-number" type="tel" placeholder="333 123 4567" autocomplete="tel-national">
+          </div>
+        </div>
+        <div class="form-group">
           <div id="turnstile-widget" class="cf-turnstile" data-sitekey="0x4AAAAAAEk64IMAKphKHb0M" data-theme="dark"></div>
           <div class="form-error" id="captcha-error"></div>
         </div>
@@ -1331,9 +1370,9 @@
     function loadProfile() { return _profileCache; }
 
     async function fetchProfile() {
-      const { data, error } = await sb
+      const { data } = await sb
         .from('profiles')
-        .select('first_name, last_name, kids, avatar_url')
+        .select('first_name, last_name, kids, avatar_url, phone')
         .eq('id', currentUser.id)
         .maybeSingle();
       if (data) {
@@ -1342,6 +1381,7 @@
           lastName:  data.last_name  || '',
           kids:      Array.isArray(data.kids) ? data.kids : [],
           avatarUrl: data.avatar_url || '',
+          phone:     data.phone      || '',
         };
       }
     }
@@ -1354,6 +1394,7 @@
         last_name:  data.lastName  || null,
         kids:       data.kids      || [],
         avatar_url: data.avatarUrl || null,
+        phone:      data.phone     || null,
         updated_at: new Date().toISOString(),
       }, { onConflict: 'id' });
     }
@@ -1394,10 +1435,18 @@
       document.getElementById('account-card-foot').innerHTML =
         `<button class="account-edit-btn" onclick="startEditProfile()">Modifica profilo →</button>`;
 
+      const phoneVal = p.phone
+        ? escHtml(p.phone)
+        : '<span class="account-field-val muted">Non impostato</span>';
+
       document.getElementById('account-card-body').innerHTML = `
         <div class="account-field">
           <div class="account-field-label">Nome</div>
           <div class="account-field-val">${nameVal}</div>
+        </div>
+        <div class="account-field">
+          <div class="account-field-label">Telefono</div>
+          <div class="account-field-val">${phoneVal}</div>
         </div>
         <div class="account-field">
           <div class="account-field-label">Bambini</div>
@@ -1418,6 +1467,21 @@
           <button class="account-save-btn" onclick="saveProfileForm()">Salva</button>
         </div>`;
 
+      // Split stored phone (e.g. "+39333123") into cc + number
+      const CODES = ['+351','+39','+41','+33','+49','+34','+44','+32','+31','+43','+55','+54','+52','+1'];
+      let pfCc = '+39', pfNum = '';
+      if (p.phone) {
+        const matched = CODES.find(c => p.phone.startsWith(c));
+        if (matched) { pfCc = matched; pfNum = p.phone.slice(matched.length); }
+        else pfNum = p.phone;
+      }
+      const ccOptions = [
+        ['+39','🇮🇹 +39'],['+41','🇨🇭 +41'],['+33','🇫🇷 +33'],['+49','🇩🇪 +49'],
+        ['+34','🇪🇸 +34'],['+44','🇬🇧 +44'],['+1','🇺🇸 +1'],['+351','🇵🇹 +351'],
+        ['+32','🇧🇪 +32'],['+31','🇳🇱 +31'],['+43','🇦🇹 +43'],['+55','🇧🇷 +55'],
+        ['+54','🇦🇷 +54'],['+52','🇲🇽 +52'],
+      ].map(([v,l]) => `<option value="${v}"${v===pfCc?' selected':''}>${l}</option>`).join('');
+
       document.getElementById('account-card-body').innerHTML = `
         <div class="account-field">
           <div class="account-field-label">Nome</div>
@@ -1426,6 +1490,13 @@
         <div class="account-field">
           <div class="account-field-label">Cognome</div>
           <input class="account-field-input" id="pf-last" type="text" placeholder="Cognome" value="${escHtml(p.lastName || '')}">
+        </div>
+        <div class="account-field">
+          <div class="account-field-label">Telefono <span style="font-weight:400;text-transform:none;letter-spacing:0">(WhatsApp)</span></div>
+          <div class="phone-wrap">
+            <select class="phone-country" id="pf-phone-cc">${ccOptions}</select>
+            <input class="account-field-input phone-number" id="pf-phone-num" type="tel" placeholder="333 123 4567" value="${escHtml(pfNum)}">
+          </div>
         </div>
         <div class="account-field">
           <div class="account-field-label">Bambini</div>
@@ -1459,6 +1530,9 @@
 
       const firstName  = (document.getElementById('pf-first').value || '').trim();
       const lastName   = (document.getElementById('pf-last').value  || '').trim();
+      const cc         = document.getElementById('pf-phone-cc')?.value  || '+39';
+      const phoneNum   = (document.getElementById('pf-phone-num')?.value || '').trim().replace(/\s+/g, '');
+      const phone      = phoneNum ? `${cc}${phoneNum}` : '';
       const nameInputs = document.querySelectorAll('[data-kid-name]');
       const ageInputs  = document.querySelectorAll('[data-kid-age]');
       const kids = [];
@@ -1468,7 +1542,7 @@
         if (name || age) kids.push({ name, age });
       });
       const existing = loadProfile();
-      await saveProfile({ ...existing, firstName, lastName, kids });
+      await saveProfile({ ...existing, firstName, lastName, phone, kids });
       renderProfileView();
     }
 
@@ -1600,8 +1674,12 @@
       if (password !== confirm) { errEl.textContent = 'Le password non corrispondono.'; return; }
       if (!captchaToken) { capErrEl.textContent = 'Completa la verifica CAPTCHA.'; return; }
 
+      const cc    = document.getElementById('signup-phone-cc').value;
+      const phone = document.getElementById('signup-phone-number').value.trim().replace(/\s+/g, '');
+      const fullPhone = phone ? `${cc}${phone}` : null;
+
       btn.disabled = true; btn.textContent = 'Creazione…';
-      const { error } = await sb.auth.signUp({
+      const { data: signUpData, error } = await sb.auth.signUp({
         email, password,
         options: {
           emailRedirectTo: 'https://www.missionemattoncini.it/dashboard.html',
@@ -1611,6 +1689,15 @@
       btn.disabled = false; btn.textContent = 'Crea account →';
 
       if (error) { errEl.textContent = error.message; resetTurnstile(); return; }
+
+      // Save phone to profiles immediately (upsert — user may confirm email later)
+      if (fullPhone && signUpData?.user?.id) {
+        await sb.from('profiles').upsert({
+          id: signUpData.user.id,
+          phone: fullPhone,
+          updated_at: new Date().toISOString(),
+        }, { onConflict: 'id' });
+      }
 
       document.getElementById('signup-success').style.display = 'block';
       btn.style.display = 'none';
