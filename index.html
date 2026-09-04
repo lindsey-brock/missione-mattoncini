@@ -3263,13 +3263,11 @@ function enableRocketNav() {
     const label     = document.getElementById('navLabel');
     const avatarEl  = document.getElementById('navAvatarSVG');
     const astronaut = document.getElementById('navAstronaut');
-    // Profile name is stored in localStorage by dashboard.html (key: mm_profile_<uid>)
     let firstName = '';
     try {
-      const p = JSON.parse(localStorage.getItem(`mm_profile_${user.id}`)) || {};
-      firstName = p.firstName || '';
+      const { data: prof } = await sb.from('profiles').select('first_name').eq('id', user.id).maybeSingle();
+      firstName = prof?.first_name || '';
     } catch {}
-    // Fall back to OAuth metadata name if no local profile yet
     if (!firstName) {
       const meta = user.user_metadata?.name || user.user_metadata?.full_name || '';
       firstName = meta ? meta.split(/\s/)[0] : '';
