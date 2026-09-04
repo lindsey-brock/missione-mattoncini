@@ -1462,6 +1462,7 @@
       const kids = p.kids && p.kids.length ? p.kids : [{ name: '', age: '' }];
 
       document.getElementById('account-card-foot').innerHTML = `
+        <div class="form-error" id="profile-save-error" style="margin-bottom:8px"></div>
         <div class="account-foot-btns">
           <button class="account-cancel-btn" onclick="renderProfileView()">Annulla</button>
           <button class="account-save-btn" onclick="saveProfileForm()">Salva</button>
@@ -1525,7 +1526,9 @@
     }
 
     async function saveProfileForm() {
-      const btn = document.querySelector('.account-save-btn');
+      const btn    = document.querySelector('.account-save-btn');
+      const errEl  = document.getElementById('profile-save-error');
+      if (errEl) errEl.textContent = '';
       if (btn) { btn.disabled = true; btn.textContent = 'Salvataggio…'; }
 
       const firstName  = (document.getElementById('pf-first').value || '').trim();
@@ -1542,7 +1545,24 @@
         if (name || age) kids.push({ name, age });
       });
       const existing = loadProfile();
-      await saveProfile({ ...existing, firstName, lastName, phone, kids });
+      const { error: saveErr } = await sb.from('profiles').upsert({
+        id:         currentUser.id,
+        first_name: firstName || null,
+        last_name:  lastName  || null,
+        kids:       kids,
+        phone:      phone     || null,
+        avatar_url: existing.avatarUrl || null,
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'id' });
+
+      if (saveErr) {
+        if (btn) { btn.disabled = false; btn.textContent = 'Salva'; }
+        const errEl = document.getElementById('profile-save-error');
+        if (errEl) errEl.textContent = 'Errore: ' + saveErr.message;
+        return;
+      }
+
+      _profileCache = { ...existing, firstName, lastName, phone, kids };
       renderProfileView();
     }
 
