@@ -1357,6 +1357,12 @@
       const p    = loadProfile();
       const kids = p.kids || [];
 
+      // Auto-open edit form when profile is completely empty
+      if (!p.firstName && !p.lastName && !kids.length) {
+        startEditProfile();
+        return;
+      }
+
       const nameVal = (p.firstName || p.lastName)
         ? escHtml(`${p.firstName || ''} ${p.lastName || ''}`.trim())
         : '<span class="account-field-val muted">Non impostato</span>';
@@ -1424,7 +1430,7 @@
       row.id = `kid-row-${idx}`;
       row.innerHTML = `
         <input class="account-field-input" placeholder="Nome bambino" value="${name}" data-kid-name="${idx}">
-        <input class="account-field-input" placeholder="età" type="number" min="1" max="18" value="${age}" data-kid-age="${idx}" style="text-align:center">
+        <input class="account-field-input" placeholder="Età (anni)" type="number" min="1" max="18" value="${age}" data-kid-age="${idx}" style="text-align:center;max-width:90px">
         <button class="kid-remove-btn" onclick="document.getElementById('kid-row-${idx}').remove()" title="Rimuovi">×</button>
       `;
       document.getElementById('pf-kids-list').appendChild(row);
